@@ -2745,9 +2745,10 @@ STRINGS.fr = {
     connected: 'Connecté ✔',
     lost: 'Connexion perdue… on réessaie',
     'no-host': 'Code introuvable… on réessaie',
-    offline: 'Pas de réseau : le jumelage a besoin d’internet',
+    offline: 'Pas de connexion : vérifie internet sur cet appareil',
     error: 'Erreur de connexion'
   },
+  route: { direct: 'direct', relay: 'via relais', local: 'local' },
 
   names: {
     teddy: 'Agent Nounours', chief: 'Commissaire Minou', granny: 'Mamie Ourse', owl: 'Hibou Hugo', duck: 'Cane Coralie',
@@ -2895,9 +2896,10 @@ STRINGS.ru = {
     connected: 'Подключено ✔',
     lost: 'Связь потеряна… пробуем снова',
     'no-host': 'Код не найден… пробуем снова',
-    offline: 'Нет сети: для подключения нужен интернет',
+    offline: 'Нет соединения: проверь интернет на этом устройстве',
     error: 'Ошибка подключения'
   },
+  route: { direct: 'напрямую', relay: 'через сервер', local: 'локально' },
 
   names: {
     teddy: 'Агент Мишка', chief: 'Комиссар Мурка', granny: 'Бабушка Медведица', owl: 'Филин Филя', duck: 'Уточка Кряка',
@@ -3368,86 +3370,224 @@ const Town = (function () {
   <script>
 'use strict';
 
+// Minimal MQTT 3.1.1 client over WebSocket: connect, subscribe and publish at QoS 0, with automatic reconnection.
+// Used as a relay when a direct WebRTC link cannot be opened (corporate networks, mobile data, strict routers).
+const MiniMqtt = (function () {
+  const encoder = new TextEncoder(), decoder = new TextDecoder();
+  const KEEPALIVE = 120, PING_EVERY = 30000;
+
+  function lengthBytes(n) {
+    const out = [];
+    do { let b = n % 128; n = Math.floor(n / 128); if (n > 0) b |= 128; out.push(b); } while (n > 0);
+    return out;
+  }
+  function utf8(text) {
+    const b = encoder.encode(text);
+    return [b.length >> 8, b.length & 255, ...b];
+  }
+  function packet(type, flags, body) {
+    const head = [(type << 4) | flags, ...lengthBytes(body.length)];
+    const out = new Uint8Array(head.length + body.length);
+    out.set(head, 0); out.set(body, head.length);
+    return out;
+  }
+
+  // handlers: { onMessage(topic, text), onState(up) }
+  function connect(url, handlers) {
+    const clientId = 'tp-' + Math.random().toString(36).slice(2, 12);
+    const topics = [];
+    let ws = null, up = false, closed = false, retry = 1000, pinger = null, packetId = 1, buffer = new Uint8Array(0);
+
+    function send(bytes) { if (ws && ws.readyState === 1) { ws.send(bytes); return true; } return false; }
+    function subscribeNow(topic) {
+      packetId = (packetId % 65535) + 1;
+      send(packet(8, 2, [packetId >> 8, packetId & 255, ...utf8(topic), 0]));
+    }
+    function read(data) {
+      const joined = new Uint8Array(buffer.length + data.length);
+      joined.set(buffer, 0); joined.set(data, buffer.length);
+      buffer = joined;
+      for (;;) {
+        if (buffer.length < 2) return;
+        let length = 0, multiplier = 1, i = 1, byte;
+        do {
+          if (i >= buffer.length) return;
+          byte = buffer[i++];
+          length += (byte & 127) * multiplier;
+          multiplier *= 128;
+        } while (byte & 128);
+        if (buffer.length < i + length) return;
+        const header = buffer[0], type = header >> 4, body = buffer.subarray(i, i + length);
+        buffer = buffer.slice(i + length);
+        if (type === 2) {
+          if (body[1] !== 0) { ws.close(); return; }
+          up = true; retry = 1000;
+          topics.forEach(subscribeNow);
+          clearInterval(pinger);
+          pinger = setInterval(() => send(new Uint8Array([0xC0, 0])), PING_EVERY);
+          handlers.onState(true);
+        } else if (type === 3) {
+          const topicLength = (body[0] << 8) | body[1];
+          const topic = decoder.decode(body.subarray(2, 2 + topicLength));
+          // QoS 1/2 messages carry a 2-byte packet id after the topic (we subscribe at QoS 0, but be safe)
+          const qos = (header >> 1) & 3;
+          handlers.onMessage(topic, decoder.decode(body.subarray(2 + topicLength + (qos ? 2 : 0))));
+        }
+      }
+    }
+
+    function open() {
+      if (closed) return;
+      try { ws = new WebSocket(url, 'mqtt'); } catch (error) { setTimeout(open, retry); return; }
+      ws.binaryType = 'arraybuffer';
+      buffer = new Uint8Array(0);
+      ws.onopen = () => send(packet(1, 0, [...utf8('MQTT'), 4, 2, KEEPALIVE >> 8, KEEPALIVE & 255, ...utf8(clientId)]));
+      ws.onmessage = event => read(new Uint8Array(event.data));
+      ws.onerror = () => { /* onclose follows */ };
+      ws.onclose = () => {
+        clearInterval(pinger);
+        if (up) { up = false; handlers.onState(false); }
+        if (!closed) { setTimeout(open, retry); retry = Math.min(retry * 2, 15000); }
+      };
+    }
+    open();
+
+    return {
+      get up() { return up; },
+      subscribe(topic) { topics.push(topic); if (up) subscribeNow(topic); },
+      publish(topic, text) { return up && send(packet(3, 0, [...utf8(topic), ...encoder.encode(text)])); },
+      close() { closed = true; clearInterval(pinger); if (ws) ws.close(); }
+    };
+  }
+
+  return { connect };
+})();
+
+</script>
+  <script>
+'use strict';
+
 // Connection between the station (host) and the officer (guest).
-// Two transports share one "link" with a heartbeat: WebRTC through PeerJS (two devices),
-// or BroadcastChannel (two tabs of the same browser, for testing on one computer).
+// Every message goes out on all open paths and the receiver keeps the first copy (sender id + sequence number):
+//  - 'direct': WebRTC data channel through PeerJS (fast, device to device, works on most home networks)
+//  - 'relay':  two public MQTT brokers over secure WebSockets (works through corporate networks and mobile data)
+//  - 'local':  BroadcastChannel between tabs of one browser (tests, no internet)
 const Net = (function () {
   const PREFIX = 'teddy-patrol-v1-';
-  const BEAT = 1000, TIMEOUT = 4500, OPEN_TIMEOUT = 12000;
+  const RELAYS = ['wss://broker.hivemq.com:8884/mqtt', 'wss://broker.emqx.io:8084/mqtt'];
+  const TOPIC = 'teddy-patrol/v1/';
+  const BEAT = 1000, TIMEOUT = 5000, OPEN_TIMEOUT = 12000, OFFLINE_AFTER = 10000;
 
   const makeCode = () => String(1000 + Math.floor(Math.random() * 9000));
+  const randomId = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 
-  // handlers: { onMessage(msg), onStatus(status, detail) }
-  // Statuses: 'starting', 'waiting' (host ready), 'connected', 'lost', 'no-host', 'offline', 'error'
-  function createLink(handlers) {
-    let sendRaw = null, lastHeard = 0, lastSent = 0, connected = false, closed = false;
+  // handlers: { onMessage(msg), onStatus(status, route) }
+  // Statuses: 'starting', 'waiting' (station ready), 'connected', 'lost', 'no-host', 'offline'
+  function createLink(role, handlers) {
+    const sid = randomId(), started = Date.now(), ready = {}, paths = new Map();
+    let seq = 0, peerSid = null, peerSeq = 0, lastHeard = 0, lastSent = 0, lastDirect = 0, via = '';
+    let connected = false, hint = null, closed = false, shown = '';
+
+    function route() { return Date.now() - lastDirect < 3000 ? 'direct' : via; }
+    function refresh() {
+      let status;
+      if (connected) status = 'connected';
+      else if (hint) status = hint;
+      else if (Object.values(ready).some(Boolean)) status = role === 'station' ? 'waiting' : 'starting';
+      else status = Date.now() - started > OFFLINE_AFTER ? 'offline' : 'starting';
+      const key = status + '|' + (connected ? route() : '');
+      if (key !== shown) { shown = key; handlers.onStatus(status, connected ? route() : ''); }
+    }
+
     const link = {
       get connected() { return connected; },
-      send(msg) { if (sendRaw) { try { sendRaw(msg); lastSent = Date.now(); } catch (error) { /* channel closing */ } } },
-      attach(fn) { sendRaw = fn; },
-      detach() { sendRaw = null; if (connected) { connected = false; handlers.onStatus('lost'); } },
-      heard(msg) {
-        if (closed || !msg || typeof msg !== 'object') return;
+      send(msg) {
+        if (closed) return;
+        const envelope = { sid, seq: ++seq, m: msg };
+        let sent = false;
+        paths.forEach(fn => { try { if (fn(envelope) !== false) sent = true; } catch (error) { /* path closing */ } });
+        if (sent) lastSent = Date.now();
+      },
+      setPath(name, fn) { if (fn) paths.set(name, fn); else paths.delete(name); },
+      setReady(name, up) { ready[name] = up; refresh(); },
+      setHint(value) { hint = value; refresh(); },
+      receive(envelope, from) {
+        if (closed || !envelope || typeof envelope !== 'object' || typeof envelope.seq !== 'number' || !envelope.m) return;
+        if (envelope.sid !== peerSid) { peerSid = envelope.sid; peerSeq = 0; }
+        if (envelope.seq <= peerSeq) return;
+        peerSeq = envelope.seq;
         lastHeard = Date.now();
-        if (!connected) { connected = true; handlers.onStatus('connected'); }
+        via = from;
+        if (from === 'direct') lastDirect = lastHeard;
+        if (!connected) { connected = true; hint = null; }
+        refresh();
+        const msg = envelope.m;
         // Answer beats: a background tab gets its timers throttled but still receives messages
         if (msg.t === 'beat') { if (lastHeard - lastSent > BEAT * 0.8) link.send({ t: 'beat' }); return; }
         handlers.onMessage(msg);
       },
-      close() { closed = true; clearInterval(timer); sendRaw = null; }
+      close() { closed = true; clearInterval(timer); paths.clear(); }
     };
     const timer = setInterval(() => {
       link.send({ t: 'beat' });
-      if (connected && Date.now() - lastHeard > TIMEOUT) { connected = false; handlers.onStatus('lost'); if (link.onTimeout) link.onTimeout(); }
+      if (connected && Date.now() - lastHeard > TIMEOUT) { connected = false; hint = 'lost'; if (link.onTimeout) link.onTimeout(); }
+      refresh();
     }, BEAT);
     return link;
   }
 
-  const NETWORK_ERRORS = ['network', 'server-error', 'socket-error', 'socket-closed', 'browser-incompatible', 'unavailable-id'];
+  // ===== Relay through public MQTT brokers =====
+  function startRelays(role, code, link) {
+    const inbox = TOPIC + code + '/' + role, outbox = TOPIC + code + '/' + (role === 'station' ? 'officer' : 'station');
+    const clients = RELAYS.map((url, i) => {
+      const name = 'relay' + i;
+      const client = MiniMqtt.connect(url, {
+        onMessage: (topic, text) => { let envelope; try { envelope = JSON.parse(text); } catch (error) { return; } link.receive(envelope, 'relay'); },
+        onState: up => link.setReady(name, up)
+      });
+      client.subscribe(inbox);
+      link.setPath(name, envelope => client.publish(outbox, JSON.stringify(envelope)));
+      return { name, client };
+    });
+    return { close() { clients.forEach(({ name, client }) => { link.setPath(name, null); link.setReady(name, false); client.close(); }); } };
+  }
 
-  // ===== WebRTC via PeerJS =====
-  function hostPeer(code, handlers) {
-    const link = createLink(handlers);
-    let peer = null, conn = null, tries = 0, dead = false;
+  // ===== Direct WebRTC via PeerJS =====
+  function hostPeer(code, link) {
+    let peer = null, conn = null, dead = false, backoff = 2500;
     function start() {
       if (dead) return;
-      handlers.onStatus('starting');
       peer = new Peer(PREFIX + code, { debug: 0 });
-      peer.on('open', () => { tries = 0; handlers.onStatus('waiting'); });
+      peer.on('open', () => { backoff = 2500; link.setReady('peer', true); });
       peer.on('connection', c => {
         c.on('open', () => {
           if (conn && conn !== c) conn.close();
           conn = c;
-          link.attach(m => c.send(m));
+          link.setPath('direct', envelope => c.send(envelope));
         });
-        c.on('data', d => { if (conn === c) link.heard(d); });
-        c.on('close', () => { if (conn === c) { conn = null; link.detach(); } });
+        c.on('data', d => { if (conn === c) link.receive(d, 'direct'); });
+        c.on('close', () => { if (conn === c) { conn = null; link.setPath('direct', null); } });
       });
-      peer.on('disconnected', () => { setTimeout(() => { if (!dead && peer && !peer.destroyed) peer.reconnect(); }, 1500); });
+      peer.on('disconnected', () => { link.setReady('peer', false); setTimeout(() => { if (!dead && peer && !peer.destroyed) peer.reconnect(); }, 1500); });
       peer.on('error', err => {
         if (err.type === 'unavailable-id') {
-          // After a reload the server can still hold the old id for a moment
+          // After a reload the server can still hold the old id for a while; keep the code (the relay already
+          // uses it, and the phone knows it) and try again later
           peer.destroy();
-          if (++tries >= 3) { code = makeCode(); tries = 0; if (handlers.onCode) handlers.onCode(code); }
-          setTimeout(start, 2500);
-        } else if (NETWORK_ERRORS.includes(err.type)) {
-          handlers.onStatus('offline', err.type);
+          setTimeout(start, backoff);
+          backoff = Math.min(backoff * 2, 30000);
         } else if (err.type !== 'peer-unavailable') {
-          handlers.onStatus('error', err.type);
+          link.setReady('peer', false);
         }
       });
     }
     start();
-    return { link, close() { dead = true; link.close(); if (peer) peer.destroy(); } };
+    return { close() { dead = true; if (peer) peer.destroy(); } };
   }
 
-  function joinPeer(code, handlers) {
-    const link = createLink(handlers);
-    let peer = null, conn = null, retry = null, openTimer = null, dead = false;
-    function later(ms) {
-      clearTimeout(retry);
-      retry = setTimeout(dial, ms);
-    }
+  function joinPeer(code, link) {
+    let peer = null, conn = null, retry = null, openTimer = null, dead = false, backoff = 3000;
+    function later(ms) { clearTimeout(retry); retry = setTimeout(dial, ms); }
     function dial() {
       if (dead) return;
       if (!peer || peer.destroyed) { begin(); return; }
@@ -3456,47 +3596,50 @@ const Net = (function () {
       const c = peer.connect(PREFIX + code, { serialization: 'json', reliable: true });
       conn = c;
       clearTimeout(openTimer);
-      openTimer = setTimeout(() => { if (conn === c && !c.open) later(0); }, OPEN_TIMEOUT);
-      c.on('open', () => { clearTimeout(openTimer); link.attach(m => c.send(m)); link.send({ t: 'beat' }); });
-      c.on('data', d => { if (conn === c) link.heard(d); });
-      c.on('close', () => { if (conn === c) { link.detach(); later(2000); } });
+      // A direct link that never opens (strict network): retry less and less often, the relay carries the game
+      openTimer = setTimeout(() => { if (conn === c && !c.open) { later(backoff); backoff = Math.min(backoff * 2, 60000); } }, OPEN_TIMEOUT);
+      c.on('open', () => { clearTimeout(openTimer); backoff = 3000; link.setPath('direct', envelope => c.send(envelope)); });
+      c.on('data', d => { if (conn === c) link.receive(d, 'direct'); });
+      c.on('close', () => { if (conn === c) { link.setPath('direct', null); later(2000); } });
     }
     function begin() {
-      handlers.onStatus('starting');
       peer = new Peer({ debug: 0 });
-      peer.on('open', dial);
-      peer.on('disconnected', () => later(2000));
+      peer.on('open', () => { link.setReady('peer', true); dial(); });
+      peer.on('disconnected', () => { link.setReady('peer', false); later(2000); });
       peer.on('error', err => {
-        if (err.type === 'peer-unavailable') { handlers.onStatus('no-host'); later(3000); }
-        else if (NETWORK_ERRORS.includes(err.type)) { handlers.onStatus('offline', err.type); later(4000); }
-        else { handlers.onStatus('error', err.type); later(4000); }
+        if (err.type === 'peer-unavailable') { if (!link.connected) link.setHint('no-host'); later(backoff); backoff = Math.min(backoff * 2, 60000); }
+        else { link.setReady('peer', false); later(4000); }
       });
     }
-    link.onTimeout = () => later(500);
     begin();
-    return { link, close() { dead = true; clearTimeout(retry); clearTimeout(openTimer); link.close(); if (peer) peer.destroy(); } };
+    return { close() { dead = true; clearTimeout(retry); clearTimeout(openTimer); if (peer) peer.destroy(); } };
   }
 
   // ===== Same browser, two tabs =====
-  function localChannel(role, code, handlers) {
-    const link = createLink(handlers);
+  function localChannel(role, code, link) {
     const channel = new BroadcastChannel(PREFIX + code);
-    channel.onmessage = event => { const data = event.data || {}; if (data.from !== role) link.heard(data.msg); };
-    link.attach(msg => channel.postMessage({ from: role, msg }));
-    handlers.onStatus(role === 'station' ? 'waiting' : 'starting');
-    link.send({ t: 'beat' });
-    return { link, close() { link.close(); channel.close(); } };
+    channel.onmessage = event => { const data = event.data || {}; if (data.from !== role) link.receive(data.envelope, 'local'); };
+    link.setPath('local', envelope => channel.postMessage({ from: role, envelope }));
+    link.setReady('local', true);
+    return { close() { channel.close(); } };
   }
 
+  // handlers: { onMessage, onStatus } -> { link, close() }
   function open(role, code, local, handlers) {
-    if (local || typeof Peer === 'undefined') {
-      if (typeof BroadcastChannel === 'undefined') { handlers.onStatus('error', 'no-transport'); return null; }
-      return localChannel(role, code, handlers);
+    const link = createLink(role, handlers);
+    const parts = [];
+    if (local) {
+      if (typeof BroadcastChannel === 'undefined') { link.setHint('offline'); return { link, close() { link.close(); } }; }
+      parts.push(localChannel(role, code, link));
+    } else {
+      const relays = typeof MiniMqtt !== 'undefined' && typeof WebSocket !== 'undefined' ? startRelays(role, code, link) : null;
+      if (typeof Peer !== 'undefined') parts.push(role === 'station' ? hostPeer(code, link) : joinPeer(code, link));
+      if (relays) parts.push(relays);
     }
-    return role === 'station' ? hostPeer(code, handlers) : joinPeer(code, handlers);
+    return { link, close() { parts.forEach(p => p.close()); link.close(); } };
   }
 
-  return { open, makeCode };
+  return { open, makeCode, createLink };
 })();
 
 </script>
@@ -4589,14 +4732,23 @@ const Officer = (function () {
     }
   }
 
-  function onStatus(status) {
+  function statusText() {
+    const s = O.lastStatus;
+    if (!s) return '';
+    const text = L().status[s] || s;
+    return s === 'connected' && O.route ? text + ' · ' + (L().route[O.route] || O.route) : text;
+  }
+
+  function onStatus(status, route) {
+    const wasConnected = O.connected;
     O.lastStatus = status;
+    O.route = route;
     O.connected = status === 'connected';
-    if (status === 'connected') { sfx('connect'); O.send({ t: 'hello' }); }
+    if (O.connected && !wasConnected) { sfx('connect'); O.send({ t: 'hello' }); }
     $('connOverlay').hidden = O.connected || !O.everConnected;
     if (O.connected) O.everConnected = true;
-    $('connText').textContent = L().status[status] || status;
-    $('officerStatus').textContent = L().status[status] || status;
+    $('connText').textContent = statusText();
+    $('officerStatus').textContent = statusText();
   }
 
   // ===== Loop, resize and pointer =====
@@ -4662,10 +4814,7 @@ const Officer = (function () {
     canvas.addEventListener('pointercancel', up);
     $('rotateHint').addEventListener('click', () => { O.rotateDismissed = true; $('rotateHint').hidden = true; });
     switchScene('waiting');
-    languageListeners.push(() => {
-      const text = O.lastStatus ? L().status[O.lastStatus] || O.lastStatus : '';
-      $('connText').textContent = text; $('officerStatus').textContent = text;
-    });
+    languageListeners.push(() => { $('connText').textContent = statusText(); $('officerStatus').textContent = statusText(); });
     link = netFactory({ onMessage, onStatus }).link;
     requestAnimationFrame(t => { last = t; frame(t); });
     keepAwake();
@@ -5372,14 +5521,21 @@ const Station = (function () {
     }
   }
 
-  function onStatus(status) {
+  function statusText() {
+    const s = S.lastStatus;
+    if (!s) return '';
+    const text = L().status[s] || s;
+    return s === 'connected' && S.route ? text + ' · ' + (L().route[S.route] || S.route) : text;
+  }
+
+  function onStatus(status, route) {
     const wasConnected = S.connected;
     S.connected = status === 'connected';
     S.lastStatus = status;
-    const text = L().status[status] || status;
-    $('stationStatus').textContent = text;
+    S.route = route;
+    $('stationStatus').textContent = statusText();
     $('stationStatus').className = 'pill status ' + status;
-    $('lobbyStatus').textContent = text;
+    $('lobbyStatus').textContent = statusText();
     if (S.connected && !wasConnected) { sfx('connect'); $('lobby').hidden = true; }
   }
 
@@ -5589,7 +5745,7 @@ const Station = (function () {
     languageListeners.push(code => {
       if (S.state && C.apply(S.state, { t: 'lang', lang: code })) broadcast(); else render();
       lobby();
-      if (S.lastStatus) { const text = L().status[S.lastStatus] || S.lastStatus; $('stationStatus').textContent = text; $('lobbyStatus').textContent = text; }
+      if (S.lastStatus) { $('stationStatus').textContent = statusText(); $('lobbyStatus').textContent = statusText(); }
     });
   }
 
@@ -5603,10 +5759,7 @@ const Station = (function () {
     lobby();
     render();
     save();
-    link = netFactory({
-      onMessage, onStatus,
-      onCode: c => { S.code = c; save(); lobby(); }
-    }).link;
+    link = netFactory({ onMessage, onStatus }).link;
     StationView.start(S);
   }
 
