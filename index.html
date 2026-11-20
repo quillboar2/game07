@@ -84,7 +84,7 @@ body.station #scene { display: none; }
 .tools { display: flex; gap: 8px; align-items: center; margin-left: auto; }
 .mission-card { width: 92px; height: 92px; border: 4px solid var(--ink); border-radius: 22px; background: #fff; box-shadow: 0 5px 0 rgba(29,47,69,0.35); display: grid; place-items: center; animation: pop 0.35s ease; }
 .mission-card canvas { width: 80px; height: 80px; }
-.gps-bubble { position: fixed; left: 50%; top: 10px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; padding: 6px 22px 6px 6px; background: var(--cream); border: 4px solid var(--ink); border-radius: 50px; box-shadow: 0 6px 0 rgba(29,47,69,0.35); }
+.gps-bubble { position: fixed; left: 50%; top: 100px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; padding: 6px 22px 6px 6px; background: var(--cream); border: 4px solid var(--ink); border-radius: 50px; box-shadow: 0 6px 0 rgba(29,47,69,0.35); z-index: 6; }
 .gps-bubble.pop { animation: pop 0.3s ease; }
 .gps-bubble canvas { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--ink); background: radial-gradient(circle at 50% 65%, #fff2c2, #ffd98a); }
 .gps-bubble span { font-size: 58px; line-height: 1; color: var(--blue); }
@@ -115,12 +115,12 @@ body.station #scene { display: none; }
 @keyframes flashRed { 50% { background: #ff2d2d; box-shadow: 0 0 18px #ff2d2d; } }
 @keyframes flashBlue { 0% { background: #1f6bff; box-shadow: 0 0 18px #1f6bff; } 50% { background: #8ab4f8; box-shadow: none; } }
 
-.dialogue { position: fixed; left: 50%; top: 110px; transform: translateX(-50%); width: min(720px, calc(100% - 24px)); display: flex; align-items: center; gap: 12px; padding: 8px 20px 8px 8px; background: var(--cream); border: 3px solid var(--ink); border-radius: 22px; box-shadow: 0 6px 0 rgba(29,47,69,0.35); z-index: 6; pointer-events: none; }
+.dialogue { position: fixed; left: 50%; top: 8px; transform: translateX(-50%); width: min(680px, calc(100% - 250px)); display: flex; align-items: center; gap: 10px; padding: 6px 16px 6px 6px; background: var(--cream); border: 3px solid var(--ink); border-radius: 20px; box-shadow: 0 5px 0 rgba(29,47,69,0.35); z-index: 6; pointer-events: none; }
 .dialogue.pop { animation: fadeDown 0.25s ease; }
 @keyframes fadeDown { from { transform: translate(-50%, -20px); opacity: 0; } }
-.dialogue canvas { width: 76px; height: 76px; flex: none; background: radial-gradient(circle at 50% 70%, #fff2c2, #ffd98a); border: 3px solid var(--ink); border-radius: 50%; }
-.dialogue strong { display: block; font-size: 14px; color: var(--blue); margin-bottom: 2px; }
-.dialogue p { margin: 0; font-size: clamp(15px, 2.2vw, 20px); line-height: 1.3; }
+.dialogue canvas { width: 64px; height: 64px; flex: none; background: radial-gradient(circle at 50% 70%, #fff2c2, #ffd98a); border: 3px solid var(--ink); border-radius: 50%; }
+.dialogue strong { display: block; font-size: 13px; color: var(--blue); margin-bottom: 1px; }
+.dialogue p { margin: 0; font-size: clamp(14px, 2vw, 19px); line-height: 1.25; }
 .conn-overlay { position: fixed; inset: 0; z-index: 25; display: grid; place-items: center; background: rgba(34,66,122,0.45); }
 .conn-overlay .card { padding: 18px 26px; text-align: center; font-size: 20px; }
 .spinner { width: 46px; height: 46px; margin: 0 auto 10px; border: 6px solid #cfe0ff; border-top-color: var(--blue); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -184,6 +184,27 @@ body.station #scene { display: none; }
 button.print-card:hover { background: #f1f7ff; }
 .equals { font: bold 40px Georgia, serif; }
 
+/* ===== Case board and case summary ===== */
+.case-board { position: absolute; inset: 0; overflow: auto; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 14px; background: rgba(255,248,232,0.9); }
+.case-board h3 { margin: 0; font: bold 26px Georgia, serif; color: var(--navy); }
+.case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; width: 100%; max-width: 900px; }
+.case-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 8px; background: #fff; border: 3px solid var(--ink); border-radius: 18px; box-shadow: 0 5px 0 rgba(29,47,69,0.3); font-size: 15px; }
+.case-card:hover { background: #f1f7ff; }
+.case-card:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(29,47,69,0.3); }
+.case-card canvas { width: 76px; height: 76px; border-radius: 50%; border: 3px solid var(--ink); background: radial-gradient(circle at 50% 65%, #fff2c2, #ffd98a); }
+.case-card.solved { background: #ebfbee; }
+.case-card small { color: #2f9e44; font-weight: bold; }
+.big-surprise { font-size: 22px; font-weight: bold; padding: 10px 34px; border-radius: 26px; border: 4px solid var(--ink); background: var(--sun); box-shadow: 0 5px 0 rgba(29,47,69,0.4); }
+.case-header { display: flex; align-items: center; gap: 10px; margin-top: 10px; font: bold 19px Georgia, serif; color: var(--navy); }
+.case-header canvas { width: 54px; height: 54px; border-radius: 50%; border: 3px solid var(--ink); background: radial-gradient(circle at 50% 65%, #fff2c2, #ffd98a); flex: none; }
+.steps-list { display: grid; gap: 5px; }
+.step-row { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: 8px; padding: 5px 10px; border: 2px solid rgba(29,47,69,0.3); border-radius: 12px; background: #fff; }
+.step-row.now { border-color: var(--ink); background: #fff3bf; font-weight: bold; }
+.step-row.done { background: #ebfbee; opacity: 0.8; }
+.step-row.later { opacity: 0.6; }
+.step-icon { font-size: 20px; text-align: center; }
+.step-row small { font-size: 12px; opacity: 0.8; }
+
 .lobby-card { width: min(520px, 100%); padding: 18px 24px; text-align: center; position: relative; }
 .lobby-card h2 { margin: 0 0 8px; font: bold 26px Georgia, serif; color: var(--navy); }
 .code-big { font: bold 72px Georgia, serif; letter-spacing: 0.2em; margin: 4px 0 8px; color: var(--blue); }
@@ -203,8 +224,9 @@ button.print-card:hover { background: #f1f7ff; }
   .siren { width: 74px; height: 74px; }
   .siren .lights i { width: 22px; height: 26px; }
   .side-buttons { gap: 6px; }
-  .dialogue { top: 92px; }
-  .dialogue canvas { width: 56px; height: 56px; }
+  .dialogue { top: 6px; width: min(640px, calc(100% - 200px)); }
+  .dialogue canvas { width: 46px; height: 46px; }
+  .gps-bubble { top: 70px; }
   .mission-card { width: 72px; height: 72px; }
   .mission-card canvas { width: 62px; height: 62px; }
   .gps-bubble canvas { width: 52px; height: 52px; }
@@ -301,6 +323,7 @@ button.print-card:hover { background: #f1f7ff; }
         <div class="st-view">
           <canvas id="stationCanvas"></canvas>
           <div id="matchGame" class="match-game" hidden></div>
+          <div id="caseBoard" class="case-board" hidden></div>
           <div id="radioFlash" class="radio-flash" hidden data-i18n="radio"></div>
         </div>
         <div class="st-controls">
@@ -319,20 +342,30 @@ button.print-card:hover { background: #f1f7ff; }
             <button data-dir="right" class="pad-btn">➡</button>
           </div>
           <span id="nextTurn" class="next-turn" hidden></span>
+          <button id="sendBtn" class="small-button glow" data-i18n="send" hidden></button>
           <button id="hintBtn" class="small-button glow" data-i18n="hint" hidden></button>
+          <button id="repeatBtn" class="small-button glow" data-i18n="repeat" hidden></button>
+          <button id="sayCellBtn" class="small-button glow" data-i18n="sayCell" hidden></button>
           <button id="askBtn" class="small-button glow" data-i18n="ask" hidden></button>
           <button id="newCaseBtn" class="small-button glow" data-i18n="newCase" hidden></button>
           <button id="bravoBtn" class="small-button bravo" data-i18n="bravoButton"></button>
         </div>
       </section>
       <aside class="st-side">
-        <h3 data-i18n="board"></h3>
-        <div id="clues" class="clues"></div>
-        <h3 data-i18n="witnesses"></h3>
-        <div id="witnesses" class="witnesses"></div>
-        <h3 data-i18n="suspects"></h3>
-        <div id="suspects" class="suspects"></div>
-        <p id="suspectNote" class="note"></p>
+        <div id="caseSection">
+          <div id="caseHeader" class="case-header"></div>
+          <h3 data-i18n="steps"></h3>
+          <div id="stepsList" class="steps-list"></div>
+        </div>
+        <div id="lineupBox">
+          <h3 data-i18n="board"></h3>
+          <div id="clues" class="clues"></div>
+          <h3 data-i18n="witnesses"></h3>
+          <div id="witnesses" class="witnesses"></div>
+          <h3 data-i18n="suspects"></h3>
+          <div id="suspects" class="suspects"></div>
+          <p id="suspectNote" class="note"></p>
+        </div>
       </aside>
     </main>
     <div id="lobby" class="overlay lobby">
@@ -3025,23 +3058,569 @@ STRINGS.ru = {
   <script>
 'use strict';
 
-// One case = plain JSON owned by the station (host). The officer sends events, the station applies them and shares the new state.
+// Cases and new mini-games (French). Merged into STRINGS.fr.
+(function (T) {
+  Object.assign(T.names, {
+    hedgehog: 'Hérisson le boulanger', giraffe: 'Maîtresse Girafe', elephant: 'Monsieur le Maire', pig: 'Fermier Cochon',
+    frog: 'Reine Grenouille', hippo: 'Bébé Hippo', dalmatian: 'Capitaine Dalmatien', seagull: 'Maman Mouette',
+    hamster: 'Noisette le hamster', deer: 'Petit Faon', magpie: 'Pie Brillante'
+  });
+  Object.assign(T.places, { pond: 'Étang', park: 'Parc', townhall: 'Mairie', farm: 'Ferme' });
+  Object.assign(T.placeTo, { pond: 'l’étang', park: 'le parc', townhall: 'la mairie', farm: 'la ferme' });
+  Object.assign(T.items, {
+    nest: 'le nid', hamster: 'le hamster', deer: 'le petit faon', crown: 'la couronne', balloon: 'le ballon rouge',
+    key: 'la clé', paintbrush: 'le pinceau'
+  });
+  T.paws.hoof = 'petits sabots';
+
+  T.callChief = 'Pas de panique ! Agent Nounours, vite, à ton véhicule ! Je te guide par la radio.';
+  T.nextStop = place => `Bravo ! Maintenant, direction ${T.placeTo[place]} !`;
+  T.lampFound = 'Je l’ai trouvé !';
+  T.lettersIntro = 'Mets les lettres dans l’ordre pour lire le mot secret !';
+  T.lettersIntroName = 'Mets les lettres dans l’ordre pour lire le nom du suspect !';
+  T.lettersNext = 'Bravo, tu as lu le mot !';
+  T.brushIntro = 'Il y a une trace ! Frotte la poussière pour voir l’empreinte.';
+  T.endChief = 'Enquête résolue ! Bravo, Agent Nounours ! Voici ton autocollant !';
+
+  T.games = {
+    grid: {
+      intro: 'Monte dans l’hélicoptère ! Le commissaire va te donner une case : une lettre et un chiffre.',
+      cell: (c, r) => `Case ${c} ${r} !`,
+      miss: (c, r) => `Rien ici, case ${c} ${r}.`,
+      found: 'Je l’ai trouvé ! Bravo, pilote !'
+    },
+    spot: {
+      intro: 'Regarde bien : trois choses ont changé ! Le commissaire a la photo d’avant.',
+      yes: 'Bien vu !',
+      no: 'Non, ça n’a pas changé.',
+      done: 'Bravo, tu as trouvé les trois différences !'
+    },
+    safe: {
+      intro: 'Un coffre-fort ! Compte les dessins pour trouver chaque chiffre du code.',
+      hint: (a, b) => `${a}, et encore ${b}… ça fait combien ?`,
+      right: n => `${n} ! Clic !`,
+      wrong: 'Hmm, recompte bien !',
+      open: 'Le coffre est ouvert !'
+    },
+    symbols: {
+      intro: 'Un message secret ! Le commissaire a le livre des codes.',
+      hint: letter => `Ce dessin, c’est la lettre ${letter}.`,
+      done: word => `Le message dit : ${word} !`
+    },
+    word: {
+      intro: 'Écris le mot dans ton carnet de police. Écoute bien !',
+      done: word => `Bravo, tu as écrit ${word} !`
+    },
+    sketch: {
+      intro: 'Dessine le visage du suspect ! Le commissaire sait comment il est.',
+      done: 'C’est lui ! Le portrait est fini.'
+    }
+  };
+  T.fur = { orange: 'orange', grey: 'grise', white: 'blanche', beige: 'beige' };
+  T.ears = { pointy: 'pointues', round: 'rondes', long: 'longues' };
+  T.sketchSays = (fur, ears, scarf) => `Hou hou ! Il avait la fourrure ${T.fur[fur]}, des oreilles ${T.ears[ears]} et une écharpe ${T.colors[scarf]}.`;
+  T.gridLetters = 'ABCDE';
+
+  T.cases = {
+    cake: {
+      title: 'Le gâteau de Mamie Ourse',
+      call: T.callGranny,
+      steps: [
+        ['granny', 'Te voilà, Agent Nounours ! Regarde mon assiette, il y a une trace !'],
+        ['chief', 'Le gourmand est passé par le jardin sombre. Cherchons des indices !'],
+        ['chief', 'Il a laissé un indice sur son nom !'],
+        ['chief', 'Les suspects sont arrivés au commissariat.']
+      ],
+      confess: T.confess,
+      forgive: ['granny', T.endGranny]
+    },
+    paint: {
+      title: 'La mairie arc-en-ciel',
+      call: 'Allô, la police ? Ici le Maire ! Quelqu’un a mis de la peinture arc-en-ciel partout sur la mairie !',
+      steps: [
+        ['elephant', 'Regardez ma mairie ! Il y a des traces de peinture partout !'],
+        ['elephant', 'Il y a peut-être d’autres indices dans la mairie.'],
+        ['chief', 'Hibou Hugo a vu le peintre au parc. Il nous aide !'],
+        ['chief', 'Les suspects sont arrivés au commissariat.']
+      ],
+      confess: {
+        fox: 'Oui, c’est moi… Je voulais peindre un arc-en-ciel pour faire une surprise à toute la ville ! Pardon, Monsieur le Maire !',
+        mouse: 'Oui, c’est moi… Les murs étaient tout gris, alors j’ai voulu les rendre joyeux ! Pardon, Monsieur le Maire !',
+        panda: 'Oui, c’est moi… Je suis tout noir et blanc, alors je rêvais de couleurs ! Pardon, Monsieur le Maire !',
+        rabbit: 'Oui, c’est moi… Je voulais offrir un dessin à toute la ville ! Pardon, Monsieur le Maire !'
+      },
+      forgive: ['elephant', 'Ce n’est pas grave ! Peignons ensemble une grande fresque, avec la permission !']
+    },
+    bakery: {
+      title: 'Les croissants envolés',
+      call: 'Allô, la police ? Ici Hérisson le boulanger ! Tous mes croissants ont disparu !',
+      steps: [
+        ['hedgehog', 'Bonjour, Agent Nounours ! Regarde ma boulangerie, il s’est passé quelque chose…'],
+        ['chief', 'Note bien tout dans ton carnet de police !'],
+        ['chief', 'Des plumes blanches mènent à l’étang… Cherchons là-bas !']
+      ],
+      ending: [
+        ['seagull', 'Pardon ! Mes petits avaient si faim… J’ai pris les croissants pour eux.'],
+        ['hedgehog', 'Pauvres petits ! Je vous apporterai des miettes de pain tous les matins !']
+      ]
+    },
+    hamster: {
+      title: 'Le hamster de l’école',
+      call: 'Allô, la police ? Ici Maîtresse Girafe ! Le hamster de la classe s’est échappé !',
+      steps: [
+        ['giraffe', 'Bonjour ! Voici notre classe. Noisette était dans sa cage ce matin.'],
+        ['giraffe', 'Il nous faut de quoi attirer Noisette !'],
+        ['chief', 'Je crois qu’il est parti jouer au parc !']
+      ],
+      ending: [
+        ['hamster', 'Coucou ! Je voulais juste voir les toboggans du parc !'],
+        ['giraffe', 'Te voilà, Noisette ! On va te faire une cage avec un toboggan !']
+      ]
+    },
+    farm: {
+      title: 'Les légumes grignotés',
+      call: 'Allô, la police ? Ici Fermier Cochon ! Quelqu’un a grignoté mes légumes cette nuit !',
+      steps: [
+        ['pig', 'Regarde mon potager ! Il y a des traces bizarres…'],
+        ['pig', 'Préparons un piège tout doux avec des légumes !'],
+        ['chief', 'Les traces partent vers le jardin sombre…']
+      ],
+      ending: [
+        ['deer', 'Pardon… J’avais si faim, et les carottes sentaient si bon !'],
+        ['pig', 'Ne t’inquiète pas, petit faon ! Je vais te planter ton propre petit potager.']
+      ]
+    },
+    crown: {
+      title: 'La couronne de la Reine',
+      call: 'Allô, la police ? Ici la Reine Grenouille ! Ma couronne a disparu au bord de l’étang !',
+      steps: [
+        ['frog', 'Ma couronne était posée ici, au bord de l’étang !'],
+        ['frog', 'On a trouvé un message mystérieux sur un nénuphar !'],
+        ['chief', 'Un oiseau a été vu au parc avec quelque chose de brillant !']
+      ],
+      ending: [
+        ['magpie', 'Elle brillait si fort ! Je voulais juste la regarder dans mon nid.'],
+        ['frog', 'Merci de l’avoir gardée ! Tiens, voici un joli bouton brillant rien que pour toi.']
+      ]
+    },
+    balloon: {
+      title: 'Le ballon de Bébé Hippo',
+      call: 'Allô, la police ? C’est Bébé Hippo ! Mon ballon d’anniversaire s’est envolé !',
+      steps: [
+        ['hippo', 'Voici ma fête. Mon ballon rouge était juste là !'],
+        ['chief', 'Prends l’hélicoptère pour voir le parc d’en haut !'],
+        ['chief', 'Le ballon est coincé tout en haut d’un arbre… Il faut l’échelle des pompiers !']
+      ],
+      ending: [
+        ['hippo', 'Mon ballon ! Merci, Agent Nounours ! Viens à ma fête d’anniversaire !']
+      ]
+    },
+    traffic: {
+      title: 'Les feux en panne',
+      call: 'Allô, la police ? Ici le Capitaine Dalmatien des pompiers ! Les feux sont en panne, tout est bloqué !',
+      steps: [
+        ['dalmatian', 'Pour réparer les feux, il faut ouvrir notre boîte à outils !'],
+        ['dalmatian', 'Voici le tableau des feux, à la mairie. Quelque chose cloche…'],
+        ['chief', 'Il manque la clé du tableau ! Elle est tombée près de l’école.']
+      ],
+      ending: [
+        ['dalmatian', 'Les feux marchent à nouveau ! Le camion de pompiers peut passer. Pin-pon !']
+      ]
+    }
+  };
+
+  // Witnesses in the lineup cases
+  T.answers['owl.who'] = color => `Hou hou ! J’ai vu quelqu’un qui s’enfuyait, avec une écharpe ${T.colors[color]} !`;
+  T.nextPiece = piece => `Syllabe suivante : ${piece}`;
+  T.questions['duck.what'] = 'Tu as vu ses pattes ?';
+  T.answers['owl.where'] = place => `Hou ! Il est parti vers ${T.placeTo[place]}.`;
+  T.answers['duck.what'] = paw => `Coin coin ! Il avait de ${T.paws[paw]} !`;
+  T.answers['duck.more'] = () => 'Coin ! Il avait l’air très pressé !';
+
+  // ===== Station (adult) =====
+  T.boardTitle = 'Choisis une enquête';
+  T.surprise = '🎲 Surprise !';
+  T.solved = 'résolue';
+  T.steps = 'Étapes';
+  T.gameNames = {
+    brush: 'Empreinte', lamp: 'Lampe de poche', letters: 'Lettres', word: 'Écrire un mot', symbols: 'Message secret',
+    sketch: 'Portrait-robot', spot: 'Différences', safe: 'Coffre-fort', grid: 'Hélicoptère', lineup: 'Identification'
+  };
+  Object.assign(T.todo, {
+    board: 'Choisis l’enquête du jour (ou laisse faire la surprise 🎲).',
+    goTo: place => `Touche « ${T.places[place]} » sur la carte, puis guide l’agent aux carrefours avec les flèches.`,
+    grid: 'Dis à l’agent la case où chercher : d’abord la lettre (en haut), puis le chiffre (sur le côté).',
+    spot: 'Compare ta photo « avant » avec l’écran de l’agent. Les différences sont entourées chez toi : aide-le à les trouver.',
+    safe: 'Chaque chiffre du code est une petite addition : aide l’agent à compter les dessins.',
+    symbols: 'Tu as le livre des codes : dis à l’agent quelle lettre va sous chaque dessin.',
+    word: 'L’agent écrit le mot en écoutant les syllabes. Appuie sur « Répéter » pour le redire.',
+    sketch: 'Lis ce que dit le témoin et aide l’agent à dessiner le bon visage.',
+    lettersWord: 'Aide l’agent à ranger les lettres : dis-lui la lettre suivante.'
+  });
+  T.before = 'Avant';
+  T.now = 'Maintenant';
+  T.code = 'Code';
+  T.repeat = '🔊 Répéter';
+  T.sayCell = '📻 Dire la case';
+  T.target = 'À trouver';
+  T.codebook = 'Livre des codes';
+  T.witnessSays = 'Le témoin dit :';
+  T.progressWord = 'Mot';
+})(STRINGS.fr);
+
+</script>
+  <script>
+'use strict';
+
+// Cases and new mini-games (Russian). Merged into STRINGS.ru.
+(function (T) {
+  Object.assign(T.names, {
+    hedgehog: 'Ёжик-пекарь', giraffe: 'Учительница Жираф', elephant: 'Господин Мэр', pig: 'Фермер Хрюша',
+    frog: 'Королева Лягушка', hippo: 'Малыш Бегемотик', dalmatian: 'Капитан Далматинец', seagull: 'Мама Чайка',
+    hamster: 'Хомячок Орешек', deer: 'Оленёнок', magpie: 'Сорока-Блестяшка'
+  });
+  Object.assign(T.places, { pond: 'Пруд', park: 'Парк', townhall: 'Мэрия', farm: 'Ферма' });
+  Object.assign(T.placeTo, { pond: 'к пруду', park: 'в парк', townhall: 'в мэрию', farm: 'на ферму' });
+  // Accusative ("найди гнездо") and nominative ("это гнездо")
+  Object.assign(T.items, { nest: 'гнездо', hamster: 'хомячка', deer: 'оленёнка', crown: 'корону', balloon: 'красный шарик', key: 'ключ', paintbrush: 'кисточку' });
+  Object.assign(T.itemsIs, { nest: 'гнездо', hamster: 'хомячок', deer: 'оленёнок', crown: 'корона', balloon: 'красный шарик', key: 'ключ', paintbrush: 'кисточка' });
+  T.paws.hoof = 'копытца';
+
+  T.callChief = 'Не волнуйтесь! Агент Мишка, скорее в путь! Я буду подсказывать дорогу по рации.';
+  T.nextStop = place => `Молодец! Теперь едем ${T.placeTo[place]}!`;
+  T.lampFound = 'Нашёл!';
+  T.lettersIntro = 'Расставь буквы по порядку и прочитай тайное слово!';
+  T.lettersIntroName = 'Расставь буквы по порядку и прочитай имя подозреваемого!';
+  T.lettersNext = 'Молодец, ты прочитал слово!';
+  T.brushIntro = 'Здесь след! Сотри пыль, чтобы увидеть отпечаток.';
+  T.endChief = 'Дело раскрыто! Молодец, агент Мишка! Вот твоя наклейка!';
+
+  T.games = {
+    grid: {
+      intro: 'Садись в вертолёт! Комиссар назовёт клетку: букву и цифру.',
+      cell: (c, r) => `Клетка ${c} ${r}!`,
+      miss: (c, r) => `Здесь ничего нет, клетка ${c} ${r}.`,
+      found: 'Нашёл! Отличный пилот!'
+    },
+    spot: {
+      intro: 'Смотри внимательно: три вещи изменились! У комиссара есть фото «до».',
+      yes: 'Точно!',
+      no: 'Нет, это не изменилось.',
+      done: 'Молодец, ты нашёл все три отличия!'
+    },
+    safe: {
+      intro: 'Сейф! Посчитай картинки, чтобы узнать каждую цифру кода.',
+      hint: (a, b) => `${a}, и ещё ${b}… сколько всего?`,
+      right: n => `${n}! Щёлк!`,
+      wrong: 'Хм, посчитай ещё раз!',
+      open: 'Сейф открыт!'
+    },
+    symbols: {
+      intro: 'Тайное послание! У комиссара есть книга шифров.',
+      hint: letter => `Эта картинка — буква ${letter}.`,
+      done: word => `Послание: ${word}!`
+    },
+    word: {
+      intro: 'Запиши слово в свой полицейский блокнот. Слушай внимательно!',
+      done: word => `Молодец, ты написал: ${word}!`
+    },
+    sketch: {
+      intro: 'Нарисуй портрет подозреваемого! Комиссар знает, как он выглядит.',
+      done: 'Это он! Портрет готов.'
+    }
+  };
+  T.fur = { orange: 'рыжий', grey: 'серый', white: 'белый', beige: 'бежевый' };
+  T.ears = { pointy: 'острые', round: 'круглые', long: 'длинные' };
+  T.sketchSays = (fur, ears, scarf) => `Ух-ух! Мех у него ${T.fur[fur]}, уши ${T.ears[ears]}, а шарф ${T.colors[scarf]}.`;
+  T.gridLetters = 'АБВГД';
+
+  T.cases = {
+    cake: {
+      title: 'Торт бабушки Медведицы',
+      call: T.callGranny,
+      steps: [
+        ['granny', 'Вот и ты, агент Мишка! Смотри, на моей тарелке след!'],
+        ['chief', 'Сладкоежка прошёл через тёмный сад. Ищем улики!'],
+        ['chief', 'Он оставил подсказку о своём имени!'],
+        ['chief', 'Подозреваемые уже в полиции.']
+      ],
+      confess: T.confess,
+      forgive: ['granny', T.endGranny]
+    },
+    paint: {
+      title: 'Радужная мэрия',
+      call: 'Алло, полиция? Это Мэр! Кто-то разрисовал всю мэрию радужной краской!',
+      steps: [
+        ['elephant', 'Посмотрите на мою мэрию! Повсюду следы краски!'],
+        ['elephant', 'Может быть, в мэрии есть ещё улики.'],
+        ['chief', 'Филин Филя видел художника в парке. Он нам поможет!'],
+        ['chief', 'Подозреваемые уже в полиции.']
+      ],
+      confess: {
+        fox: 'Да, это я… Я хотела нарисовать радугу, чтобы порадовать весь город! Простите, господин Мэр!',
+        mouse: 'Да, это я… Стены были такие серые, я хотела их развеселить! Простите, господин Мэр!',
+        panda: 'Да, это я… Я вся чёрно-белая, вот и мечтала о красках! Простите, господин Мэр!',
+        rabbit: 'Да, это я… Я хотел подарить городу картинку! Простите, господин Мэр!'
+      },
+      forgive: ['elephant', 'Ничего страшного! Давайте вместе нарисуем большую картину — с разрешения!']
+    },
+    bakery: {
+      title: 'Пропавшие круассаны',
+      call: 'Алло, полиция? Это Ёжик-пекарь! Пропали все мои круассаны!',
+      steps: [
+        ['hedgehog', 'Здравствуй, агент Мишка! Посмотри на мою пекарню, что-то случилось…'],
+        ['chief', 'Запиши всё в полицейский блокнот!'],
+        ['chief', 'Белые перья ведут к пруду… Ищем там!']
+      ],
+      ending: [
+        ['seagull', 'Простите! Мои малыши были такие голодные… Я взяла круассаны для них.'],
+        ['hedgehog', 'Бедные малыши! Я буду приносить вам хлебные крошки каждое утро!']
+      ]
+    },
+    hamster: {
+      title: 'Школьный хомячок',
+      call: 'Алло, полиция? Это учительница Жираф! Из класса сбежал хомячок!',
+      steps: [
+        ['giraffe', 'Здравствуй! Вот наш класс. Утром Орешек был в клетке.'],
+        ['giraffe', 'Нужно чем-то приманить Орешка!'],
+        ['chief', 'Кажется, он убежал играть в парк!']
+      ],
+      ending: [
+        ['hamster', 'Привет! Я просто хотел посмотреть на горки в парке!'],
+        ['giraffe', 'Вот ты где, Орешек! Мы сделаем тебе клетку с горкой!']
+      ]
+    },
+    farm: {
+      title: 'Обкусанные овощи',
+      call: 'Алло, полиция? Это фермер Хрюша! Ночью кто-то погрыз мои овощи!',
+      steps: [
+        ['pig', 'Посмотри на мой огород! Тут странные следы…'],
+        ['pig', 'Приготовим добрую ловушку с овощами!'],
+        ['chief', 'Следы ведут в тёмный сад…']
+      ],
+      ending: [
+        ['deer', 'Простите… Я так проголодался, а морковка так вкусно пахла!'],
+        ['pig', 'Не бойся, оленёнок! Я посажу для тебя твой собственный огородик.']
+      ]
+    },
+    crown: {
+      title: 'Корона Королевы',
+      call: 'Алло, полиция? Это Королева Лягушка! У пруда пропала моя корона!',
+      steps: [
+        ['frog', 'Моя корона лежала здесь, на берегу пруда!'],
+        ['frog', 'На кувшинке нашли таинственное послание!'],
+        ['chief', 'В парке видели птицу с чем-то блестящим!']
+      ],
+      ending: [
+        ['magpie', 'Она так блестела! Я только хотела полюбоваться ею в гнезде.'],
+        ['frog', 'Спасибо, что сберегла её! Вот тебе блестящая пуговка.']
+      ]
+    },
+    balloon: {
+      title: 'Шарик Бегемотика',
+      call: 'Алло, полиция? Это Малыш Бегемотик! Улетел мой шарик на день рождения!',
+      steps: [
+        ['hippo', 'Вот мой праздник. Красный шарик был прямо здесь!'],
+        ['chief', 'Садись в вертолёт и посмотри на парк сверху!'],
+        ['chief', 'Шарик застрял на самой верхушке дерева… Нужна лестница пожарных!']
+      ],
+      ending: [
+        ['hippo', 'Мой шарик! Спасибо, агент Мишка! Приходи ко мне на день рождения!']
+      ]
+    },
+    traffic: {
+      title: 'Сломанный светофор',
+      call: 'Алло, полиция? Это капитан Далматинец из пожарной части! Светофоры сломались, всё стоит!',
+      steps: [
+        ['dalmatian', 'Чтобы починить светофоры, надо открыть ящик с инструментами!'],
+        ['dalmatian', 'Вот щит управления светофорами в мэрии. Что-то не так…'],
+        ['chief', 'Нет ключа от щита! Он упал возле школы.']
+      ],
+      ending: [
+        ['dalmatian', 'Светофоры снова работают! Пожарная машина может проехать. Пиу-пиу!']
+      ]
+    }
+  };
+
+  T.answers['owl.who'] = color => `Ух-ух! Я видел, как кто-то убегал — в ${T.colorsIn[color]} шарфе!`;
+  T.nextPiece = piece => `Следующий слог: ${piece}`;
+  T.questions['duck.what'] = 'Ты видела его лапы?';
+  T.answers['owl.where'] = place => `Ух! Он ушёл ${T.placeTo[place]}.`;
+  T.answers['duck.what'] = paw => `Кря-кря! У него ${T.paws[paw]}!`;
+  T.answers['duck.more'] = () => 'Кря! Он очень торопился!';
+
+  // ===== Station (adult) =====
+  T.boardTitle = 'Выбери дело';
+  T.surprise = '🎲 Сюрприз!';
+  T.solved = 'раскрыто';
+  T.steps = 'Этапы';
+  T.gameNames = {
+    brush: 'Отпечаток', lamp: 'Фонарик', letters: 'Буквы', word: 'Напиши слово', symbols: 'Тайное послание',
+    sketch: 'Фоторобот', spot: 'Отличия', safe: 'Сейф', grid: 'Вертолёт', lineup: 'Опознание'
+  };
+  Object.assign(T.todo, {
+    board: 'Выбери дело на сегодня (или нажми «Сюрприз» 🎲).',
+    goTo: place => `Нажми «${T.places[place]}» на карте и подсказывай агенту стрелками на перекрёстках.`,
+    grid: 'Назови агенту клетку: сначала букву (сверху), потом цифру (сбоку).',
+    spot: 'Сравни своё фото «до» с экраном агента. Отличия обведены у тебя: помоги их найти.',
+    safe: 'Каждая цифра кода — маленькое сложение: помоги агенту посчитать картинки.',
+    symbols: 'У тебя книга шифров: подскажи агенту, какая буква под каждой картинкой.',
+    word: 'Агент пишет слово, слушая слоги. Нажми «Повторить», чтобы сказать его ещё раз.',
+    sketch: 'Прочитай, что говорит свидетель, и помоги агенту нарисовать лицо.',
+    lettersWord: 'Помоги агенту расставить буквы: подскажи следующую.'
+  });
+  T.before = 'До';
+  T.now = 'Сейчас';
+  T.code = 'Код';
+  T.repeat = '🔊 Повторить';
+  T.sayCell = '📻 Назвать клетку';
+  T.target = 'Найти';
+  T.codebook = 'Книга шифров';
+  T.witnessSays = 'Свидетель говорит:';
+  T.progressWord = 'Слово';
+})(STRINGS.ru);
+
+</script>
+  <script>
+'use strict';
+
+// The cases. Each step happens at a place and plays one mini-game picked at random from `games` when the case starts.
+// Lineup cases end at the police station with three suspects; the others end when the lost one is found.
+const CaseData = (function () {
+  const CASES = {
+    cake: {
+      caller: 'granny', home: 'granny', lineup: true,
+      steps: [
+        { place: 'granny', games: ['brush'] },
+        { place: 'garden', games: ['lamp', 'grid', 'spot'] },
+        { place: 'garden', games: ['letters', 'word', 'symbols', 'sketch'] },
+        { place: 'station', games: ['lineup'] }
+      ],
+      find: ['basket', 'umbrella', 'bucket', 'kite']
+    },
+    paint: {
+      caller: 'elephant', home: 'townhall', lineup: true,
+      steps: [
+        { place: 'townhall', games: ['brush'] },
+        { place: 'townhall', games: ['spot', 'safe', 'lamp'] },
+        { place: 'park', games: ['sketch', 'letters', 'symbols', 'word'] },
+        { place: 'station', games: ['lineup'] }
+      ],
+      find: ['paintbrush']
+    },
+    bakery: {
+      caller: 'hedgehog', home: 'bakery', found: 'seagull', print: 'bird',
+      steps: [
+        { place: 'bakery', games: ['spot', 'brush'] },
+        { place: 'bakery', games: ['safe', 'word', 'symbols', 'letters'] },
+        { place: 'pond', games: ['grid', 'lamp'] }
+      ],
+      find: ['nest'], words: ['croissant', 'bread', 'seagull', 'nest']
+    },
+    hamster: {
+      caller: 'giraffe', home: 'school', found: 'hamster', print: 'small',
+      steps: [
+        { place: 'school', games: ['spot', 'brush'] },
+        { place: 'school', games: ['safe', 'word', 'letters', 'symbols'] },
+        { place: 'park', games: ['lamp', 'grid'] }
+      ],
+      find: ['hamster'], words: ['hamster', 'seeds', 'cage']
+    },
+    farm: {
+      caller: 'pig', home: 'farm', found: 'deer', print: 'hoof',
+      steps: [
+        { place: 'farm', games: ['brush', 'spot'] },
+        { place: 'farm', games: ['word', 'symbols', 'letters', 'safe'] },
+        { place: 'garden', games: ['lamp', 'grid'] }
+      ],
+      find: ['deer'], words: ['carrot', 'salad', 'deer']
+    },
+    crown: {
+      caller: 'frog', home: 'pond', found: 'magpie', print: 'bird',
+      steps: [
+        { place: 'pond', games: ['spot', 'brush'] },
+        { place: 'pond', games: ['symbols', 'word', 'safe'] },
+        { place: 'park', games: ['grid', 'lamp'] }
+      ],
+      find: ['crown'], words: ['crown', 'magpie', 'frog']
+    },
+    balloon: {
+      caller: 'hippo', home: 'park', found: 'hippo',
+      steps: [
+        { place: 'park', games: ['spot', 'word', 'letters'] },
+        { place: 'park', games: ['grid'] },
+        { place: 'fire', games: ['safe', 'symbols'] }
+      ],
+      find: ['balloon'], words: ['balloon', 'gift', 'hippo']
+    },
+    traffic: {
+      caller: 'dalmatian', home: 'fire', found: 'dalmatian',
+      steps: [
+        { place: 'fire', games: ['safe', 'symbols'] },
+        { place: 'townhall', games: ['spot', 'word', 'letters'] },
+        { place: 'school', games: ['grid', 'lamp'] }
+      ],
+      find: ['key'], words: ['truck', 'key', 'light']
+    }
+  };
+
+  // Syllables are separated by '-'. Only words a 5-year-old can picture, no accents.
+  const WORDS = {
+    fr: {
+      fox: 'RE-NARD', mouse: 'SOU-RIS', panda: 'PAN-DA', rabbit: 'LA-PIN',
+      croissant: 'CROIS-SANT', bread: 'PAIN', seagull: 'MOU-ET-TE', nest: 'NID',
+      hamster: 'HAM-STER', seeds: 'GRAI-NES', cage: 'CA-GE',
+      carrot: 'CA-ROT-TE', salad: 'SA-LA-DE', deer: 'FAON',
+      crown: 'COU-RON-NE', magpie: 'PIE', frog: 'GRE-NOUIL-LE',
+      balloon: 'BAL-LON', gift: 'CA-DEAU', hippo: 'HIP-PO',
+      truck: 'CA-MI-ON', key: 'CLEF', light: 'FEU'
+    },
+    ru: {
+      fox: 'ЛИ-СА', mouse: 'МЫШ-КА', panda: 'ПАН-ДА', rabbit: 'ЗА-ЯЦ',
+      croissant: 'КРУ-АС-САН', bread: 'ХЛЕБ', seagull: 'ЧАЙ-КА', nest: 'ГНЕЗ-ДО',
+      hamster: 'ХО-МЯК', seeds: 'СЕ-МЕЧ-КИ', cage: 'КЛЕТ-КА',
+      carrot: 'МОР-КОВЬ', salad: 'СА-ЛАТ', deer: 'О-ЛЕНЬ',
+      crown: 'КО-РО-НА', magpie: 'СО-РО-КА', frog: 'ЛЯ-ГУШ-КА',
+      balloon: 'ША-РИК', gift: 'ПО-ДА-РОК', hippo: 'БЕ-ГЕ-МОТ',
+      truck: 'МА-ШИ-НА', key: 'КЛЮЧ', light: 'СВЕ-ТО-ФОР'
+    }
+  };
+
+  // Sticker earned at the end of a non-lineup case (lineup cases give the culprit's sticker)
+  const STICKERS = ['fox', 'mouse', 'panda', 'rabbit', 'seagull', 'hamster', 'deer', 'magpie', 'hippo', 'dalmatian'];
+
+  return { CASES, WORDS, STICKERS };
+})();
+
+</script>
+  <script>
+'use strict';
+
+// Case engine. The state is plain JSON owned by the station (host): the officer sends events, the station applies
+// them and shares the new state. A case is a list of steps (place + mini-game); see cases.js.
 const PatrolCase = (function () {
+  const { CASES, WORDS, STICKERS } = CaseData;
   const SPECIES = { fox: 'small', mouse: 'small', panda: 'big', rabbit: 'big' };
   const COLORS = ['red', 'blue', 'green', 'yellow'];
   const ITEMS = ['basket', 'umbrella', 'bucket', 'kite', 'boot', 'ball'];
-  const TARGETS = ['basket', 'umbrella', 'bucket', 'kite'];
-  const PRINTS = ['big', 'small', 'bird'];
+  const PRINTS = ['big', 'small', 'bird', 'hoof'];
   const VEHICLES = ['car', 'moto', 'horse'];
-  const PLACES = ['station', 'granny', 'garden', 'bakery', 'school', 'fire'];
-  const WORDS = {
-    fr: { fox: 'RENARD', mouse: 'SOURIS', panda: 'PANDA', rabbit: 'LAPIN' },
-    ru: { fox: 'ЛИСА', mouse: 'МЫШКА', panda: 'ПАНДА', rabbit: 'ЗАЯЦ' }
-  };
-  // Hiding spots in the dark garden, as fractions of the scene
-  const SPOTS = [[0.13, 0.66], [0.3, 0.84], [0.5, 0.62], [0.7, 0.85], [0.87, 0.64], [0.22, 0.44], [0.62, 0.42], [0.85, 0.4]];
-  const SCENE_FOR = { granny: 'brush', garden: 'lamp', station: 'lineup' };
+  const PLACES = ['station', 'granny', 'garden', 'bakery', 'school', 'fire', 'pond', 'park', 'townhall', 'farm'];
+  const GAMES = ['brush', 'lamp', 'letters', 'word', 'symbols', 'sketch', 'spot', 'safe', 'grid', 'lineup'];
+  const NAME_GAMES = ['letters', 'word', 'symbols', 'sketch'];
+  const WORD_GAMES = ['letters', 'word', 'symbols'];
   const QUESTIONS = { owl: ['who', 'where'], duck: ['what', 'more'] };
+  // Hiding spots in the dark, as fractions of the scene
+  const SPOTS = [[0.13, 0.66], [0.3, 0.84], [0.5, 0.62], [0.7, 0.85], [0.87, 0.64], [0.22, 0.44], [0.62, 0.42], [0.85, 0.4]];
+  // Sketch artist: the suspects' faces
+  const SKETCH = { fox: { color: 'orange', ears: 'pointy' }, mouse: { color: 'grey', ears: 'round' }, panda: { color: 'white', ears: 'round' }, rabbit: { color: 'beige', ears: 'long' } };
+  const SKETCH_OPTIONS = { color: ['orange', 'grey', 'white', 'beige'], ears: ['pointy', 'round', 'long'], scarf: COLORS };
+  const PROPS = ['cup', 'book', 'box', 'jar', 'flower', 'ball'];
+  const TINTS = ['red', 'blue', 'green', 'yellow', 'purple'];
+  const COUNT_ICONS = ['star', 'apple', 'heart', 'fish', 'flower'];
+  const GRID = 5, GRID_DECOYS = ['tree', 'bush', 'bench', 'rock', 'flowers'];
+  const SYMBOLS = 12;
+  const ALPHABET = { fr: 'ABCDEFGHIJLMNOPRSTUV', ru: 'АБВГДЕЖЗИКЛМНОПРСТУХЧШ' };
 
   function random(seed) {
     let s = seed >>> 0;
@@ -3052,40 +3631,215 @@ const PatrolCase = (function () {
     return list;
   }
   const pick = (list, r) => list[Math.floor(r() * list.length)];
-
-  // The lineup always needs both clues: one suspect shares the paws, another shares the scarf
-  function create(seed, lang) {
-    seed = (seed >>> 0) || ((Math.random() * 4294967295) >>> 0) || 1;
-    const r = random(seed);
-    const names = Object.keys(SPECIES);
-    const culprit = pick(names, r);
-    const mate = names.find(k => k !== culprit && SPECIES[k] === SPECIES[culprit]);
-    const other = pick(names.filter(k => SPECIES[k] !== SPECIES[culprit]), r);
-    const [scarf, otherScarf] = shuffle(COLORS.slice(), r);
-    const suspects = shuffle([{ species: culprit, scarf }, { species: mate, scarf: otherScarf }, { species: other, scarf }], r);
-    const item = pick(TARGETS, r);
-    const spots = shuffle(SPOTS.slice(), r);
-    const objects = [item, ...shuffle(ITEMS.filter(i => i !== item), r).slice(0, 4)].map((kind, i) => ({ kind, x: spots[i][0], y: spots[i][1] }));
-    return {
-      seed, lang: WORDS[lang] ? lang : 'fr', phase: 'call', suspects, culprit: suspects.findIndex(s => s.species === culprit),
-      item, objects, vehicle: null, target: null, asked: [], matchTries: 0, wrong: [],
-      clues: { print: false, scarf: false, garden: false, item: false, itemSent: false, found: false, letters: 0, name: false }
-    };
-  }
+  const newSeed = () => ((Math.random() * 4294967295) >>> 0) || 1;
+  const fixLang = lang => (WORDS[lang] ? lang : 'fr');
 
   const culprit = s => s.suspects[s.culprit];
   const paw = s => SPECIES[culprit(s).species];
   const pawOf = species => SPECIES[species];
-  const word = s => (WORDS[s.lang] || WORDS.fr)[culprit(s).species];
-  const canInterview = s => !['call', 'garage'].includes(s.phase);
+  const def = s => CASES[s.caseId];
+  const current = s => (s.steps ? s.steps[s.step] : null);
+  const game = s => (s.phase === 'game' && current(s) ? current(s).game : null);
+  const isLineup = s => !!(def(s) && def(s).lineup);
+  const canInterview = s => isLineup(s) && !['board', 'call', 'garage'].includes(s.phase);
+  const stickerOf = s => (isLineup(s) ? culprit(s).species : def(s).found);
 
-  // Where the officer must drive now (null = the station has something to do first)
-  function need(s) {
-    if (s.phase !== 'drive') return null;
-    if (!s.clues.print) return 'granny';
-    if (!s.clues.found) return s.clues.garden && s.clues.itemSent ? 'garden' : null;
-    return 'station';
+  // ===== Words =====
+  const wordOf = (s, key) => (WORDS[s.lang] || WORDS.fr)[key] || '';
+  const plain = (s, key) => wordOf(s, key).replace(/-/g, '');
+  // Pieces to put in order: syllables for the word game (when there are several), letters otherwise
+  function pieces(s, step) {
+    const w = wordOf(s, step.data.word);
+    if (step.game === 'word') { const syl = w.split('-'); return syl.length > 1 ? syl : syl[0].split(''); }
+    return w.replace(/-/g, '').split('');
   }
+  // Secret code: one symbol per letter, plus a few letters that are not in the word
+  function symbolCode(s, stepIndex) {
+    const step = s.steps[stepIndex], letters = [...new Set(plain(s, step.data.word).split(''))];
+    const r = random((s.seed ^ (stepIndex * 7919)) + (s.lang === 'ru' ? 13 : 0));
+    const alphabet = (ALPHABET[s.lang] || ALPHABET.fr).split('').filter(ch => !letters.includes(ch));
+    const all = letters.concat(shuffle(alphabet, r).slice(0, Math.max(0, Math.min(3, SYMBOLS - letters.length))));
+    const symbols = shuffle([...Array(SYMBOLS).keys()], r), map = {};
+    all.forEach((ch, i) => { map[ch] = symbols[i]; });
+    return { map, palette: shuffle(all.slice(), r) };
+  }
+
+  // ===== Building a case =====
+  function makeData(gameKey, d, s, r, usedWords) {
+    switch (gameKey) {
+      case 'brush': {
+        const print = d.lineup ? paw(s) : d.print;
+        return { print, choices: shuffle([print, ...shuffle(PRINTS.filter(p => p !== print), r).slice(0, 2)], r) };
+      }
+      case 'lamp': {
+        const item = pick(d.find, r), spots = shuffle(SPOTS.slice(), r);
+        const objects = [item, ...shuffle(ITEMS.filter(i => i !== item), r).slice(0, 4)].map((kind, i) => ({ kind, x: spots[i][0], y: spots[i][1] }));
+        return { item, objects };
+      }
+      case 'grid': {
+        const cells = [];
+        for (let c = 0; c < GRID; c++) for (let row = 0; row < GRID; row++) cells.push([c, row]);
+        shuffle(cells, r);
+        return { item: pick(d.find, r), c: cells[0][0], r: cells[0][1], decoys: cells.slice(1, 10).map(([c, row]) => ({ c, r: row, kind: pick(GRID_DECOYS, r) })) };
+      }
+      case 'letters': case 'word': case 'symbols': {
+        if (d.lineup) return { word: culprit(s).species };
+        const options = d.words.filter(w => !usedWords.has(w));
+        const word = pick(options.length ? options : d.words, r);
+        usedWords.add(word);
+        return { word };
+      }
+      case 'sketch': {
+        const cul = culprit(s);
+        return { color: SKETCH[cul.species].color, ears: SKETCH[cul.species].ears, scarf: cul.scarf };
+      }
+      case 'spot': {
+        const items = [...Array(8)].map(() => ({ kind: pick(PROPS, r), tint: pick(TINTS, r) }));
+        const types = shuffle(['missing', 'color', 'swap'], r);
+        const changes = shuffle([...Array(8).keys()], r).slice(0, 3).map((i, k) => {
+          const type = types[k];
+          const to = type === 'color' ? pick(TINTS.filter(t => t !== items[i].tint), r) : type === 'swap' ? pick(PROPS.filter(p => p !== items[i].kind), r) : null;
+          return { i, type, to };
+        });
+        return { items, changes };
+      }
+      case 'safe':
+        // Each digit is a small addition the child can count: a + b, from 2 to 9
+        return {
+          digits: [0, 1, 2].map(() => {
+            const sum = 2 + Math.floor(r() * 8), a = 1 + Math.floor(r() * (sum - 1));
+            return { a, b: sum - a, icon: pick(COUNT_ICONS, r) };
+          })
+        };
+      default:
+        return {};
+    }
+  }
+
+  function freshProgress(gameKey) {
+    switch (gameKey) {
+      case 'brush': return { part: 'brush', tries: 0 };
+      case 'lamp': return { sent: false };
+      case 'sketch': return { color: null, ears: null, scarf: null };
+      case 'spot': return { found: [] };
+      case 'safe': return { n: 0, wrong: 0 };
+      case 'grid': return { c: -1, r: -1, found: false };
+      case 'letters': case 'word': case 'symbols': return { n: 0 };
+      default: return {};
+    }
+  }
+
+  // The station shows the case board between cases
+  function board(lang) {
+    return { v: 2, phase: 'board', caseId: null, seed: newSeed(), lang: fixLang(lang), steps: [], step: 0, progress: null };
+  }
+
+  function create(caseId, seed, lang) {
+    const d = CASES[caseId] ? CASES[caseId] : CASES.cake;
+    seed = (seed >>> 0) || newSeed();
+    const r = random(seed);
+    const s = {
+      v: 2, caseId: CASES[caseId] ? caseId : 'cake', seed, lang: fixLang(lang), phase: 'call',
+      steps: [], step: 0, progress: null, vehicle: null, target: null, asked: [], wrong: [], results: {}
+    };
+    if (d.lineup) {
+      // The lineup always needs both clues: one suspect shares the paws, another shares the scarf
+      const names = Object.keys(SPECIES);
+      const cul = pick(names, r);
+      const mate = names.find(k => k !== cul && SPECIES[k] === SPECIES[cul]);
+      const other = pick(names.filter(k => SPECIES[k] !== SPECIES[cul]), r);
+      const [scarf, otherScarf] = shuffle(COLORS.slice(), r);
+      s.suspects = shuffle([{ species: cul, scarf }, { species: mate, scarf: otherScarf }, { species: other, scarf }], r);
+      s.culprit = s.suspects.findIndex(x => x.species === cul);
+    }
+    const usedGames = new Set(), usedWords = new Set();
+    d.steps.forEach(st => {
+      const options = st.games.filter(g => !usedGames.has(g));
+      const g = pick(options.length ? options : st.games, r);
+      usedGames.add(g);
+      s.steps.push({ place: st.place, game: g, data: makeData(g, d, s, r, usedWords) });
+    });
+    return s;
+  }
+
+  // Where the officer must drive now
+  const need = s => (s.phase === 'drive' && current(s) ? current(s).place : null);
+
+  function startStep(s) {
+    s.phase = 'game';
+    s.progress = freshProgress(current(s).game);
+  }
+  function finishStep(s) {
+    const g = current(s).game;
+    if (g === 'brush') s.results.print = true;
+    if (NAME_GAMES.includes(g) && isLineup(s)) s.results.name = true;
+    if (g === 'lamp' || g === 'grid') s.results.found = true;
+    s.step++;
+    if (s.step >= s.steps.length) { s.phase = 'ending'; s.progress = null; return; }
+    if (s.steps[s.step].place === s.steps[s.step - 1].place) startStep(s);
+    else { s.phase = 'drive'; s.progress = null; s.target = null; }
+  }
+
+  // ===== Mini-game rules (event { t: 'g', step, a: action, ... }) =====
+  function sequence(s, st, p, e) {
+    const n = pieces(s, st).length;
+    if (e.a === 'piece' && e.i === p.n && p.n < n) { p.n++; return true; }
+    if (e.a === 'complete' && p.n === n) { p.done = true; return true; }
+    return false;
+  }
+  const RULES = {
+    brush(s, st, p, e) {
+      if (e.a === 'brushed' && p.part === 'brush') { p.part = 'match'; return true; }
+      if (e.a === 'match' && p.part === 'match' && PRINTS.includes(e.print)) {
+        if (e.print === st.data.print) p.done = true; else p.tries++;
+        return true;
+      }
+      return false;
+    },
+    lamp(s, st, p, e) {
+      if (e.a === 'send' && !p.sent) { p.sent = true; return true; }
+      if (e.a === 'found' && p.sent) { p.done = true; return true; }
+      return false;
+    },
+    letters: sequence,
+    word: sequence,
+    symbols: sequence,
+    sketch(s, st, p, e) {
+      if (e.a === 'pick' && SKETCH_OPTIONS[e.cat] && SKETCH_OPTIONS[e.cat].includes(e.v) && p[e.cat] !== e.v) { p[e.cat] = e.v; return true; }
+      if (e.a === 'complete' && Object.keys(SKETCH_OPTIONS).every(k => p[k] === st.data[k])) { p.done = true; return true; }
+      return false;
+    },
+    spot(s, st, p, e) {
+      if (e.a === 'tap' && st.data.changes.some(c => c.i === e.i) && !p.found.includes(e.i)) { p.found.push(e.i); return true; }
+      if (e.a === 'complete' && p.found.length === st.data.changes.length) { p.done = true; return true; }
+      return false;
+    },
+    safe(s, st, p, e) {
+      const digits = st.data.digits;
+      if (e.a === 'digit' && e.i === p.n && p.n < digits.length) {
+        if (e.v === digits[p.n].a + digits[p.n].b) p.n++; else p.wrong++;
+        return true;
+      }
+      if (e.a === 'complete' && p.n === digits.length) { p.done = true; return true; }
+      return false;
+    },
+    grid(s, st, p, e) {
+      if (e.a === 'cell' && e.c >= 0 && e.c < GRID && e.r >= 0 && e.r < GRID && !p.found) {
+        p.c = e.c; p.r = e.r;
+        if (e.c === st.data.c && e.r === st.data.r) p.found = true;
+        return true;
+      }
+      if (e.a === 'complete' && p.found) { p.done = true; return true; }
+      return false;
+    },
+    lineup(s, st, p, e) {
+      if (e.a !== 'pick' || !s.suspects[e.i]) return false;
+      if (e.i === s.culprit) { p.done = true; return true; }
+      if (s.wrong.includes(e.i)) return false;
+      s.wrong.push(e.i);
+      return true;
+    }
+  };
 
   // Applies an event; returns true when the state changed
   function apply(s, e) {
@@ -3097,51 +3851,32 @@ const PatrolCase = (function () {
         if (s.phase !== 'garage' || !VEHICLES.includes(e.v)) return false;
         s.vehicle = e.v; s.phase = 'drive'; return true;
       case 'target':
-        if (!PLACES.includes(e.place) || s.target === e.place) return false;
+        if (s.phase === 'board' || !PLACES.includes(e.place) || s.target === e.place) return false;
         s.target = e.place; return true;
       case 'arrive':
         if (e.place !== need(s)) return false;
-        s.phase = SCENE_FOR[e.place]; s.target = null; return true;
-      case 'print':
-        if (s.phase !== 'brush') return false;
-        s.phase = 'match'; return true;
-      case 'match':
-        if (s.phase !== 'match' || !PRINTS.includes(e.print)) return false;
-        if (e.print !== paw(s)) { s.matchTries++; return true; }
-        s.clues.print = true; s.phase = 'drive'; return true;
+        s.target = null; startStep(s); return true;
       case 'ask': {
         const k = e.witness + '.' + e.q;
         if (!canInterview(s) || !(QUESTIONS[e.witness] || []).includes(e.q) || s.asked.includes(k)) return false;
         s.asked.push(k);
-        if (k === 'owl.who') s.clues.scarf = true;
-        if (k === 'owl.where') s.clues.garden = true;
-        if (k === 'duck.what') s.clues.item = true;
+        if (k === 'owl.who') s.results.scarf = true;
         return true;
       }
-      case 'sendItem':
-        if (!s.clues.item || s.clues.itemSent) return false;
-        s.clues.itemSent = true; return true;
-      case 'found':
-        if (s.phase !== 'lamp' || !s.clues.itemSent) return false;
-        s.clues.found = true; s.phase = 'letters'; return true;
-      case 'letter':
-        if (s.phase !== 'letters' || e.i !== s.clues.letters || e.i >= word(s).length) return false;
-        s.clues.letters++; return true;
-      case 'lettersDone':
-        if (s.phase !== 'letters' || s.clues.letters < word(s).length) return false;
-        s.clues.name = true; s.phase = 'drive'; return true;
-      case 'pick':
-        if (s.phase !== 'lineup' || !s.suspects[e.i]) return false;
-        if (e.i === s.culprit) { s.phase = 'ending'; return true; }
-        if (s.wrong.includes(e.i)) return false;
-        s.wrong.push(e.i); return true;
+      case 'g': {
+        const st = current(s);
+        if (s.phase !== 'game' || !st || e.step !== s.step) return false;
+        const changed = RULES[st.game](s, st, s.progress, e);
+        if (s.progress.done) finishStep(s);
+        return changed;
+      }
       case 'endDone':
         if (s.phase !== 'ending') return false;
         s.phase = 'done'; return true;
       case 'lang':
         if (!WORDS[e.lang] || s.lang === e.lang) return false;
         s.lang = e.lang;
-        if (s.phase === 'letters') s.clues.letters = 0;
+        if (WORD_GAMES.includes(game(s))) s.progress.n = 0;
         return true;
     }
     return false;
@@ -3152,7 +3887,11 @@ const PatrolCase = (function () {
     return SPECIES[s.suspects[i].species] !== paw(s) ? 'paws' : 'scarf';
   }
 
-  return { SPECIES, COLORS, ITEMS, PRINTS, VEHICLES, PLACES, WORDS, QUESTIONS, create, apply, need, culprit, paw, pawOf, word, alibi, canInterview };
+  return {
+    CASES, WORDS, STICKERS, SPECIES, COLORS, ITEMS, PRINTS, VEHICLES, PLACES, GAMES, QUESTIONS, SKETCH, SKETCH_OPTIONS, PROPS, TINTS, GRID,
+    SYMBOLS, create, board, apply, need, current, game, culprit, paw, pawOf, wordOf, plain, pieces, symbolCode, alibi,
+    canInterview, isLineup, stickerOf, def
+  };
 })();
 
 </script>
@@ -3192,7 +3931,11 @@ const Town = (function () {
     garden: { a: at(5, 0), b: at(5, 1), dir: 'w', cell: [4, 0] },
     bakery: { a: at(3, 2), b: at(4, 2), dir: 's', cell: [3, 2] },
     school: { a: at(0, 2), b: at(0, 3), dir: 'e', cell: [0, 2] },
-    fire: { a: at(4, 4), b: at(5, 4), dir: 'n', cell: [4, 3] }
+    fire: { a: at(4, 4), b: at(5, 4), dir: 'n', cell: [4, 3] },
+    pond: { a: at(2, 0), b: at(2, 1), dir: 'e', cell: [2, 0] },
+    park: { a: at(1, 1), b: at(2, 1), dir: 's', cell: [1, 1] },
+    townhall: { a: at(3, 1), b: at(4, 1), dir: 's', cell: [3, 1] },
+    farm: { a: at(0, 4), b: at(1, 4), dir: 'n', cell: [0, 3] }
   };
   Object.values(PLACES).forEach(p => {
     const A = nodes[p.a], B = nodes[p.b], d = DIRS[p.dir], off = ROAD / 2 + 62;
@@ -4311,6 +5054,26 @@ const Art = (function () {
         ctx.beginPath(); ctx.moveTo(0, -20); ctx.quadraticCurveTo(18, -2, 10, 14); ctx.quadraticCurveTo(0, 20, -10, 14); ctx.quadraticCurveTo(-18, -2, 0, -20); shape(ctx, '#ff6b2c', OUT, 2.2);
         ell(ctx, 0, 8, 6, 8, '#ffd23f');
         break;
+      case 'pond':
+        ell(ctx, 0, 4, 20, 12, '#5bb5f0', OUT, 2.2);
+        ell(ctx, -4, -6, 9, 6, '#6cc24a', OUT, 1.8); ell(ctx, -8, -11, 3, 3, '#fff', OUT, 1); ell(ctx, 0, -11, 3, 3, '#fff', OUT, 1);
+        break;
+      case 'park':
+        line(ctx, [[0, 2], [-4, 20]], OUT, 1.6);
+        ell(ctx, 0, -8, 12, 14, '#ff4d4d', OUT, 2.2);
+        ell(ctx, -4, -12, 3, 5, 'rgba(255,255,255,0.6)');
+        break;
+      case 'townhall':
+        poly(ctx, [[-18, -6], [0, -18], [18, -6]], '#c0392b', OUT, 2);
+        rr(ctx, -16, -6, 32, 22, 2, '#f3e6cf', OUT, 2);
+        [-9, 0, 9].forEach(x => line(ctx, [[x, -3], [x, 13]], OUT, 1.6));
+        break;
+      case 'farm':
+        ctx.save(); ctx.rotate(0.5);
+        poly(ctx, [[-7, -10], [7, -10], [0, 20]], '#ff8a3d', OUT, 2);
+        [-4, 0, 4].forEach(x => ell(ctx, x, -15, 3, 7, '#3fbf5a', OUT, 1.2));
+        ctx.restore();
+        break;
     }
   }
   function placeBadge(ctx, place, time, highlight) {
@@ -4427,6 +5190,30 @@ const Art = (function () {
       case 'fire':
         rr(ctx, -60, -40, 120, 80, 8, '#e53935', OUT, 3);
         [-36, 0, 36].forEach(dx => rr(ctx, dx - 14, -46, 28, 10, 2, '#ffccbc', OUT, 1.4));
+        break;
+      case 'pond':
+        rr(ctx, -46, -64, 22, 90, 3, '#a8743f', OUT, 2.4);
+        for (let i = -56; i < 24; i += 14) line(ctx, [[-46, i], [-24, i]], '#6b4a2b', 1.6);
+        ell(ctx, 10, -10, 18, 7, '#4cc552', OUT, 2); ell(ctx, 30, 20, 14, 6, '#4cc552', OUT, 2);
+        break;
+      case 'park':
+        poly(ctx, [[-40, 30], [-10, -40], [2, -40], [-24, 30]], '#ff8a3d', OUT, 2.4);
+        line(ctx, [[20, -40], [20, 30]], OUT, 3); line(ctx, [[56, -40], [56, 30]], OUT, 3); line(ctx, [[14, -40], [62, -40]], OUT, 4);
+        rr(ctx, 28, 0, 20, 6, 2, '#3f8cff', OUT, 1.6); line(ctx, [[30, -40], [30, 0]], OUT, 1.4); line(ctx, [[46, -40], [46, 0]], OUT, 1.4);
+        tree(ctx, -56, -30, 15);
+        break;
+      case 'townhall':
+        rr(ctx, -64, -42, 128, 84, 6, '#f3e6cf', OUT, 3);
+        poly(ctx, [[-70, -40], [0, -62], [70, -40]], '#c0392b', OUT, 2.4);
+        ell(ctx, 0, -12, 12, 12, '#fff', OUT, 2); line(ctx, [[0, -12], [0, -20]], OUT, 2); line(ctx, [[0, -12], [6, -12]], OUT, 2);
+        [['#3f6fd8', -54], ['#fff', -46], ['#ff4d4d', -38]].forEach(([c, x]) => rr(ctx, x, -38, 8, 16, 0, c));
+        break;
+      case 'farm':
+        rr(ctx, -64, -36, 70, 70, 4, '#c0392b', OUT, 3);
+        poly(ctx, [[-64, -36], [-29, -58], [6, -36]], '#8e2a20', OUT, 2.4);
+        line(ctx, [[-44, 0], [-14, 34]], '#fff', 3); line(ctx, [[-14, 0], [-44, 34]], '#fff', 3);
+        for (let i = 0; i < 4; i++) line(ctx, [[20, -30 + i * 18], [64, -30 + i * 18]], '#6b4a2b', 6);
+        [0, 1, 2, 3].forEach(i => ell(ctx, 30 + i * 10, -30 + i * 18, 4, 5, '#3fbf5a'));
         break;
     }
     ctx.restore();
@@ -4569,11 +5356,569 @@ const Art = (function () {
   <script>
 'use strict';
 
+// More drawings for the cases: callers, the ones we look for, items, props, symbols and backgrounds.
+// Extends Art (art.js); heads are ~26 units in radius, bodies stand on the origin like the other characters.
+(function (A) {
+  const OUT = A.OUT;
+  const { ell, rr, poly, line, curve, star } = A;
+  const blinking = (time, offset) => ((time + offset) % 4.2) < 0.13;
+  function eye(ctx, x, y, r, time, offset) {
+    if (blinking(time, offset || 0)) { line(ctx, [[x - r, y], [x + r, y]], OUT, 2); return; }
+    ell(ctx, x, y, r, r * 1.15, '#fff', OUT, 1.5);
+    ell(ctx, x + 0.2 * r, y + 0.1 * r, r * 0.62, r * 0.72, OUT);
+    ell(ctx, x + 0.45 * r, y - 0.25 * r, r * 0.22, r * 0.22, '#fff');
+  }
+  function cheeks(ctx, x, y, dx) { ell(ctx, x - dx, y, 4.5, 3, 'rgba(255,110,120,0.45)'); ell(ctx, x + dx, y, 4.5, 3, 'rgba(255,110,120,0.45)'); }
+  function smile(ctx, x, y, w, happy) {
+    if (happy) { ctx.beginPath(); ctx.arc(x, y, w, 0, Math.PI); ctx.closePath(); ctx.fillStyle = '#b33a3a'; ctx.fill(); ctx.strokeStyle = OUT; ctx.lineWidth = 1.8; ctx.stroke(); }
+    else curve(ctx, x - w, y, x, y + w * 0.9, x + w, y, OUT, 2.2);
+  }
+  function face(ctx, x, y, time, happy, dx, offset) {
+    eye(ctx, x - (dx || 10), y - 3, 3.8, time, offset);
+    eye(ctx, x + (dx || 10), y - 3, 3.8, time, offset);
+    cheeks(ctx, x, y + 6, 16);
+    smile(ctx, x, y + 11, 4, happy);
+  }
+
+  // ===== Heads =====
+  const HEADS = {
+    hedgehog(ctx, x, y, time, happy) {
+      for (let i = 0; i < 11; i++) { const a = Math.PI * (0.95 + i * 0.11); poly(ctx, [[x + Math.cos(a - 0.12) * 24, y + Math.sin(a - 0.12) * 22], [x + Math.cos(a) * 40, y + Math.sin(a) * 36], [x + Math.cos(a + 0.12) * 24, y + Math.sin(a + 0.12) * 22]], '#7a5232', OUT, 2); }
+      ell(ctx, x, y, 26, 22, '#c99a6b', OUT, 2.6);
+      ell(ctx, x, y + 8, 12, 9, '#f3e1c6');
+      ell(ctx, x, y + 4, 4.5, 3.5, OUT);
+      face(ctx, x, y, time, happy, 10, 0.4);
+      // Baker's hat
+      rr(ctx, x - 16, y - 30, 32, 10, 3, '#fff', OUT, 2);
+      [-10, 0, 10].forEach(dx => ell(ctx, x + dx, y - 36, 9, 9, '#fff', OUT, 2));
+      rr(ctx, x - 16, y - 32, 32, 8, 2, '#fff');
+    },
+    giraffe(ctx, x, y, time, happy) {
+      [-8, 8].forEach(dx => { line(ctx, [[x + dx, y - 20], [x + dx, y - 36]], OUT, 3); ell(ctx, x + dx, y - 38, 4, 4, '#a0522d', OUT, 1.6); });
+      ell(ctx, x - 24, y - 12, 9, 5, '#f6c453', OUT, 2, -0.4); ell(ctx, x + 24, y - 12, 9, 5, '#f6c453', OUT, 2, 0.4);
+      ell(ctx, x, y, 22, 25, '#f6c453', OUT, 2.6);
+      [[-12, -12], [10, -16], [14, 2], [-15, 6]].forEach(([dx, dy]) => ell(ctx, x + dx, y + dy, 4, 3, '#c68136'));
+      ell(ctx, x, y + 13, 14, 10, '#f3dca2', OUT, 1.8);
+      ell(ctx, x - 5, y + 12, 1.6, 2, OUT); ell(ctx, x + 5, y + 12, 1.6, 2, OUT);
+      eye(ctx, x - 9, y - 4, 3.6, time, 0.8); eye(ctx, x + 9, y - 4, 3.6, time, 0.8);
+      ell(ctx, x - 9, y - 4, 7, 7, null, '#7b2fbf', 2); ell(ctx, x + 9, y - 4, 7, 7, null, '#7b2fbf', 2);
+      line(ctx, [[x - 2, y - 4], [x + 2, y - 4]], '#7b2fbf', 2);
+      smile(ctx, x, y + 18, 4, happy);
+    },
+    elephant(ctx, x, y, time, happy) {
+      ell(ctx, x - 26, y + 2, 16, 20, '#9aa5b8', OUT, 2.4); ell(ctx, x + 26, y + 2, 16, 20, '#9aa5b8', OUT, 2.4);
+      ell(ctx, x - 26, y + 2, 9, 13, '#f0b8c8'); ell(ctx, x + 26, y + 2, 9, 13, '#f0b8c8');
+      ell(ctx, x, y, 24, 23, '#aab4c6', OUT, 2.6);
+      ctx.beginPath(); ctx.moveTo(x - 6, y + 6); ctx.quadraticCurveTo(x - 7, y + 26, x + 4, y + 30); ctx.quadraticCurveTo(x + 9, y + 26, x + 6, y + 6); ctx.closePath();
+      ctx.fillStyle = '#aab4c6'; ctx.fill(); ctx.strokeStyle = OUT; ctx.lineWidth = 2.2; ctx.stroke();
+      eye(ctx, x - 10, y - 4, 3.6, time, 1.2); eye(ctx, x + 10, y - 4, 3.6, time, 1.2);
+      cheeks(ctx, x, y + 6, 16);
+      if (happy) curve(ctx, x - 14, y + 12, x - 10, y + 18, x - 6, y + 14, OUT, 2);
+      // Mayor's top hat
+      rr(ctx, x - 14, y - 44, 28, 24, 3, '#2b2b3b', OUT, 2);
+      rr(ctx, x - 20, y - 22, 40, 6, 3, '#2b2b3b', OUT, 2);
+      rr(ctx, x - 14, y - 30, 28, 5, 1, '#e03131');
+    },
+    pig(ctx, x, y, time, happy) {
+      poly(ctx, [[x - 22, y - 8], [x - 20, y - 28], [x - 6, y - 18]], '#f7a8c4', OUT, 2.2);
+      poly(ctx, [[x + 22, y - 8], [x + 20, y - 28], [x + 6, y - 18]], '#f7a8c4', OUT, 2.2);
+      ell(ctx, x, y, 26, 23, '#f7b6cc', OUT, 2.6);
+      ell(ctx, x, y + 7, 10, 7, '#f48fb1', OUT, 2);
+      ell(ctx, x - 3.5, y + 7, 1.8, 2.6, '#b4466e'); ell(ctx, x + 3.5, y + 7, 1.8, 2.6, '#b4466e');
+      eye(ctx, x - 11, y - 6, 3.4, time, 2.2); eye(ctx, x + 11, y - 6, 3.4, time, 2.2);
+      cheeks(ctx, x, y + 4, 18);
+      smile(ctx, x, y + 16, 4, happy);
+      // Straw hat
+      ell(ctx, x, y - 22, 32, 7, '#f2d27a', OUT, 2);
+      ctx.beginPath(); ctx.ellipse(x, y - 24, 17, 13, 0, Math.PI, 0); ctx.closePath(); ctx.fillStyle = '#f2d27a'; ctx.fill(); ctx.strokeStyle = OUT; ctx.lineWidth = 2; ctx.stroke();
+      rr(ctx, x - 17, y - 27, 34, 4, 2, '#e03131');
+    },
+    frog(ctx, x, y, time, happy, opts) {
+      ell(ctx, x - 13, y - 18, 10, 10, '#6cc24a', OUT, 2.4); ell(ctx, x + 13, y - 18, 10, 10, '#6cc24a', OUT, 2.4);
+      eye(ctx, x - 13, y - 18, 5, time, 1.6); eye(ctx, x + 13, y - 18, 5, time, 1.6);
+      ell(ctx, x, y, 28, 20, '#6cc24a', OUT, 2.6);
+      ell(ctx, x - 14, y + 4, 4, 2.6, 'rgba(255,110,120,0.5)'); ell(ctx, x + 14, y + 4, 4, 2.6, 'rgba(255,110,120,0.5)');
+      if (happy) { ctx.beginPath(); ctx.arc(x, y + 4, 12, 0.1, Math.PI - 0.1); ctx.closePath(); ctx.fillStyle = '#b33a3a'; ctx.fill(); ctx.strokeStyle = OUT; ctx.lineWidth = 1.8; ctx.stroke(); }
+      else curve(ctx, x - 14, y + 4, x, y + 14, x + 14, y + 4, OUT, 2.2);
+      if (opts && opts.crown) poly(ctx, [[x - 12, y - 26], [x - 12, y - 40], [x - 6, y - 32], [x, y - 42], [x + 6, y - 32], [x + 12, y - 40], [x + 12, y - 26]], '#ffd34d', OUT, 2);
+    },
+    hippo(ctx, x, y, time, happy) {
+      ell(ctx, x - 17, y - 20, 6, 6, '#a58fc7', OUT, 2); ell(ctx, x + 17, y - 20, 6, 6, '#a58fc7', OUT, 2);
+      ell(ctx, x, y - 4, 24, 20, '#a58fc7', OUT, 2.6);
+      ell(ctx, x, y + 12, 22, 14, '#c3b1df', OUT, 2.4);
+      ell(ctx, x - 7, y + 8, 2.2, 3, OUT); ell(ctx, x + 7, y + 8, 2.2, 3, OUT);
+      eye(ctx, x - 9, y - 10, 3.6, time, 2.8); eye(ctx, x + 9, y - 10, 3.6, time, 2.8);
+      ell(ctx, x - 18, y + 2, 4.5, 3, 'rgba(255,110,120,0.5)'); ell(ctx, x + 18, y + 2, 4.5, 3, 'rgba(255,110,120,0.5)');
+      smile(ctx, x, y + 16, 5, happy);
+      // Party hat
+      poly(ctx, [[x - 9, y - 22], [x + 3, y - 46], [x + 13, y - 20]], '#ff6fb5', OUT, 2);
+      ell(ctx, x + 3, y - 47, 4, 4, '#ffd23f', OUT, 1.5);
+    },
+    dalmatian(ctx, x, y, time, happy) {
+      ell(ctx, x - 22, y + 2, 8, 16, OUT, null, 0, 0.3); ell(ctx, x + 22, y + 2, 8, 16, OUT, null, 0, -0.3);
+      ell(ctx, x, y, 24, 23, '#fff', OUT, 2.6);
+      [[-12, -10], [13, 4], [6, -16], [-15, 8]].forEach(([dx, dy]) => ell(ctx, x + dx, y + dy, 3.5, 3, OUT));
+      ell(ctx, x, y + 9, 11, 8, '#f4f4f4', OUT, 1.6);
+      ell(ctx, x, y + 5, 5, 3.6, OUT);
+      eye(ctx, x - 9, y - 4, 3.6, time, 3.3); eye(ctx, x + 9, y - 4, 3.6, time, 3.3);
+      cheeks(ctx, x, y + 6, 16);
+      smile(ctx, x, y + 12, 4, happy);
+      // Fire helmet
+      ctx.beginPath(); ctx.ellipse(x, y - 15, 20, 15, 0, Math.PI, 0); ctx.closePath(); ctx.fillStyle = '#e03131'; ctx.fill(); ctx.strokeStyle = OUT; ctx.lineWidth = 2.2; ctx.stroke();
+      rr(ctx, x - 26, y - 17, 52, 6, 3, '#e03131', OUT, 2);
+      star(ctx, x, y - 22, 6, '#ffd34d', OUT, 1.2);
+    },
+    seagull(ctx, x, y, time, happy) {
+      ell(ctx, x, y, 22, 20, '#fff', OUT, 2.6);
+      poly(ctx, [[x + 10, y + 2], [x + 34, y + 6], [x + 10, y + 10]], '#ffc107', OUT, 2);
+      ell(ctx, x + 30, y + 7, 2.2, 2, '#e03131');
+      eye(ctx, x + 2, y - 4, 3.6, time, 0.6);
+      ell(ctx, x - 8, y + 6, 4, 2.6, 'rgba(255,110,120,0.45)');
+      if (happy) curve(ctx, x + 10, y + 12, x + 18, y + 14, x + 24, y + 11, OUT, 1.6);
+    },
+    hamster(ctx, x, y, time, happy) {
+      ell(ctx, x - 17, y - 17, 7, 7, '#e6a15a', OUT, 2); ell(ctx, x + 17, y - 17, 7, 7, '#e6a15a', OUT, 2);
+      ell(ctx, x - 17, y - 17, 3.5, 3.5, '#ffc2d4'); ell(ctx, x + 17, y - 17, 3.5, 3.5, '#ffc2d4');
+      ell(ctx, x, y, 25, 22, '#e6a15a', OUT, 2.6);
+      ell(ctx, x - 12, y + 8, 11, 9, '#fff3e6'); ell(ctx, x + 12, y + 8, 11, 9, '#fff3e6');
+      ell(ctx, x, y + 3, 3.5, 2.6, '#ff6f91', OUT, 1.2);
+      eye(ctx, x - 9, y - 5, 3.4, time, 1.9); eye(ctx, x + 9, y - 5, 3.4, time, 1.9);
+      smile(ctx, x, y + 8, 3, happy);
+    },
+    deer(ctx, x, y, time, happy) {
+      ell(ctx, x - 24, y - 12, 12, 6, '#b5793f', OUT, 2.2, -0.5); ell(ctx, x + 24, y - 12, 12, 6, '#b5793f', OUT, 2.2, 0.5);
+      ell(ctx, x - 24, y - 12, 7, 3, '#f3c9a1', null, 0, -0.5); ell(ctx, x + 24, y - 12, 7, 3, '#f3c9a1', null, 0, 0.5);
+      ell(ctx, x, y, 21, 23, '#b5793f', OUT, 2.6);
+      ell(ctx, x, y + 11, 11, 10, '#f3e1c6', OUT, 1.6);
+      ell(ctx, x, y + 7, 4.5, 3.4, OUT);
+      [[-11, -14], [-5, -18], [9, -15]].forEach(([dx, dy]) => ell(ctx, x + dx, y + dy, 2.2, 2.2, '#fff'));
+      eye(ctx, x - 9, y - 3, 4, time, 2.5); eye(ctx, x + 9, y - 3, 4, time, 2.5);
+      cheeks(ctx, x, y + 6, 15);
+      smile(ctx, x, y + 14, 3, happy);
+    },
+    magpie(ctx, x, y, time, happy) {
+      ell(ctx, x, y, 21, 20, '#26263a', OUT, 2.6);
+      ell(ctx, x - 6, y + 10, 10, 7, '#fff');
+      poly(ctx, [[x + 12, y - 2], [x + 30, y + 3], [x + 12, y + 7]], '#3a3a4a', OUT, 2);
+      eye(ctx, x + 2, y - 6, 3.6, time, 3.6);
+      ell(ctx, x - 6, y - 12, 5, 2.5, 'rgba(90,130,255,0.6)');
+      if (happy) curve(ctx, x + 12, y + 9, x + 18, y + 12, x + 24, y + 8, '#fff', 1.6);
+    }
+  };
+
+  // ===== Bodies =====
+  const BODY = {
+    hedgehog: { body: '#f6f0e6', belly: '#fff', foot: '#7a5232', apron: true },
+    giraffe: { body: '#f6c453', belly: '#f3dca2', foot: '#a0522d', neck: true },
+    elephant: { body: '#aab4c6', belly: '#c3ccda', foot: '#7d889c', sash: true },
+    pig: { body: '#5b8fd6', belly: '#7aa7e6', foot: '#f48fb1', overalls: true },
+    frog: { body: '#6cc24a', belly: '#c8f0a8', foot: '#4f9b33', cape: true },
+    hippo: { body: '#a58fc7', belly: '#c3b1df', foot: '#8a73ad' },
+    dalmatian: { body: '#1f2a44', belly: '#ffd34d', foot: '#2b2b33' },
+    hamster: { body: '#e6a15a', belly: '#fff3e6', foot: '#ffb3c6' },
+    deer: { body: '#b5793f', belly: '#f3e1c6', foot: '#6b4a2b' }
+  };
+  const BIRDS = { seagull: { body: '#fff', wing: '#b7c3d0', foot: '#ffc107' }, magpie: { body: '#26263a', wing: '#3d4b8f', foot: '#3a3a4a' } };
+
+  function bird(ctx, who, time, opts) {
+    const b = BIRDS[who], flap = opts.happy ? Math.sin(time * 12) * 0.5 : Math.sin(time * 2) * 0.08;
+    [-7, 7].forEach(dx => line(ctx, [[dx, -18], [dx, 0], [dx + 6, 0]], b.foot, 3));
+    if (who === 'magpie') poly(ctx, [[-14, -34], [-52, -20], [-48, -12], [-12, -26]], '#3d4b8f', OUT, 2);
+    ell(ctx, 0, -42, 24, 26, b.body, OUT, 2.6);
+    if (who === 'magpie') ell(ctx, 4, -36, 12, 14, '#fff');
+    [-1, 1].forEach(s => { ctx.save(); ctx.translate(s * 18, -46); ctx.rotate(s * (0.4 + flap)); ell(ctx, s * 6, 6, 9, 18, b.wing, OUT, 2.2); ctx.restore(); });
+    HEADS[who](ctx, 4, -84, time, opts.happy);
+    if (who === 'seagull' && opts.chicks) {
+      [[-46, -4], [-30, -2]].forEach(([x, y], i) => {
+        ell(ctx, x, y - 10, 10, 10, '#d8dee6', OUT, 2);
+        poly(ctx, [[x + 7, y - 12], [x + 15, y - 10], [x + 7, y - 8]], '#ffc107', OUT, 1.4);
+        ell(ctx, x + 2, y - 14, 1.8, 1.8, OUT);
+        if (opts.happy) line(ctx, [[x - 3, y - 22 - Math.abs(Math.sin(time * 9 + i)) * 3], [x, y - 20]], '#d8dee6', 3);
+      });
+    }
+  }
+
+  function critter(ctx, who, time, opts) {
+    const o = opts || {};
+    if (BIRDS[who]) { bird(ctx, who, time, o); return; }
+    const b = BODY[who];
+    const bounce = o.happy ? Math.abs(Math.sin(time * 8)) * 5 : Math.sin(time * 2 + who.length) * 1;
+    ctx.save(); ctx.translate(0, -bounce);
+    if (who === 'hedgehog') ell(ctx, 0, -50, 30, 30, '#7a5232', OUT, 2.4);
+    if (who === 'frog' && !o.noCape) poly(ctx, [[-24, -72], [24, -72], [34, -12], [-34, -12]], '#c2255c', OUT, 2.4);
+    [-1, 1].forEach(s => rr(ctx, s * 11 - 8, -28, 16, 24, 7, b.body, OUT, 2.4));
+    [-1, 1].forEach(s => ell(ctx, s * 12, -3, 11, 6, b.foot, OUT, 2));
+    rr(ctx, -25, -76, 50, 54, 20, b.body, OUT, 2.8);
+    ell(ctx, 0, -46, 15, 18, b.belly);
+    if (who === 'giraffe') [[-14, -60], [12, -40], [-8, -32]].forEach(([x, y]) => ell(ctx, x, y, 5, 4, '#c68136'));
+    if (who === 'dalmatian') { rr(ctx, -25, -50, 50, 6, 2, '#ffd34d'); rr(ctx, -25, -36, 50, 6, 2, '#ffd34d'); }
+    if (b.apron) { rr(ctx, -16, -62, 32, 40, 8, '#fff', OUT, 2); ell(ctx, 0, -44, 5, 3, '#e0a050'); }
+    if (b.overalls) { rr(ctx, -15, -58, 30, 34, 6, '#3b6fb6', OUT, 2); ell(ctx, -9, -56, 2.4, 2.4, '#ffd34d'); ell(ctx, 9, -56, 2.4, 2.4, '#ffd34d'); }
+    if (b.sash) line(ctx, [[-22, -72], [20, -30]], '#e03131', 7);
+    const arm = who === 'pig' ? '#f7b6cc' : who === 'dalmatian' ? '#1f2a44' : b.body;
+    ctx.save(); ctx.translate(-23, -68); ctx.rotate(0.35); rr(ctx, -7, 0, 14, 28, 7, arm, OUT, 2.2); ctx.restore();
+    ctx.save(); ctx.translate(23, -68); ctx.rotate(o.wave ? -2.5 + Math.sin(time * 9) * 0.3 : -0.35); rr(ctx, -7, 0, 14, 28, 7, arm, OUT, 2.2); ctx.restore();
+    if (b.neck) { rr(ctx, -9, -112, 18, 40, 8, '#f6c453', OUT, 2.4); ell(ctx, 4, -94, 4, 3, '#c68136'); HEADS[who](ctx, 0, -130, time, o.happy, o); }
+    else HEADS[who](ctx, 0, -100, time, o.happy, o);
+    ctx.restore();
+  }
+
+  // ===== Portraits and stickers (also for the characters of art.js) =====
+  const basePortrait = A.portrait;
+  function portrait(ctx, who, time, size) {
+    if (!HEADS[who]) { basePortrait(ctx, who, time, size); return; }
+    const s = (size || 100) / 100;
+    ctx.save(); ctx.scale(s, s); ctx.translate(50, 62); ctx.scale(1.2, 1.2);
+    HEADS[who](ctx, who === 'seagull' || who === 'magpie' ? -6 : 0, 0, time, false, { crown: who === 'frog' });
+    ctx.restore();
+  }
+  function sticker(ctx, who, time, size, owned) {
+    const s = (size || 120) / 120;
+    ctx.save(); ctx.scale(s, s);
+    ctx.save(); ctx.translate(60, 60);
+    const pts = [];
+    for (let i = 0; i < 24; i++) { const a = i * Math.PI / 12, k = i % 2 ? 50 : 58; pts.push([Math.cos(a) * k, Math.sin(a) * k]); }
+    poly(ctx, pts, owned ? '#fff3a0' : '#e6e6e6', OUT, 3);
+    ell(ctx, 0, 0, 44, 44, owned ? '#fff' : '#d0d0d0', OUT, 2.5);
+    ctx.restore();
+    if (owned) { ctx.save(); ctx.beginPath(); ctx.arc(60, 60, 43, 0, Math.PI * 2); ctx.clip(); ctx.translate(10, 4); portrait(ctx, who, time, 100); ctx.restore(); }
+    else { ctx.save(); ctx.translate(60, 60); ctx.font = 'bold 40px Georgia'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#999'; ctx.fillText('?', 0, 2); ctx.restore(); }
+    ctx.restore();
+  }
+
+  // ===== Items (centred, about 70 units) =====
+  const baseItem = A.item;
+  const NEW_ITEMS = {
+    nest(ctx) {
+      ell(ctx, 0, 12, 36, 16, '#a0723f', OUT, 2.6);
+      for (let i = -3; i <= 3; i++) curve(ctx, i * 9 - 8, 4, i * 9, 20, i * 9 + 8, 6, '#7a5232', 2);
+      [[-12, 0], [10, -2]].forEach(([x, y]) => { ell(ctx, x, y, 10, 10, '#d8dee6', OUT, 2); poly(ctx, [[x + 7, y - 2], [x + 15, y], [x + 7, y + 2]], '#ffc107', OUT, 1.2); ell(ctx, x + 2, y - 4, 1.8, 1.8, OUT); });
+      ell(ctx, -2, 6, 8, 6, '#f6e3b4', OUT, 1.6);
+    },
+    hamster(ctx, time) { ctx.save(); ctx.scale(1.1, 1.1); ell(ctx, 0, 14, 26, 14, '#e6a15a', OUT, 2.2); HEADS.hamster(ctx, 0, -4, time || 0, true); ctx.restore(); },
+    deer(ctx, time) { ctx.save(); ctx.scale(1.1, 1.1); HEADS.deer(ctx, 0, 0, time || 0, true); ctx.restore(); },
+    crown(ctx) {
+      poly(ctx, [[-30, 20], [-34, -16], [-16, 2], [0, -24], [16, 2], [34, -16], [30, 20]], '#ffd34d', OUT, 2.8);
+      [-30, 0, 30].forEach((x, i) => ell(ctx, x * 0.95, [-18, -26, -18][i], 5, 5, ['#ff4d4d', '#3f8cff', '#3fbf5a'][i], OUT, 1.6));
+      rr(ctx, -30, 10, 60, 10, 3, '#f0b72f', OUT, 2);
+    },
+    balloon(ctx) {
+      curve(ctx, 0, 14, -8, 30, 4, 44, OUT, 2);
+      ell(ctx, 0, -12, 24, 28, '#ff4d4d', OUT, 2.6);
+      poly(ctx, [[-4, 16], [4, 16], [0, 10]], '#ff4d4d', OUT, 1.6);
+      ell(ctx, -8, -22, 6, 9, 'rgba(255,255,255,0.6)', null, 0, 0.4);
+    },
+    key(ctx) {
+      ell(ctx, -16, 0, 14, 14, '#ffd34d', OUT, 2.6); ell(ctx, -16, 0, 5, 5, '#fff8e8', OUT, 1.8);
+      rr(ctx, -4, -4, 38, 8, 3, '#ffd34d', OUT, 2.4);
+      rr(ctx, 20, 2, 6, 10, 1, '#ffd34d', OUT, 2); rr(ctx, 28, 2, 5, 7, 1, '#ffd34d', OUT, 2);
+    },
+    croissant(ctx) {
+      ctx.save(); ctx.rotate(-0.15);
+      [[-26, 6, 9], [-14, -2, 12], [0, -6, 14], [14, -2, 12], [26, 6, 9]].forEach(([x, y, r]) => ell(ctx, x, y, r, r * 0.9, '#e8a952', OUT, 2.2));
+      [-14, 0, 14].forEach(x => curve(ctx, x - 4, -8, x, 0, x - 4, 8, '#b5793f', 1.6));
+      ctx.restore();
+    },
+    bread(ctx) {
+      ell(ctx, 0, 0, 36, 14, '#e0a050', OUT, 2.6, -0.1);
+      [-16, -2, 12].forEach(x => line(ctx, [[x - 4, -8], [x + 4, 6]], '#a8743f', 2.4));
+    },
+    paintbrush(ctx) {
+      ctx.save(); ctx.rotate(-0.6);
+      rr(ctx, -4, -6, 8, 40, 3, '#c98b4e', OUT, 2.2);
+      rr(ctx, -6, -14, 12, 10, 2, '#cfd6e0', OUT, 2);
+      poly(ctx, [[-7, -14], [7, -14], [4, -32], [0, -38], [-4, -32]], '#3f8cff', OUT, 2);
+      ctx.restore();
+      [[18, 18, '#ff4d4d'], [26, 6, '#ffd23f'], [12, 28, '#3fbf5a']].forEach(([x, y, c]) => ell(ctx, x, y, 5, 4, c));
+    },
+    carrot(ctx) {
+      ctx.save(); ctx.rotate(0.5);
+      poly(ctx, [[-10, -18], [10, -18], [0, 30]], '#ff8a3d', OUT, 2.6);
+      [-6, 2, 8].forEach((x, i) => line(ctx, [[x - 3, -6 + i * 10], [x + 3, -6 + i * 10]], '#d9601d', 2));
+      [-6, 0, 6].forEach(x => ell(ctx, x, -26, 4, 10, '#3fbf5a', OUT, 1.6, x * 0.06));
+      ctx.restore();
+    },
+    seeds(ctx) {
+      poly(ctx, [[-20, -24], [20, -24], [24, 24], [-24, 24]], '#d9b38c', OUT, 2.6);
+      line(ctx, [[-20, -16], [20, -16]], '#a8743f', 2);
+      ell(ctx, 0, 4, 12, 12, '#ffd23f', OUT, 2);
+      for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4; ell(ctx, Math.cos(a) * 13, 4 + Math.sin(a) * 13, 4, 2.4, '#ffd23f', null, 0, a); }
+      ell(ctx, 0, 4, 6, 6, '#6b4a2b');
+    },
+    cage(ctx) {
+      ctx.beginPath(); ctx.moveTo(-26, 24); ctx.lineTo(-26, -6); ctx.arc(0, -6, 26, Math.PI, 0); ctx.lineTo(26, 24);
+      ctx.fillStyle = 'rgba(200,230,255,0.4)'; ctx.fill(); ctx.strokeStyle = OUT; ctx.lineWidth = 2.6; ctx.stroke();
+      for (let x = -18; x <= 18; x += 9) line(ctx, [[x, 24], [x, -24 + Math.abs(x) * 0.5]], '#7a8291', 2);
+      rr(ctx, -30, 22, 60, 6, 2, '#e03131', OUT, 2);
+      ell(ctx, 0, -34, 5, 5, null, OUT, 2);
+    },
+    salad(ctx) {
+      [[-14, 4], [14, 4], [0, -8], [-6, 10], [8, 12]].forEach(([x, y], i) => ell(ctx, x, y, 16, 14, i % 2 ? '#7bd67f' : '#4cc552', OUT, 2));
+      ell(ctx, 0, 4, 8, 8, '#b2f2bb');
+    },
+    gift(ctx) {
+      rr(ctx, -26, -10, 52, 36, 4, '#3f8cff', OUT, 2.6);
+      rr(ctx, -30, -20, 60, 12, 3, '#5aa0ff', OUT, 2.4);
+      rr(ctx, -5, -20, 10, 46, 1, '#ffd23f', OUT, 1.6);
+      ell(ctx, -10, -26, 10, 6, '#ffd23f', OUT, 1.8, -0.4); ell(ctx, 10, -26, 10, 6, '#ffd23f', OUT, 1.8, 0.4);
+    },
+    truck(ctx) {
+      rr(ctx, -36, -18, 52, 28, 4, '#e03131', OUT, 2.6);
+      rr(ctx, 16, -10, 20, 20, 4, '#e03131', OUT, 2.6);
+      rr(ctx, 20, -6, 12, 8, 2, '#a8ddff', OUT, 1.6);
+      line(ctx, [[-32, -24], [10, -30]], '#cfd6e0', 4); line(ctx, [[-32, -24], [10, -30]], OUT, 1);
+      ell(ctx, -24, 12, 8, 8, '#2b2b33', OUT, 2); ell(ctx, 22, 12, 8, 8, '#2b2b33', OUT, 2);
+      ell(ctx, 30, -14, 4, 3, '#3f8cff', OUT, 1.2);
+    },
+    light(ctx) {
+      rr(ctx, -14, -36, 28, 64, 8, '#2b2b3b', OUT, 2.6);
+      [['#ff4d4d', -22], ['#ffd23f', -2], ['#3fbf5a', 18]].forEach(([c, y]) => ell(ctx, 0, y, 8, 8, c, OUT, 1.6));
+      rr(ctx, -4, 28, 8, 12, 2, '#7a8291', OUT, 1.6);
+    }
+  };
+  function item(ctx, kind, glow, time) {
+    if (!NEW_ITEMS[kind]) { baseItem(ctx, kind, glow); return; }
+    if (glow) { ctx.save(); ctx.shadowColor = '#fff3a0'; ctx.shadowBlur = 30; }
+    NEW_ITEMS[kind](ctx, time);
+    if (glow) ctx.restore();
+  }
+  // Picture of a word: animals as portraits, things as items
+  function wordIcon(ctx, key, time) {
+    if (HEADS[key] || ['fox', 'mouse', 'panda', 'rabbit'].includes(key)) { ctx.save(); ctx.translate(-50, -55); portrait(ctx, key, time || 0, 100); ctx.restore(); return; }
+    item(ctx, key, false, time);
+  }
+
+  // ===== Hoof print =====
+  const basePrint = A.pawPrint;
+  function pawPrint(ctx, kind, color) {
+    if (kind !== 'hoof') { basePrint(ctx, kind, color); return; }
+    const c = color || '#4a3426';
+    ell(ctx, -11, 0, 9, 22, c, null, 0, 0.12); ell(ctx, 11, 0, 9, 22, c, null, 0, -0.12);
+    ell(ctx, -9, 28, 3, 4, c); ell(ctx, 9, 28, 3, 4, c);
+  }
+
+  // ===== Spot-the-difference props (tintable) =====
+  const TINT = { red: '#ff4d4d', blue: '#3f8cff', green: '#3fbf5a', yellow: '#ffd23f', purple: '#9b5de5' };
+  function prop(ctx, kind, tint) {
+    const c = TINT[tint] || tint;
+    switch (kind) {
+      case 'cup': rr(ctx, -20, -18, 34, 36, 8, c, OUT, 2.6); ctx.beginPath(); ctx.arc(16, 0, 9, -1.3, 1.3); ctx.strokeStyle = OUT; ctx.lineWidth = 6; ctx.stroke(); ctx.strokeStyle = c; ctx.lineWidth = 3; ctx.stroke(); ell(ctx, -3, -18, 17, 4, '#6b4a2b', OUT, 1.6); break;
+      case 'book': rr(ctx, -16, -24, 32, 46, 3, c, OUT, 2.6); rr(ctx, -12, -24, 4, 46, 0, 'rgba(0,0,0,0.2)'); rr(ctx, -4, -12, 14, 6, 2, '#fff8e8'); break;
+      case 'box': rr(ctx, -22, -16, 44, 34, 3, c, OUT, 2.6); line(ctx, [[-22, -4], [22, -4]], OUT, 2); rr(ctx, -5, -18, 10, 36, 0, 'rgba(255,255,255,0.45)'); break;
+      case 'jar': rr(ctx, -16, -16, 32, 36, 9, c, OUT, 2.6); rr(ctx, -18, -24, 36, 10, 3, '#cfd6e0', OUT, 2); ell(ctx, -6, -2, 4, 8, 'rgba(255,255,255,0.5)'); break;
+      case 'flower': poly(ctx, [[-14, 2], [14, 2], [10, 22], [-10, 22]], '#c0703a', OUT, 2.4); line(ctx, [[0, 2], [0, -16]], '#3fbf5a', 3); for (let i = 0; i < 5; i++) { const a = i * 1.26; ell(ctx, Math.cos(a) * 8, -22 + Math.sin(a) * 8, 6, 6, c, OUT, 1.4); } ell(ctx, 0, -22, 4, 4, '#ffd23f'); break;
+      default: ell(ctx, 0, 0, 20, 20, c, OUT, 2.6); curve(ctx, -20, 0, 0, 10, 20, 0, '#fff', 3); ell(ctx, -7, -8, 5, 4, 'rgba(255,255,255,0.6)');
+    }
+  }
+
+  // ===== Secret symbols (12 shapes, each with its own colour) =====
+  const SYMBOL_COLORS = ['#ffb703', '#5c7cfa', '#ffd23f', '#ff4d6d', '#3fa7f5', '#3fbf5a', '#ff8a3d', '#e64980', '#20c997', '#adb5bd', '#fab005', '#9b5de5'];
+  function symbol(ctx, i, size) {
+    const s = (size || 40) / 40, c = SYMBOL_COLORS[i % 12];
+    ctx.save(); ctx.scale(s, s);
+    switch (i % 12) {
+      case 0: for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; line(ctx, [[Math.cos(a) * 12, Math.sin(a) * 12], [Math.cos(a) * 18, Math.sin(a) * 18]], c, 3); } ell(ctx, 0, 0, 10, 10, c, OUT, 2); break;
+      case 1: ctx.beginPath(); ctx.arc(0, 0, 16, 0.6, Math.PI * 2 - 0.6); ctx.arc(6, 0, 12, Math.PI * 2 - 0.9, 0.9, true); ctx.closePath(); ctx.fillStyle = c; ctx.fill(); ctx.strokeStyle = OUT; ctx.lineWidth = 2; ctx.stroke(); break;
+      case 2: star(ctx, 0, 0, 17, c, OUT, 2); break;
+      case 3: ctx.beginPath(); ctx.moveTo(0, 14); ctx.bezierCurveTo(-24, -2, -10, -22, 0, -8); ctx.bezierCurveTo(10, -22, 24, -2, 0, 14); ctx.fillStyle = c; ctx.fill(); ctx.strokeStyle = OUT; ctx.lineWidth = 2; ctx.stroke(); break;
+      case 4: ctx.beginPath(); ctx.moveTo(0, -18); ctx.quadraticCurveTo(14, 2, 0, 14); ctx.quadraticCurveTo(-14, 2, 0, -18); ctx.fillStyle = c; ctx.fill(); ctx.strokeStyle = OUT; ctx.lineWidth = 2; ctx.stroke(); break;
+      case 5: ell(ctx, 0, 0, 9, 17, c, OUT, 2, 0.6); line(ctx, [[-8, 10], [8, -10]], OUT, 1.6); break;
+      case 6: ell(ctx, -2, 0, 14, 9, c, OUT, 2); poly(ctx, [[10, 0], [19, -8], [19, 8]], c, OUT, 2); ell(ctx, -8, -2, 1.8, 1.8, OUT); break;
+      case 7: for (let k = 0; k < 5; k++) { const a = k * 1.26; ell(ctx, Math.cos(a) * 8, Math.sin(a) * 8, 7, 7, c, OUT, 1.6); } ell(ctx, 0, 0, 5, 5, '#fff', OUT, 1.4); break;
+      case 8: poly(ctx, [[0, -17], [17, 14], [-17, 14]], c, OUT, 2); break;
+      case 9: [[-8, 2, 9], [4, -4, 11], [12, 4, 8]].forEach(([x, y, r]) => ell(ctx, x, y, r, r, c, OUT, 2)); rr(ctx, -16, 2, 34, 10, 4, c); break;
+      case 10: poly(ctx, [[4, -18], [-10, 2], [0, 2], [-4, 18], [10, -4], [0, -4]], c, OUT, 2); break;
+      default: poly(ctx, [[0, -17], [15, 0], [0, 17], [-15, 0]], c, OUT, 2);
+    }
+    ctx.restore();
+  }
+
+  // ===== Small things to count on the safe =====
+  function countIcon(ctx, kind, size) {
+    const s = (size || 30) / 30;
+    ctx.save(); ctx.scale(s, s);
+    switch (kind) {
+      case 'star': star(ctx, 0, 0, 13, '#ffd23f', OUT, 2); break;
+      case 'apple': ell(ctx, 0, 2, 12, 11, '#ff4d4d', OUT, 2); line(ctx, [[0, -8], [2, -14]], '#6b4a2b', 2.4); ell(ctx, 6, -12, 5, 3, '#3fbf5a', null, 0, -0.5); break;
+      case 'heart': symbol(ctx, 3, 30); break;
+      case 'fish': symbol(ctx, 6, 30); break;
+      default: symbol(ctx, 7, 28);
+    }
+    ctx.restore();
+  }
+
+  // ===== Backgrounds (virtual stage 1000 x 600) =====
+  function wall(ctx, color, floor) {
+    ctx.fillStyle = color; ctx.fillRect(-500, -300, 2000, 1200);
+    ctx.fillStyle = floor; ctx.fillRect(-500, 470, 2000, 600);
+    line(ctx, [[-500, 470], [1500, 470]], OUT, 3);
+  }
+  function outdoor(ctx, ground) {
+    const g = ctx.createLinearGradient(0, 0, 0, 600);
+    g.addColorStop(0, '#8fd3ff'); g.addColorStop(1, '#d9f2ff');
+    ctx.fillStyle = g; ctx.fillRect(-500, -300, 2000, 1200);
+    ell(ctx, 880, 80, 44, 44, '#ffe066', OUT, 3);
+    ctx.fillStyle = ground; ctx.fillRect(-500, 400, 2000, 700);
+    line(ctx, [[-500, 400], [1500, 400]], OUT, 3);
+  }
+  function room(ctx, place, time) {
+    switch (place) {
+      case 'granny': A.kitchen(ctx, time); break;
+      case 'garden': A.gardenNight(ctx, time); break;
+      case 'station': A.lineupRoom(ctx); break;
+      case 'bakery':
+        wall(ctx, '#ffe8c2', '#c9a27a');
+        [150, 300].forEach(y => rr(ctx, 560, y, 380, 14, 4, '#a8743f', OUT, 3));
+        [600, 700, 800, 880].forEach((x, i) => { ctx.save(); ctx.translate(x, 135); ctx.scale(0.8, 0.8); item(ctx, i % 2 ? 'bread' : 'croissant'); ctx.restore(); });
+        rr(ctx, 60, 80, 300, 70, 12, '#fff8e8', OUT, 3);
+        ctx.save(); ctx.translate(210, 115); item(ctx, 'croissant'); ctx.restore();
+        break;
+      case 'school':
+        wall(ctx, '#d7ecff', '#c9a27a');
+        rr(ctx, 520, 70, 420, 220, 10, '#2f6b4f', OUT, 5);
+        ctx.fillStyle = '#fff'; ctx.font = 'bold 54px Georgia'; ctx.fillText('A B C', 600, 160); ctx.fillText('1 2 3', 600, 240);
+        break;
+      case 'townhall':
+        wall(ctx, '#f3e6cf', '#b8a58a');
+        [120, 300, 700, 880].forEach(x => { rr(ctx, x - 22, 70, 44, 400, 6, '#fff8e8', OUT, 3); rr(ctx, x - 32, 60, 64, 16, 4, '#fff8e8', OUT, 3); });
+        [['#3f6fd8', 0], ['#fff', 1], ['#ff4d4d', 2]].forEach(([c, i]) => rr(ctx, 440 + i * 40, 90, 40, 100, 0, c, OUT, 2));
+        line(ctx, [[440, 90], [440, 300]], OUT, 4);
+        // A few drops of rainbow paint everywhere
+        [[200, 380, '#ff4d4d'], [520, 420, '#3fbf5a'], [820, 360, '#3f8cff'], [640, 260, '#ffd23f']].forEach(([x, y, c]) => ell(ctx, x, y, 22, 12, c, OUT, 2));
+        break;
+      case 'farm':
+        wall(ctx, '#c0392b', '#d9b38c');
+        for (let x = -500; x < 1500; x += 50) line(ctx, [[x, 0], [x, 470]], 'rgba(0,0,0,0.15)', 3);
+        rr(ctx, 600, 330, 160, 140, 8, '#f2d27a', OUT, 3);
+        for (let i = 0; i < 6; i++) line(ctx, [[610 + i * 26, 340], [620 + i * 26, 460]], '#d9b54a', 3);
+        break;
+      case 'pond':
+        outdoor(ctx, '#9ed27a');
+        ell(ctx, 500, 500, 420, 90, '#5bb5f0', OUT, 3);
+        [[140, 420], [860, 430], [300, 560]].forEach(([x, y]) => { line(ctx, [[x, y], [x - 6, y - 70]], '#3f8f3f', 4); ell(ctx, x - 6, y - 80, 6, 16, '#8a5a2b'); });
+        [[420, 500], [600, 520]].forEach(([x, y]) => ell(ctx, x, y, 36, 12, '#4cc552', OUT, 2));
+        break;
+      case 'park':
+        outdoor(ctx, '#9ed27a');
+        [[80, 330, 70], [930, 320, 80]].forEach(([x, y, r]) => { rr(ctx, x - 10, y, 20, 80, 4, '#6b4a2b', OUT, 2); ell(ctx, x, y - 10, r, r * 0.8, '#4caf50', OUT, 3); });
+        poly(ctx, [[700, 400], [780, 230], [800, 230], [740, 400]], '#ff8a3d', OUT, 3);
+        line(ctx, [[800, 230], [820, 400]], OUT, 4); line(ctx, [[780, 230], [800, 230]], OUT, 4);
+        break;
+      case 'fire':
+        wall(ctx, '#d9534f', '#9aa4b5');
+        for (let y = 20; y < 470; y += 34) for (let x = (y / 34) % 2 ? -480 : -500; x < 1500; x += 70) rr(ctx, x, y, 66, 30, 2, null, 'rgba(0,0,0,0.12)', 2);
+        rr(ctx, 560, 150, 380, 320, 8, '#f1f3f5', OUT, 4);
+        for (let y = 180; y < 470; y += 40) line(ctx, [[560, y], [940, y]], '#cfd6e0', 3);
+        break;
+      default: wall(ctx, '#e7f0ff', '#c9a27a');
+    }
+  }
+
+  // ===== Helicopter grid: top-down park, `size` per cell =====
+  function gridThing(ctx, kind, size, time) {
+    const k = size / 100;
+    ctx.save(); ctx.scale(k, k);
+    switch (kind) {
+      case 'tree': ell(ctx, 4, 6, 34, 30, 'rgba(0,0,0,0.15)'); ell(ctx, 0, 0, 34, 32, '#3f9a4a', OUT, 3); ell(ctx, -10, -10, 14, 12, '#6cc77a'); break;
+      case 'bush': [[-14, 6], [12, 6], [0, -8]].forEach(([x, y]) => ell(ctx, x, y, 18, 16, '#5cb85c', OUT, 2.4)); break;
+      case 'bench': rr(ctx, -34, -12, 68, 24, 4, '#a8743f', OUT, 2.6); [-24, 24].forEach(x => rr(ctx, x - 4, -16, 8, 32, 2, '#6b4a2b')); break;
+      case 'rock': ell(ctx, 0, 0, 28, 20, '#9aa4b5', OUT, 2.6); ell(ctx, -8, -6, 8, 5, '#c3ccda'); break;
+      case 'flowers': [[-16, -8, '#ff6fb5'], [12, -12, '#ffd23f'], [0, 12, '#9b5de5'], [18, 10, '#ff4d4d']].forEach(([x, y, c]) => { for (let i = 0; i < 5; i++) { const a = i * 1.26; ell(ctx, x + Math.cos(a) * 6, y + Math.sin(a) * 6, 5, 5, c); } ell(ctx, x, y, 3, 3, '#fff'); }); break;
+      default: ctx.scale(1.1, 1.1); item(ctx, kind, true, time);
+    }
+    ctx.restore();
+  }
+  function gridMap(ctx, size, data, time, showTarget) {
+    const n = PatrolCase.GRID, w = size * n;
+    rr(ctx, 0, 0, w, w, 16, '#a8dc84', OUT, 4);
+    ctx.save(); ctx.beginPath(); ctx.roundRect(0, 0, w, w, 16); ctx.clip();
+    line(ctx, [[0, w * 0.55], [w, w * 0.45]], '#f2e2b8', size * 0.28);
+    line(ctx, [[w * 0.3, 0], [w * 0.4, w]], '#f2e2b8', size * 0.24);
+    ell(ctx, w * 0.82, w * 0.18, size * 0.7, size * 0.45, '#7cc5f2', OUT, 2);
+    ctx.restore();
+    data.decoys.forEach(d => { ctx.save(); ctx.translate((d.c + 0.5) * size, (d.r + 0.5) * size); gridThing(ctx, d.kind, size * 0.8, time); ctx.restore(); });
+    if (showTarget) { ctx.save(); ctx.translate((data.c + 0.5) * size, (data.r + 0.5) * size); gridThing(ctx, data.item, size * 0.7, time); ctx.restore(); }
+    for (let i = 1; i < n; i++) {
+      line(ctx, [[i * size, 0], [i * size, w]], 'rgba(29,47,69,0.35)', 2);
+      line(ctx, [[0, i * size], [w, i * size]], 'rgba(29,47,69,0.35)', 2);
+    }
+  }
+  function helicopter(ctx, time, size) {
+    const k = (size || 60) / 60;
+    ctx.save(); ctx.scale(k, k);
+    ell(ctx, 6, 8, 26, 14, 'rgba(0,0,0,0.18)');
+    rr(ctx, -40, -4, 34, 8, 4, '#3f6fd8', OUT, 2);
+    ell(ctx, 0, 0, 22, 16, '#3f6fd8', OUT, 2.6);
+    ell(ctx, 8, -2, 9, 8, '#a8ddff', OUT, 1.6);
+    star(ctx, -8, 2, 5, '#ffd34d', OUT, 1);
+    const a = time * 25;
+    line(ctx, [[Math.cos(a) * 36, Math.sin(a) * 36], [-Math.cos(a) * 36, -Math.sin(a) * 36]], OUT, 4);
+    line(ctx, [[Math.cos(a + 1.57) * 36, Math.sin(a + 1.57) * 36], [-Math.cos(a + 1.57) * 36, -Math.sin(a + 1.57) * 36]], OUT, 4);
+    ell(ctx, 0, 0, 4, 4, '#cfd6e0', OUT, 1.5);
+    ctx.restore();
+  }
+
+  // ===== The safe =====
+  function safe(ctx, open, time) {
+    rr(ctx, -150, -170, 300, 330, 22, '#7d889c', OUT, 5);
+    rr(ctx, -130, -150, 260, 290, 16, open ? '#2b2b3b' : '#97a2b6', OUT, 4);
+    if (open) {
+      ctx.save(); ctx.translate(-130, -150); ctx.scale(-0.35, 1); rr(ctx, 0, 0, 260, 290, 16, '#97a2b6', OUT, 4); ctx.restore();
+      return;
+    }
+    ell(ctx, 80, 0, 34, 34, '#cfd6e0', OUT, 4);
+    for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4; line(ctx, [[80 + Math.cos(a) * 24, Math.sin(a) * 24], [80 + Math.cos(a) * 30, Math.sin(a) * 30]], OUT, 2); }
+    line(ctx, [[80, 0], [80, -24]], '#e03131', 4);
+    [-100, 100].forEach(y => rr(ctx, -146, y - 20, 14, 40, 4, '#5c667a', OUT, 2));
+  }
+
+  // ===== Sketch artist: a face built from parts =====
+  const FUR = { orange: '#f08a3c', grey: '#a9acb8', white: '#ffffff', beige: '#e8d7c3' };
+  function sketchFace(ctx, parts, time) {
+    const fur = FUR[parts.color] || '#eeeeee', unknown = !parts.color;
+    const stroke = unknown ? 'rgba(29,47,69,0.5)' : OUT;
+    if (parts.ears === 'pointy') { poly(ctx, [[-50, -10], [-44, -76], [-10, -40]], fur, OUT, 3); poly(ctx, [[50, -10], [44, -76], [10, -40]], fur, OUT, 3); }
+    else if (parts.ears === 'round') { ell(ctx, -46, -46, 24, 24, fur, OUT, 3); ell(ctx, 46, -46, 24, 24, fur, OUT, 3); ell(ctx, -46, -46, 13, 13, '#ffc2d4'); ell(ctx, 46, -46, 13, 13, '#ffc2d4'); }
+    else if (parts.ears === 'long') { ell(ctx, -20, -86, 14, 46, fur, OUT, 3, -0.12); ell(ctx, 20, -86, 14, 46, fur, OUT, 3, 0.12); ell(ctx, -20, -86, 7, 34, '#ffc2d4', null, 0, -0.12); ell(ctx, 20, -86, 7, 34, '#ffc2d4', null, 0, 0.12); }
+    ctx.save();
+    if (unknown) ctx.setLineDash([10, 8]);
+    ell(ctx, 0, 0, 58, 50, fur, stroke, 4);
+    ctx.restore();
+    if (parts.color === 'white') { ell(ctx, -22, -6, 14, 17, OUT, null, 0, 0.5); ell(ctx, 22, -6, 14, 17, OUT, null, 0, -0.5); }
+    eye(ctx, -22, -6, 7, time, 0.5); eye(ctx, 22, -6, 7, time, 0.5);
+    ell(ctx, 0, 14, 9, 7, OUT);
+    curve(ctx, -10, 26, 0, 34, 10, 26, OUT, 3);
+    if (parts.scarf) {
+      const c = A.SCARF[parts.scarf];
+      rr(ctx, -50, 44, 100, 22, 11, c, OUT, 3);
+      rr(ctx, 16, 58, 20, 44, 6, c, OUT, 3);
+    }
+  }
+
+  // Any character by name, standing on the origin
+  function character(ctx, who, time, opts) {
+    const o = opts || {};
+    if (who === 'teddy') A.teddy(ctx, time, o);
+    else if (who === 'chief') A.chief(ctx, time, o);
+    else if (who === 'granny') A.granny(ctx, time, o);
+    else if (who === 'owl') A.owl(ctx, time);
+    else if (who === 'duck') A.duck(ctx, time);
+    else if (PatrolCase.SPECIES[who]) A.animal(ctx, who, o.scarf || 'red', time, o);
+    else critter(ctx, who, time, o);
+  }
+
+  Object.assign(A, { HEADS, critter, character, portrait, sticker, item, wordIcon, pawPrint, prop, symbol, countIcon, room, gridMap, gridThing, helicopter, safe, sketchFace, FUR, TINT });
+})(Art);
+
+</script>
+  <script>
+'use strict';
+
 // The child's device. The station owns the case state; this side shows scenes for it, runs the driving and the
 // mini-games locally, and sends events back. Scenes live in drive.js and scenes.js and register in Officer.scenes.
 const Officer = (function () {
   const $ = id => document.getElementById(id);
-  const SCENE_OF = { call: 'office', garage: 'garage', drive: 'town', brush: 'brush', match: 'brush', lamp: 'lamp', letters: 'letters', lineup: 'lineup', ending: 'ending', done: 'done' };
+  const SCENE_OF = { board: 'done', call: 'office', garage: 'garage', drive: 'town', ending: 'ending', done: 'done' };
   const STICKER_KEY = 'teddyPatrol.stickers';
   const STAGE_W = 1000, STAGE_H = 600;
 
@@ -4645,7 +5990,7 @@ const Officer = (function () {
   const ARROWS = { left: '⬅', right: '➡', straight: '⬆', back: '↩', up: '⬆', down: '⬇' };
   let gpsTimer = null;
   O.showGps = dir => {
-    $('gpsArrow').textContent = ARROWS[dir] || '📻';
+    $('gpsArrow').textContent = ARROWS[dir] || dir || '📻';
     $('gpsBubble').hidden = false;
     $('gpsBubble').classList.remove('pop'); void $('gpsBubble').offsetWidth; $('gpsBubble').classList.add('pop');
     drawPortrait($('gpsPortrait'), 'chief');
@@ -4676,21 +6021,30 @@ const Officer = (function () {
 
   // ===== State from the station =====
   function announce(prev, s) {
-    const T = L();
-    if (!prev || prev.seed !== s.seed) return;
-    if (s.target && s.target !== prev.target && s.phase === 'drive') { sfx('gps'); O.speak('chief', T.driveTarget(s.target), { now: true }); }
-    if (!prev.clues.print && s.clues.print) O.sequence([['chief', T.matchDone(PatrolCase.paw(s))], ['chief', T.witnessTime]]);
-    if (PatrolCase.need(prev) !== 'garden' && PatrolCase.need(s) === 'garden') { sfx('gps'); O.speak('chief', T.gardenNext); }
-    if (!prev.clues.itemSent && s.clues.itemSent && s.phase === 'lamp') O.speak('chief', T.lampFind(s.item));
+    const T = L(), C = PatrolCase;
+    if (!prev || prev.seed !== s.seed || prev.caseId !== s.caseId || s.phase === 'board') return;
+    if (s.target && s.target !== prev.target && s.phase === 'drive') { sfx('gps'); O.speak('chief', T.driveTarget(s.target), { now: true }); return; }
+    if (s.step !== prev.step && prev.steps[prev.step] && prev.steps[prev.step].game === 'brush') O.speak('chief', T.matchDone(prev.steps[prev.step].data.print), { now: true });
+    if (s.step !== prev.step && s.phase === 'drive') { sfx('gps'); O.speak('chief', T.nextStop(C.need(s))); }
   }
+
+  // Scene for the current phase (the mini-game of the current step while playing)
+  function sceneOf(s) {
+    if (s.phase === 'game') return PatrolCase.current(s).game;
+    return SCENE_OF[s.phase] || 'waiting';
+  }
+
+  O.game = (a, extra) => O.send(Object.assign({ t: 'g', step: O.state.step, a }, extra || {}));
+  O.caller = () => (PatrolCase.def(O.state) || {}).caller || 'granny';
+  O.caseText = () => L().cases[O.state.caseId] || {};
 
   function applyState(s) {
     const prev = O.state;
     O.state = s;
     if (s.lang && s.lang !== lang) setLanguage(s.lang, false);
-    const key = SCENE_OF[s.phase] || 'waiting';
-    const newCase = !prev || prev.seed !== s.seed;
-    if (key !== O.sceneKey || newCase) switchScene(key, prev);
+    const key = sceneOf(s);
+    const changed = !prev || prev.seed !== s.seed || prev.caseId !== s.caseId || prev.step !== s.step;
+    if (key !== O.sceneKey || changed) switchScene(key, prev);
     else if (O.scene.stateChanged) O.scene.stateChanged(prev);
     announce(prev, s);
   }
@@ -4725,7 +6079,7 @@ const Officer = (function () {
         O.speak('chief', T.bravo[Math.floor(Math.random() * T.bravo.length)], { now: true });
         break;
       case 'ask':
-        if (s) O.speak('chief', T.question(PatrolCase.paw(s), PatrolCase.culprit(s).scarf), { now: true });
+        if (s && s.suspects) O.speak('chief', T.question(PatrolCase.paw(s), PatrolCase.culprit(s).scarf), { now: true });
         break;
       default:
         if (O.scene && O.scene.effect) O.scene.effect(msg);
@@ -4748,7 +6102,7 @@ const Officer = (function () {
     $('connOverlay').hidden = O.connected || !O.everConnected;
     if (O.connected) O.everConnected = true;
     $('connText').textContent = statusText();
-    $('officerStatus').textContent = statusText();
+    $('officerStatus').textContent = O.connected ? '✔' : statusText();
   }
 
   // ===== Loop, resize and pointer =====
@@ -4756,8 +6110,11 @@ const Officer = (function () {
     ratio = Math.min(window.devicePixelRatio || 1, 2);
     O.width = window.innerWidth; O.height = window.innerHeight;
     canvas.width = Math.round(O.width * ratio); canvas.height = Math.round(O.height * ratio);
-    const k = Math.min(O.width / STAGE_W, O.height / STAGE_H);
-    O.stage = { k, ox: (O.width - STAGE_W * k) / 2, oy: (O.height - STAGE_H * k) / 2 };
+    const k0 = Math.min(O.width / STAGE_W, O.height / STAGE_H);
+    // Keep a band at the top for the speech bubble so it never hides the game
+    const top = Math.min(96, O.height * 0.17);
+    const k = Math.min(O.width / STAGE_W, (O.height - top) / STAGE_H);
+    O.stage = k < k0 ? { k, ox: (O.width - STAGE_W * k) / 2, oy: top + (O.height - top - STAGE_H * k) / 2 } : { k: k0, ox: (O.width - STAGE_W * k0) / 2, oy: (O.height - STAGE_H * k0) / 2 };
     $('rotateHint').hidden = !(O.height > O.width * 1.15 && matchMedia('(pointer: coarse)').matches) || O.rotateDismissed;
   }
 
@@ -4814,7 +6171,7 @@ const Officer = (function () {
     canvas.addEventListener('pointercancel', up);
     $('rotateHint').addEventListener('click', () => { O.rotateDismissed = true; $('rotateHint').hidden = true; });
     switchScene('waiting');
-    languageListeners.push(() => { $('connText').textContent = statusText(); $('officerStatus').textContent = statusText(); });
+    languageListeners.push(() => { $('connText').textContent = statusText(); $('officerStatus').textContent = O.connected ? '✔' : statusText(); });
     link = netFactory({ onMessage, onStatus }).link;
     requestAnimationFrame(t => { last = t; frame(t); });
     keepAwake();
@@ -4927,7 +6284,7 @@ const Officer = (function () {
       sim.police.stopped = false;
       arrivedAt = C.need(O.state) && T.onPlace(sim.police, C.need(O.state)) ? C.need(O.state) : null;
       if (O.state.target) O.showCard('place', O.state.target);
-      if (!O.state.target && !O.state.clues.print) O.speak('chief', L().driveWait);
+      if (!O.state.target && O.state.step === 0) O.speak('chief', L().driveWait);
     },
     leave() { setSiren(false); },
     stateChanged() { O.showCard(O.state.target ? 'place' : null, O.state.target); },
@@ -5079,7 +6436,7 @@ const Officer = (function () {
       if (this.ringing && O.dist(p.sx, p.sy, PHONE.x, PHONE.y - 20) < 120) {
         this.ringing = false;
         sfx('pickup');
-        O.sequence([['granny', L().callGranny], ['chief', L().callChief]], () => { this.walking = true; });
+        O.sequence([[O.caller(), O.caseText().call], ['chief', L().callChief]], () => { this.walking = true; });
       }
     }
   };
@@ -5122,13 +6479,36 @@ const Officer = (function () {
     }
   };
 
-  // ===== Brush the dust off Granny's plate =====
+  // ===== Brush the dust off to find a print =====
   const PLATE = { x: 500, y: 355, r: 165 }, GRID = 20, PAD = 190;
+  // The first line of each step comes from the case (who speaks and what), then the game's own instructions
+  O.stepLine = () => {
+    const line = (O.caseText().steps || [])[O.state.step];
+    return line ? [line[0], line[1]] : null;
+  };
+  O.intro = (lines, done) => {
+    const first = O.stepLine();
+    O.sequence((first ? [first] : []).concat(lines), done);
+  };
+  O.stepData = () => PatrolCase.current(O.state).data;
+  O.progress = () => O.state.progress || {};
+  O.place = () => (PatrolCase.current(O.state) || {}).place || 'granny';
+  // Draws the case's caller (or any character) standing at x, y
+  O.drawWho = (c, who, x, y, scale, opts) => { c.save(); c.translate(x, y); c.scale(scale, scale); A.character(c, who, O.clock, opts); c.restore(); };
+
+  function surface(c, place, r) {
+    if (place === 'granny' || place === 'bakery') { A.plate(c, r); return; }
+    // A patch of floor
+    A.ell(c, 0, 8, r * 1.02, r * 0.98, 'rgba(0,0,0,0.15)');
+    A.ell(c, 0, 0, r, r, '#e9d8b8', A.OUT, 4);
+    for (let i = -2; i <= 2; i++) A.line(c, [[-r * 0.9, i * r * 0.36], [r * 0.9, i * r * 0.36]], 'rgba(150,110,70,0.3)', 3);
+  }
+
   O.scenes.brush = {
     enter() {
       this.dust = document.createElement('canvas');
       this.dust.width = this.dust.height = PAD * 2;
-      const d = this.dust.getContext('2d'), rnd = A.seeded(O.state.seed);
+      const d = this.dust.getContext('2d'), rnd = A.seeded(O.state.seed + O.state.step);
       d.fillStyle = 'rgba(160,150,140,0.96)';
       d.beginPath(); d.arc(PAD, PAD, PLATE.r - 8, 0, Math.PI * 2); d.fill();
       for (let i = 0; i < 90; i++) {
@@ -5142,13 +6522,13 @@ const Officer = (function () {
         const cx = (i % GRID + 0.5) * cell - PLATE.r, cy = (Math.floor(i / GRID) + 0.5) * cell - PLATE.r;
         if (Math.hypot(cx, cy) < PLATE.r * 0.8) this.total++; else this.cells[i] = 2;
       }
-      this.done = O.state.phase !== 'brush';
+      this.done = O.progress().part !== 'brush';
       this.fade = this.done ? 0 : 1;
       this.bits = []; this.brushSound = 0; this.sendTimer = 0;
-      if (!this.done) O.sequence([['granny', L().brushIntro], ['teddy', L().brushHow]]);
+      if (!this.done) O.intro([['chief', L().brushIntro], ['teddy', L().brushHow]]);
     },
-    stateChanged(prev) {
-      if (O.state.phase === 'match' && !this.done) { this.done = true; }
+    stateChanged() {
+      if (O.progress().part === 'match' && !this.done) { this.done = true; }
     },
     rub(x, y) {
       if (this.done) return;
@@ -5168,7 +6548,7 @@ const Officer = (function () {
       if (this.cleared / this.total >= 0.72) {
         this.done = true;
         sfx('sparkle');
-        O.speak('teddy', L().brushDone, { now: true, done: () => O.send({ t: 'print' }) });
+        O.speak('teddy', L().brushDone, { now: true, done: () => O.game('brushed') });
         O.send({ t: 'brush', p: 1 });
       }
     },
@@ -5184,10 +6564,11 @@ const Officer = (function () {
     },
     draw(c) {
       O.inStage(c => {
-        A.kitchen(c, O.clock);
-        c.save(); c.translate(150, 560); c.scale(1.5, 1.5); A.granny(c, O.clock, { wave: this.done }); c.restore();
-        c.save(); c.translate(PLATE.x, PLATE.y); A.plate(c, PLATE.r);
-        c.save(); c.rotate(-0.25); c.scale(1.35, 1.35); A.pawPrint(c, C.paw(O.state)); c.restore();
+        const place = O.place();
+        A.room(c, place, O.clock);
+        O.drawWho(c, O.caller(), 150, 560, 1.5, { wave: this.done });
+        c.save(); c.translate(PLATE.x, PLATE.y); surface(c, place, PLATE.r);
+        c.save(); c.rotate(-0.25); c.scale(1.35, 1.35); A.pawPrint(c, O.stepData().print); c.restore();
         c.globalAlpha = this.fade; c.drawImage(this.dust, -PAD, -PAD); c.globalAlpha = 1;
         c.restore();
         if (this.done && this.fade < 0.6) for (let i = 0; i < 5; i++) {
@@ -5201,7 +6582,7 @@ const Officer = (function () {
           A.rr(c, -5, -60, 10, 40, 3, '#c98b4e', A.OUT, 2); A.rr(c, -12, -24, 24, 26, 8, '#ff8fb3', A.OUT, 2.5);
           c.restore();
         } else if (!this.done) O.tapHint(c, PLATE.x, PLATE.y, 120);
-        if (O.state.phase === 'match') O.banner(c, L().matchWait);
+        if (O.progress().part === 'match') O.banner(c, L().matchWait);
       });
     }
   };
@@ -5216,25 +6597,33 @@ const Officer = (function () {
   const O = Officer, A = Art, C = PatrolCase;
   const LAMP_R = 150;
 
-  // ===== Dark garden: find the lost item with the flashlight =====
+  // ===== Find something in the dark with the flashlight =====
   O.scenes.lamp = {
     enter() {
       // Start at the top, where nothing is hidden, so the child does the finding
-      this.lx = 500; this.ly = 140; this.dwell = 0; this.found = false; this.light = 0; this.burst = 0;
+      this.lx = 500; this.ly = 140; this.dwell = 0; this.found = false; this.light = 0;
       this.sendTimer = 0; this.sayCooldown = 0;
-      const s = O.state;
-      this.target = s.objects.find(o => o.kind === s.item);
-      O.speak('teddy', L().lampDark, { now: true });
-      if (s.clues.itemSent) { O.speak('chief', L().lampFind(s.item)); O.showCard('item', s.item); }
+      const data = O.stepData();
+      this.target = data.objects.find(o => o.kind === data.item);
+      this.sent = !!O.progress().sent;
+      O.intro([['teddy', L().lampDark]]);
+      if (this.sent) { O.speak('chief', L().lampFind(data.item)); O.showCard('item', data.item); }
     },
-    stateChanged() { if (O.state.clues.itemSent) O.showCard('item', O.state.item); },
+    stateChanged() {
+      if (!this.sent && O.progress().sent) {
+        this.sent = true;
+        sfx('radio');
+        O.speak('chief', L().lampFind(O.stepData().item), { now: true });
+        O.showCard('item', O.stepData().item);
+      }
+    },
     aim(p) { this.lx = Math.max(0, Math.min(1000, p.sx)); this.ly = Math.max(60, Math.min(600, p.sy)); },
     down(p) {
       this.aim(p);
       if (this.found) return;
-      const hit = O.state.objects.find(o => O.dist(p.sx, p.sy, o.x * 1000, o.y * 600) < 70);
+      const hit = O.stepData().objects.find(o => O.dist(p.sx, p.sy, o.x * 1000, o.y * 600) < 70);
       if (!hit) return;
-      if (hit === this.target && O.state.clues.itemSent) { this.find(); return; }
+      if (hit === this.target && this.sent) { this.find(); return; }
       if (hit !== this.target && this.sayCooldown <= 0) { this.sayCooldown = 1.2; O.speak('teddy', L().lampIs(hit.kind), { now: true }); }
     },
     move(p) { if (p.down || matchMedia('(pointer: fine)').matches) this.aim(p); },
@@ -5242,37 +6631,31 @@ const Officer = (function () {
       this.found = true;
       sfx('found');
       O.send({ t: 'lamp', x: this.target.x, y: this.target.y });
-      O.speak('teddy', L().lampFound, { now: true, done: () => O.send({ t: 'found' }) });
+      O.speak('teddy', L().lampFound, { now: true, done: () => O.game('found') });
     },
     update(dt) {
       this.sayCooldown -= dt;
-      if (this.found) { this.light = Math.min(1, this.light + dt * 0.8); this.burst += dt; return; }
+      if (this.found) { this.light = Math.min(1, this.light + dt * 0.8); return; }
       const near = O.dist(this.lx, this.ly, this.target.x * 1000, this.target.y * 600) < 80;
       this.dwell = near ? this.dwell + dt : Math.max(0, this.dwell - dt);
-      if (this.dwell > 0.8 && O.state.clues.itemSent) this.find();
+      if (this.dwell > 0.8 && this.sent) this.find();
       this.sendTimer -= dt;
-      if (this.sendTimer <= 0) { this.sendTimer = 0.1; O.send({ t: 'lamp', x: this.lx / 1000, y: this.ly / 600 }); }
+      if (this.sendTimer <= 0) { this.sendTimer = 0.12; O.send({ t: 'lamp', x: this.lx / 1000, y: this.ly / 600 }); }
     },
     draw(c) {
       const st = O.stage;
       O.inStage(c => {
-        A.gardenNight(c, O.clock);
+        A.room(c, O.place(), O.clock);
         // A friendly cat in the bushes: two blinking eyes
         if (Math.sin(O.clock * 0.7) > -0.6) { A.ell(c, 380, 330, 6, 4, '#c6ff6b'); A.ell(c, 398, 330, 6, 4, '#c6ff6b'); }
-        O.state.objects.forEach(o => {
+        O.stepData().objects.forEach(o => {
           c.save(); c.translate(o.x * 1000, o.y * 600); c.scale(1.25, 1.25);
-          A.item(c, o.kind, this.found && o === this.target);
+          A.item(c, o.kind, this.found && o === this.target, O.clock);
           c.restore();
         });
-        if (this.found) {
-          const word = C.word(O.state);
-          word.split('').forEach((ch, i) => {
-            const k = Math.min(1, this.burst / 1.2), a = -Math.PI / 2 + (i - (word.length - 1) / 2) * 0.45;
-            const x = this.target.x * 1000 + Math.cos(a) * 160 * k, y = this.target.y * 600 + Math.sin(a) * 140 * k;
-            A.rr(c, x - 24, y - 24, 48, 48, 10, '#fff8e8', A.OUT, 3);
-            c.fillStyle = A.OUT; c.font = 'bold 32px Georgia'; c.textAlign = 'center'; c.textBaseline = 'middle';
-            c.fillText(ch, x, y + 2);
-          });
+        if (this.found) for (let i = 0; i < 6; i++) {
+          const a = O.clock * 2 + i * 1.05;
+          A.sparkle(c, this.target.x * 1000 + Math.cos(a) * 80, this.target.y * 600 + Math.sin(a) * 70, 10, '#fff3a0');
         }
         c.save(); c.translate(80, 620); c.scale(1.3, 1.3); A.teddy(c, O.clock, { lamp: true, point: true }); c.restore();
       });
@@ -5288,91 +6671,113 @@ const Officer = (function () {
         warm.addColorStop(1, 'rgba(255,240,170,0)');
         c.fillStyle = warm; c.fillRect(x - R, y - R, R * 2, R * 2);
       }
-      if (!O.state.clues.itemSent) O.inStage(c => O.banner(c, L().waitChief, 520));
+      if (!this.sent) O.inStage(c => O.banner(c, L().waitChief, 520));
     }
   };
 
-  // ===== Put the letters in order =====
-  O.scenes.letters = {
-    enter() {
-      const word = C.word(O.state), n = word.length, rnd = A.seeded(O.state.seed + 11);
-      this.word = word; this.next = 0; this.done = false;
-      this.slotW = Math.min(120, 860 / n);
-      this.slotX = i => 500 - (n * this.slotW) / 2 + this.slotW * (i + 0.5);
-      const order = word.split('').map((ch, i) => i);
+  // ===== Put pieces in order (letters, or syllables for the word game) =====
+  // Shared by the letters game here and the word game in games.js
+  O.pieceBoard = {
+    setup(scene, pieces) {
+      const n = pieces.length, rnd = A.seeded(O.state.seed + O.state.step * 17);
+      scene.pieces = pieces; scene.next = 0; scene.done = false;
+      scene.slotW = Math.min(pieces.some(p => p.length > 1) ? 200 : 120, 860 / n);
+      scene.slotX = i => 500 - (n * scene.slotW) / 2 + scene.slotW * (i + 0.5);
+      const order = pieces.map((p, i) => i);
       for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
       if (n > 1 && order.every((v, i) => v === i)) order.reverse();
       const gap = 860 / n;
-      this.tiles = order.map((idx, k) => {
+      scene.tiles = order.map((idx, k) => {
         const hx = 70 + gap * (k + 0.5), hy = 445 + (k % 2 ? 40 : -10);
-        return { ch: word[idx], hx, hy, x: hx, y: hy, slot: -1, shake: 0, wiggle: 0 };
+        return { ch: pieces[idx], hx, hy, x: hx, y: hy, slot: -1, shake: 0, wiggle: 0 };
       });
-      for (let i = 0; i < O.state.clues.letters && i < n; i++) this.place(this.tiles.find(t => t.slot < 0 && t.ch === word[i]), true);
-      if (this.next < n) O.speak('chief', L().lettersIntro, { now: true });
-      else this.complete();
+      for (let i = 0; i < (O.progress().n || 0) && i < n; i++) this.place(scene, scene.tiles.find(t => t.slot < 0 && t.ch === pieces[i]), true);
     },
-    place(tile, quiet) {
-      tile.slot = this.next++;
-      if (!quiet) { sfx('pop'); O.speak('letter', tile.ch.toLowerCase(), { now: true }); O.send({ t: 'letter', i: tile.slot }); }
-      if (!quiet && this.next === this.word.length) this.complete();
+    place(scene, tile, quiet) {
+      tile.slot = scene.next++;
+      if (!quiet) { sfx('pop'); O.speak('letter', tile.ch.toLowerCase(), { now: true }); O.game('piece', { i: tile.slot }); }
     },
-    complete() {
-      if (this.done) return;
-      this.done = true;
-      const word = this.word;
-      setTimeout(() => {
-        sfx('fanfare');
-        O.sequence([['teddy', word.split('').join(', ') + '… ' + word + ' !'], ['chief', L().lettersNext]], () => O.send({ t: 'lettersDone' }));
-      }, 700);
+    tap(scene, p) {
+      if (scene.done) return null;
+      const w = Math.max(90, scene.slotW * 0.8);
+      const tile = scene.tiles.find(t => t.slot < 0 && Math.abs(p.sx - t.x) < w / 2 && Math.abs(p.sy - t.y) < 50);
+      if (!tile) return null;
+      if (tile.ch === scene.pieces[scene.next]) { this.place(scene, tile); return 'ok'; }
+      tile.shake = 0.5; sfx('wrong'); O.speak('letter', tile.ch.toLowerCase(), { now: true });
+      return 'wrong';
     },
-    effect(msg) {
-      if (msg.kind !== 'hint' || this.done) return;
-      const tile = this.tiles.find(t => t.slot < 0 && t.ch === this.word[this.next]);
+    hint(scene, say) {
+      const tile = scene.tiles.find(t => t.slot < 0 && t.ch === scene.pieces[scene.next]);
       if (!tile) return;
       tile.wiggle = 2.5;
-      O.speak('chief', L().letterHint(tile.ch), { now: true });
+      if (say) O.speak('chief', say(tile.ch), { now: true });
     },
-    down(p) {
-      if (this.done) return;
-      const tile = this.tiles.find(t => t.slot < 0 && Math.abs(p.sx - t.x) < 50 && Math.abs(p.sy - t.y) < 50);
-      if (!tile) return;
-      if (tile.ch === this.word[this.next]) this.place(tile);
-      else { tile.shake = 0.5; sfx('wrong'); O.speak('letter', tile.ch.toLowerCase(), { now: true }); }
-    },
-    update(dt) {
-      this.tiles.forEach(t => {
-        const tx = t.slot >= 0 ? this.slotX(t.slot) : t.hx, ty = t.slot >= 0 ? 245 : t.hy;
+    update(scene, dt) {
+      scene.tiles.forEach(t => {
+        const tx = t.slot >= 0 ? scene.slotX(t.slot) : t.hx, ty = t.slot >= 0 ? 245 : t.hy;
         t.x += (tx - t.x) * Math.min(1, dt * 10); t.y += (ty - t.y) * Math.min(1, dt * 10);
         t.shake = Math.max(0, t.shake - dt); t.wiggle = Math.max(0, t.wiggle - dt);
       });
     },
-    draw(c) {
-      O.inStage(c => {
-        A.gardenNight(c, O.clock);
-        c.save(); c.globalAlpha = 0.5; c.fillStyle = '#fff3c4'; c.fillRect(-500, -300, 2000, 1200); c.restore();
-        A.rr(c, 40, 110, 920, 470, 30, '#fff8e8', A.OUT, 4);
-        c.save(); c.translate(110, 190); c.scale(0.9, 0.9); A.item(c, O.state.item); c.restore();
-        const sw = this.slotW;
-        this.word.split('').forEach((ch, i) => {
-          const x = this.slotX(i);
-          c.save(); c.setLineDash([10, 8]);
-          A.rr(c, x - sw * 0.42, 245 - sw * 0.42, sw * 0.84, sw * 0.84, 12, i === this.next && !this.done ? 'rgba(255,211,77,0.35)' : 'rgba(29,47,69,0.06)', A.OUT, 3);
-          c.restore();
-        });
-        const size = Math.min(92, sw * 0.8);
-        this.tiles.forEach(t => {
-          const dx = t.shake ? Math.sin(t.shake * 40) * 8 : 0, rot = t.wiggle ? Math.sin(O.clock * 18) * 0.2 : 0;
-          const big = t.wiggle ? 1.15 : 1;
-          c.save(); c.translate(t.x + dx, t.y); c.rotate(rot); c.scale(big, big);
-          A.rr(c, -size / 2, -size / 2 + 5, size, size, 14, 'rgba(0,0,0,0.15)');
-          A.rr(c, -size / 2, -size / 2, size, size, 14, t.slot >= 0 ? '#d3f9d8' : '#fff', A.OUT, 4);
-          c.fillStyle = A.OUT; c.font = `bold ${Math.round(size * 0.66)}px Georgia`; c.textAlign = 'center'; c.textBaseline = 'middle';
-          c.fillText(t.ch, 0, 4);
-          c.restore();
-        });
-        if (this.done) for (let i = 0; i < 6; i++) A.sparkle(c, 140 + i * 145, 120 + Math.sin(O.clock * 4 + i) * 10, 12, '#ffd34d');
+    draw(scene, c, icon) {
+      A.gardenNight(c, O.clock);
+      c.save(); c.globalAlpha = 0.5; c.fillStyle = '#fff3c4'; c.fillRect(-500, -300, 2000, 1200); c.restore();
+      A.rr(c, 40, 110, 920, 470, 30, '#fff8e8', A.OUT, 4);
+      if (icon) { c.save(); c.translate(110, 190); c.scale(0.9, 0.9); icon(c); c.restore(); }
+      const sw = scene.slotW, h = Math.min(100, sw * 0.84);
+      scene.pieces.forEach((ch, i) => {
+        const x = scene.slotX(i);
+        c.save(); c.setLineDash([10, 8]);
+        A.rr(c, x - sw * 0.42, 245 - h / 2, sw * 0.84, h, 12, i === scene.next && !scene.done ? 'rgba(255,211,77,0.35)' : 'rgba(29,47,69,0.06)', A.OUT, 3);
+        c.restore();
       });
+      const size = Math.min(92, sw * 0.8);
+      scene.tiles.forEach(t => {
+        const dx = t.shake ? Math.sin(t.shake * 40) * 8 : 0, rot = t.wiggle ? Math.sin(O.clock * 18) * 0.2 : 0;
+        const big = t.wiggle ? 1.15 : 1, w = t.ch.length > 1 ? Math.max(size, Math.min(sw * 0.8, 50 + t.ch.length * 34)) : size;
+        c.save(); c.translate(t.x + dx, t.y); c.rotate(rot); c.scale(big, big);
+        A.rr(c, -w / 2, -size / 2 + 5, w, size, 14, 'rgba(0,0,0,0.15)');
+        A.rr(c, -w / 2, -size / 2, w, size, 14, t.slot >= 0 ? '#d3f9d8' : '#fff', A.OUT, 4);
+        c.fillStyle = A.OUT; c.font = `bold ${Math.round(t.ch.length > 2 ? size * 0.44 : size * 0.6)}px Georgia`; c.textAlign = 'center'; c.textBaseline = 'middle';
+        c.fillText(t.ch, 0, 4, w - 10);
+        c.restore();
+      });
+      if (scene.done) for (let i = 0; i < 6; i++) A.sparkle(c, 140 + i * 145, 140 + Math.sin(O.clock * 4 + i) * 10, 12, '#ffd34d');
     }
+  };
+
+  // Icon shown next to the slots: the word's picture, or a "?" when it would give away the suspect
+  function wordPicture(c) {
+    if (C.isLineup(O.state)) {
+      A.ell(c, 0, 0, 44, 44, '#e7ecf5', A.OUT, 3);
+      c.fillStyle = A.OUT; c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('?', 0, 4);
+      return;
+    }
+    A.wordIcon(c, O.stepData().word, O.clock);
+  }
+  O.wordPicture = wordPicture;
+
+  O.scenes.letters = {
+    enter() {
+      O.pieceBoard.setup(this, C.pieces(O.state, C.current(O.state)));
+      if (this.next < this.pieces.length) O.intro([['chief', C.isLineup(O.state) ? L().lettersIntroName : L().lettersIntro]]);
+      else this.complete();
+    },
+    complete() {
+      if (this.done) return;
+      this.done = true;
+      const word = this.pieces.join('');
+      setTimeout(() => {
+        sfx('fanfare');
+        O.sequence([['teddy', this.pieces.join(', ') + '… ' + word + ' !'], ['chief', L().lettersNext]], () => O.game('complete'));
+      }, 700);
+    },
+    effect(msg) { if (msg.kind === 'hint' && !this.done) O.pieceBoard.hint(this, L().letterHint); },
+    down(p) {
+      if (O.pieceBoard.tap(this, p) === 'ok' && this.next === this.pieces.length) this.complete();
+    },
+    update(dt) { O.pieceBoard.update(this, dt); },
+    draw(c) { O.inStage(c => O.pieceBoard.draw(this, c, wordPicture)); }
   };
 
   // ===== Suspect lineup =====
@@ -5384,11 +6789,11 @@ const Officer = (function () {
       const i = SPOTS.findIndex(x => Math.abs(p.sx - x) < 110 && p.sy > 170 && p.sy < 560);
       if (i < 0) return;
       const s = O.state, sp = s.suspects[i];
-      if (i === s.culprit) { this.happy = i; sfx('fanfare'); O.quiet(); O.send({ t: 'pick', i }); return; }
+      if (i === s.culprit) { this.happy = i; sfx('fanfare'); O.quiet(); O.game('pick', { i }); return; }
       this.shake[i] = 0.6; sfx('wrong');
       const why = C.alibi(s, i);
       O.speak(sp.species, why === 'paws' ? L().alibiPaws(C.pawOf(sp.species)) : L().alibiScarf(sp.scarf), { now: true });
-      O.send({ t: 'pick', i });
+      O.game('pick', { i });
     },
     update(dt) { this.shake = this.shake.map(v => Math.max(0, v - dt)); },
     draw(c) {
@@ -5408,15 +6813,30 @@ const Officer = (function () {
   };
 
   // ===== Happy ending and sticker =====
+  // Who stands at the party: the caller, the one we found (or the culprit), and a prop
+  function partyCast(s) {
+    const d = C.def(s), cast = [d.caller];
+    let extra = null;
+    if (C.isLineup(s)) cast.push(C.culprit(s).species);
+    else if (d.found !== d.caller) cast.push(d.found);
+    if (s.caseId === 'balloon') extra = 'balloon';
+    if (s.caseId === 'traffic') extra = 'light';
+    return { cast, extra };
+  }
+  O.partyCast = partyCast;
+
   O.scenes.ending = {
     enter() {
-      const sp = C.culprit(O.state).species;
-      this.species = sp; this.sticker = -1; this.confetti = [];
-      const T = L();
-      O.sequence([[sp, T.confess[sp]], ['granny', T.endGranny], ['chief', T.endChief]], () => {
+      const s = O.state, text = O.caseText();
+      this.sticker = -1; this.confetti = []; this.species = C.stickerOf(s);
+      const lines = C.isLineup(s)
+        ? [[C.culprit(s).species, text.confess[C.culprit(s).species]], text.forgive]
+        : text.ending.slice();
+      lines.push(['chief', L().endChief]);
+      O.sequence(lines, () => {
         this.sticker = 0;
         sfx('sticker');
-        O.addSticker(sp);
+        O.addSticker(this.species);
         for (let i = 0; i < 80; i++) this.confetti.push({ x: Math.random() * 1000, y: -Math.random() * 400, v: 80 + Math.random() * 120, r: Math.random() * 6, c: ['#ff6f91', '#ffd23f', '#3f8cff', '#3fbf5a'][i % 4] });
         O.speak('teddy', L().yay, { done: () => setTimeout(() => O.send({ t: 'endDone' }), 1800) });
       });
@@ -5426,18 +6846,16 @@ const Officer = (function () {
       this.confetti.forEach(p => { p.y += p.v * dt; p.r += dt * 4; if (p.y > 620) p.y = -20; });
     },
     draw(c) {
+      const s = O.state, happy = this.sticker >= 0;
       O.inStage(c => {
         A.party(c, O.clock);
-        c.save(); c.translate(500, 398); c.scale(1.2, 1.2); A.cake(c, O.clock, true); c.restore();
-        const happy = this.sticker >= 0;
-        [[180, 'granny'], [360, this.species], [660, 'teddy'], [840, 'chief']].forEach(([x, who]) => {
-          c.save(); c.translate(x, 560); c.scale(1.5, 1.5);
-          if (who === 'granny') A.granny(c, O.clock, { happy: true, wave: happy });
-          else if (who === 'teddy') A.teddy(c, O.clock, { happy: true, wave: happy });
-          else if (who === 'chief') A.chief(c, O.clock, { happy: true, wave: happy });
-          else A.animal(c, who, C.culprit(O.state).scarf, O.clock, { happy });
-          c.restore();
-        });
+        const { cast, extra } = partyCast(s);
+        if (s.caseId === 'cake') { c.save(); c.translate(500, 398); c.scale(1.2, 1.2); A.cake(c, O.clock, true); c.restore(); }
+        else if (extra) { c.save(); c.translate(500, extra === 'balloon' ? 300 + Math.sin(O.clock * 2) * 8 : 350); c.scale(1.6, 1.6); A.item(c, extra, happy); c.restore(); }
+        const xs = cast.length > 1 ? [180, 360] : [270];
+        cast.forEach((who, i) => O.drawWho(c, who, xs[i], 560, 1.5, { happy: true, wave: happy, chicks: true, crown: true, scarf: C.isLineup(s) && i === 1 ? C.culprit(s).scarf : undefined }));
+        O.drawWho(c, 'teddy', 660, 560, 1.5, { happy: true, wave: happy });
+        O.drawWho(c, 'chief', 840, 560, 1.5, { happy: true, wave: happy });
         this.confetti.forEach(p => { c.save(); c.translate(p.x, p.y); c.rotate(p.r); c.fillStyle = p.c; c.fillRect(-6, -3, 12, 6); c.restore(); });
         if (this.sticker >= 0) {
           const k = Math.min(1, this.sticker / 0.6), size = 260 * (0.3 + 0.7 * k);
@@ -5448,21 +6866,19 @@ const Officer = (function () {
     }
   };
 
-  // ===== Sticker book while the chief prepares a new case =====
-  const ALL = Object.keys(C.SPECIES);
+  // ===== Sticker book while the chief picks the next case =====
   O.scenes.done = {
     enter() { this.owned = O.stickers(); },
     draw(c) {
       O.inStage(c => {
         A.party(c, O.clock);
-        O.banner(c, L().stickers, 100);
-        ALL.forEach((sp, i) => {
-          c.save(); c.translate(140 + i * 190, 200 + Math.sin(O.clock * 2 + i) * 4);
-          A.sticker(c, sp, O.clock, 170, this.owned.includes(sp));
+        O.banner(c, L().stickers, 96);
+        C.STICKERS.forEach((who, i) => {
+          c.save(); c.translate(105 + (i % 5) * 165, 170 + Math.floor(i / 5) * 160 + Math.sin(O.clock * 2 + i) * 3);
+          A.sticker(c, who, O.clock, 140, this.owned.includes(who));
           c.restore();
         });
-        c.save(); c.translate(500, 590); c.scale(1.1, 1.1); A.teddy(c, O.clock, { wave: true, happy: true }); c.restore();
-        O.banner(c, L().waitNewCase, 400);
+        O.banner(c, L().waitNewCase, 500);
       });
     }
   };
@@ -5472,12 +6888,420 @@ const Officer = (function () {
   <script>
 'use strict';
 
-// The adult's computer: owns the case state, interviews witnesses, guides the officer and shows a live view.
+// New mini-games on the officer side (stage 1000 x 600): word, symbols, safe, spot, grid, sketch.
+// In each one the child does the doing and the station holds the key; the station checks every event.
+(function () {
+  const O = Officer, A = Art, C = PatrolCase;
+  const G = () => L().games;
+  function text(c, str, x, y, size, color, align) {
+    c.save(); c.fillStyle = color || A.OUT; c.font = `bold ${size}px Georgia`; c.textAlign = align || 'center'; c.textBaseline = 'middle';
+    c.fillText(str, x, y); c.restore();
+  }
+  function panel(c, x, y, w, h, fill) { A.rr(c, x, y + 6, w, h, 24, 'rgba(0,0,0,0.15)'); A.rr(c, x, y, w, h, 24, fill || '#fff8e8', A.OUT, 4); }
+  const inBox = (p, x, y, w, h) => p.sx >= x && p.sx <= x + w && p.sy >= y && p.sy <= y + h;
+  const shakeX = t => (t > 0 ? Math.sin(t * 40) * 7 : 0);
+
+  // ===== Write a word: listen to the syllables and put them in order =====
+  const EAR = { x: 900, y: 190, r: 46 };
+  O.scenes.word = {
+    enter() {
+      O.pieceBoard.setup(this, C.pieces(O.state, C.current(O.state)));
+      if (this.next < this.pieces.length) O.intro([['chief', G().word.intro]], () => this.sayWord());
+      else this.complete();
+    },
+    // The word slowly, piece by piece, then whole
+    sayWord() {
+      const parts = this.pieces.length > 1 && this.pieces.some(p => p.length > 1) ? this.pieces : [];
+      const slow = parts.map(p => p.toLowerCase()).join('… ');
+      O.speak('letter', (slow ? slow + '… ' : '') + this.pieces.join('').toLowerCase(), { now: true });
+    },
+    complete() {
+      if (this.done) return;
+      this.done = true;
+      setTimeout(() => { sfx('fanfare'); O.speak('teddy', G().word.done(this.pieces.join('')), { now: true, done: () => O.game('complete') }); }, 600);
+    },
+    effect(msg) {
+      if (msg.kind === 'repeat') this.sayWord();
+      if (msg.kind === 'hint' && !this.done) O.pieceBoard.hint(this, null);
+    },
+    down(p) {
+      if (O.dist(p.sx, p.sy, EAR.x, EAR.y) < EAR.r) { sfx('click'); this.sayWord(); return; }
+      if (O.pieceBoard.tap(this, p) === 'ok' && this.next === this.pieces.length) this.complete();
+    },
+    update(dt) { O.pieceBoard.update(this, dt); },
+    draw(c) {
+      O.inStage(c => {
+        O.pieceBoard.draw(this, c, O.wordPicture);
+        A.ell(c, EAR.x, EAR.y, EAR.r, EAR.r, '#d0ebff', A.OUT, 4);
+        text(c, '🔊', EAR.x, EAR.y + 2, 44);
+      });
+    }
+  };
+
+  // ===== Secret message: one symbol per letter, the station has the codebook =====
+  O.scenes.symbols = {
+    enter() {
+      const code = C.symbolCode(O.state, O.state.step);
+      this.word = C.plain(O.state, O.stepData().word).split('');
+      this.map = code.map; this.palette = code.palette;
+      this.n = Math.min(O.progress().n || 0, this.word.length); this.done = false;
+      this.shake = {}; this.wiggle = -1;
+      const n = this.word.length;
+      this.cell = Math.min(110, 860 / n);
+      this.cellX = i => 500 - (n * this.cell) / 2 + this.cell * (i + 0.5);
+      const perRow = Math.min(this.palette.length, 6);
+      this.tiles = this.palette.map((ch, i) => {
+        const row = Math.floor(i / perRow), inRow = Math.min(perRow, this.palette.length - row * perRow);
+        return { ch, x: 500 + ((i % perRow) - (inRow - 1) / 2) * 112, y: 430 + row * 100 };
+      });
+      if (this.n < n) O.intro([['chief', G().symbols.intro]]);
+      else this.complete();
+    },
+    complete() {
+      if (this.done) return;
+      this.done = true;
+      const word = this.word.join('');
+      setTimeout(() => { sfx('fanfare'); O.speak('teddy', G().symbols.done(word), { now: true, done: () => O.game('complete') }); }, 600);
+    },
+    effect(msg) {
+      if (msg.kind !== 'hint' || this.done) return;
+      const letter = this.word[this.n];
+      this.wiggle = this.tiles.findIndex(t => t.ch === letter);
+      this.wiggleUntil = O.clock + 2.5;
+      O.speak('chief', G().symbols.hint(letter), { now: true });
+    },
+    down(p) {
+      if (this.done) return;
+      const i = this.tiles.findIndex(t => Math.abs(p.sx - t.x) < 48 && Math.abs(p.sy - t.y) < 44);
+      if (i < 0) return;
+      const tile = this.tiles[i];
+      if (tile.ch === this.word[this.n]) {
+        sfx('pop'); O.speak('letter', tile.ch.toLowerCase(), { now: true });
+        O.game('piece', { i: this.n });
+        this.n++;
+        this.wiggle = -1;
+        if (this.n === this.word.length) this.complete();
+      } else {
+        this.shake[i] = 0.5; sfx('wrong'); O.speak('letter', tile.ch.toLowerCase(), { now: true });
+      }
+    },
+    update(dt) { Object.keys(this.shake).forEach(k => { this.shake[k] = Math.max(0, this.shake[k] - dt); }); },
+    draw(c) {
+      O.inStage(c => {
+        A.room(c, O.place(), O.clock);
+        panel(c, 40, 110, 920, 250, '#fdf3d7');
+        const cw = this.cell;
+        this.word.forEach((ch, i) => {
+          const x = this.cellX(i), current = i === this.n && !this.done;
+          A.rr(c, x - cw * 0.42, 130, cw * 0.84, 90, 12, current ? '#fff3bf' : '#fff', A.OUT, 3);
+          c.save(); c.translate(x, 175); A.symbol(c, this.map[ch], Math.min(60, cw * 0.6)); c.restore();
+          c.save(); c.setLineDash([8, 6]);
+          A.rr(c, x - cw * 0.36, 240, cw * 0.72, 90, 12, i < this.n ? '#d3f9d8' : 'rgba(29,47,69,0.05)', A.OUT, 3);
+          c.restore();
+          if (i < this.n) text(c, ch, x, 288, Math.min(60, cw * 0.55));
+          if (current) A.poly(c, [[x - 10, 340], [x + 10, 340], [x, 352]], '#ffd34d', A.OUT, 2);
+        });
+        this.tiles.forEach((t, i) => {
+          const wig = i === this.wiggle && O.clock < this.wiggleUntil ? Math.sin(O.clock * 18) * 0.2 : 0;
+          c.save(); c.translate(t.x + shakeX(this.shake[i] || 0), t.y); c.rotate(wig);
+          A.rr(c, -42, -38, 84, 80, 14, 'rgba(0,0,0,0.15)');
+          A.rr(c, -42, -42, 84, 80, 14, '#fff', A.OUT, 4);
+          text(c, t.ch, 0, 0, 50);
+          c.restore();
+        });
+      });
+    }
+  };
+
+  // ===== Safe: each digit of the code is a small addition to count =====
+  const KEYS = { x: 610, y: 330, size: 84, gap: 8 };
+  function keyRect(v) {
+    const i = v - 1, col = i % 3, row = Math.floor(i / 3);
+    return { x: KEYS.x + col * (KEYS.size + KEYS.gap), y: KEYS.y + row * (KEYS.size + KEYS.gap) };
+  }
+  O.scenes.safe = {
+    enter() {
+      this.digits = O.stepData().digits;
+      this.n = Math.min(O.progress().n || 0, this.digits.length);
+      this.open = 0; this.done = false; this.flash = 0; this.wrong = 0; this.pressed = 0;
+      if (this.n < this.digits.length) O.intro([['chief', G().safe.intro]]);
+      else this.finish();
+    },
+    finish() {
+      if (this.done) return;
+      this.done = true;
+      sfx('fanfare');
+      O.speak('teddy', G().safe.open, { now: true, done: () => setTimeout(() => O.game('complete'), 600) });
+    },
+    effect(msg) {
+      if (msg.kind !== 'hint' || this.done) return;
+      const d = this.digits[this.n];
+      O.speak('chief', G().safe.hint(d.a, d.b), { now: true });
+    },
+    down(p) {
+      if (this.done) return;
+      for (let v = 1; v <= 9; v++) {
+        const r = keyRect(v);
+        if (!inBox(p, r.x, r.y, KEYS.size, KEYS.size)) continue;
+        this.pressed = v; this.pressedAt = O.clock;
+        const d = this.digits[this.n];
+        O.game('digit', { i: this.n, v });
+        if (v === d.a + d.b) {
+          sfx('click'); this.flash = 0.6;
+          O.speak('teddy', G().safe.right(v), { now: true });
+          this.n++;
+          if (this.n === this.digits.length) setTimeout(() => this.finish(), 700);
+        } else {
+          sfx('wrong'); this.wrong = 0.5;
+          O.speak('chief', G().safe.wrong, { now: true });
+        }
+        return;
+      }
+    },
+    update(dt) {
+      this.flash = Math.max(0, this.flash - dt); this.wrong = Math.max(0, this.wrong - dt);
+      if (this.done) this.open = Math.min(1, this.open + dt * 1.5);
+    },
+    draw(c) {
+      O.inStage(c => {
+        A.room(c, O.place(), O.clock);
+        // The safe with one window per digit
+        c.save(); c.translate(250 + shakeX(this.wrong), 360); A.safe(c, this.open > 0.5, O.clock);
+        if (this.open > 0.5) { c.save(); c.scale(1.3, 1.3); A.item(c, 'key', true); c.restore(); }
+        else this.digits.forEach((d, i) => {
+          const x = -90 + i * 70;
+          A.rr(c, x - 28, -130, 56, 70, 10, i < this.n ? '#d3f9d8' : i === this.n ? '#fff3bf' : '#e9ecef', A.OUT, 3);
+          text(c, i < this.n ? String(d.a + d.b) : '?', x, -94, 42);
+        });
+        c.restore();
+        // The riddle for the current digit: a things + b things
+        if (!this.done && this.n < this.digits.length) {
+          const d = this.digits[this.n];
+          panel(c, 470, 100, 500, 200, '#fff8e8');
+          const group = (count, x0) => {
+            for (let k = 0; k < count; k++) {
+              c.save(); c.translate(x0 + (k % 3) * 46, 150 + Math.floor(k / 3) * 46); A.countIcon(c, d.icon, 40); c.restore();
+            }
+          };
+          group(d.a, 510);
+          text(c, '+', 680, 196, 56);
+          group(d.b, 720);
+          text(c, '= ?', 905, 196, 46);
+          for (let v = 1; v <= 9; v++) {
+            const r = keyRect(v), down = this.pressed === v && O.clock - this.pressedAt < 0.2;
+            A.rr(c, r.x, r.y + (down ? 4 : 0), KEYS.size, KEYS.size, 16, down ? '#d0ebff' : '#fff', A.OUT, 4);
+            text(c, String(v), r.x + KEYS.size / 2, r.y + KEYS.size / 2 - 8 + (down ? 4 : 0), 44);
+            // Little dots under each number help to link the number and the quantity
+            for (let k = 0; k < v; k++) A.ell(c, r.x + KEYS.size / 2 + (k - (v - 1) / 2) * 8, r.y + KEYS.size - 14, 2.6, 2.6, '#3f8cff');
+          }
+        }
+      });
+    }
+  };
+
+  // ===== Spot the difference: the station has the "before" photo =====
+  const SLOT = i => ({ x: 200 + (i % 4) * 200, y: i < 4 ? 250 : 430 });
+  function afterItems(data) {
+    const items = data.items.map(it => Object.assign({}, it));
+    data.changes.forEach(ch => {
+      if (ch.type === 'missing') items[ch.i] = null;
+      if (ch.type === 'color') items[ch.i].tint = ch.to;
+      if (ch.type === 'swap') items[ch.i].kind = ch.to;
+    });
+    return items;
+  }
+  O.afterItems = afterItems;
+  O.drawShelves = (c, items, found, scale) => {
+    [300, 480].forEach(y => { A.rr(c, 80, y, 840, 18, 6, '#a8743f', A.OUT, 3); });
+    items.forEach((it, i) => {
+      const s = SLOT(i);
+      if (it) { c.save(); c.translate(s.x, s.y); c.scale(scale || 1.6, scale || 1.6); A.prop(c, it.kind, it.tint); c.restore(); }
+      if (found && found.includes(i)) A.ell(c, s.x, s.y, 66, 62, null, '#2f9e44', 6);
+    });
+  };
+  O.scenes.spot = {
+    enter() {
+      this.data = O.stepData();
+      this.items = afterItems(this.data);
+      this.found = (O.progress().found || []).slice();
+      this.done = false; this.cooldown = 0; this.miss = null;
+      if (this.found.length < this.data.changes.length) O.intro([['chief', G().spot.intro]]);
+      else this.finish();
+    },
+    finish() {
+      if (this.done) return;
+      this.done = true;
+      sfx('fanfare');
+      O.speak('chief', G().spot.done, { now: true, done: () => O.game('complete') });
+    },
+    down(p) {
+      if (this.done) return;
+      const i = [...Array(8).keys()].find(k => O.dist(p.sx, p.sy, SLOT(k).x, SLOT(k).y) < 80);
+      if (i === undefined || this.found.includes(i)) return;
+      if (this.data.changes.some(ch => ch.i === i)) {
+        this.found.push(i);
+        sfx('found');
+        O.speak('teddy', G().spot.yes, { now: true });
+        O.game('tap', { i });
+        if (this.found.length === this.data.changes.length) setTimeout(() => this.finish(), 600);
+      } else if (this.cooldown <= 0) {
+        this.cooldown = 1; this.miss = { i, t: 0.5 };
+        sfx('wrong');
+        O.speak('teddy', G().spot.no, { now: true });
+      }
+    },
+    update(dt) {
+      this.cooldown -= dt;
+      if (this.miss) { this.miss.t -= dt; if (this.miss.t <= 0) this.miss = null; }
+    },
+    draw(c) {
+      O.inStage(c => {
+        A.room(c, O.place(), O.clock);
+        panel(c, 60, 140, 880, 420, 'rgba(255,248,232,0.92)');
+        O.drawShelves(c, this.items, this.found);
+        if (this.miss) { const s = SLOT(this.miss.i); A.ell(c, s.x, s.y, 60, 56, null, '#e03131', 5); }
+        this.data.changes.forEach((ch, k) => A.ell(c, 420 + k * 80, 120, 22, 22, k < this.found.length ? '#40c057' : '#fff', A.OUT, 3));
+      });
+    }
+  };
+
+  // ===== Helicopter grid: find the cell the station names (letter + number) =====
+  const MAP = { x: 300, y: 115, cell: 92 };
+  O.scenes.grid = {
+    enter() {
+      this.data = O.stepData();
+      const p = O.progress();
+      this.found = !!p.found;
+      this.at = { c: p.c >= 0 ? p.c : 2, r: p.r >= 0 ? p.r : 2 };
+      this.hx = MAP.x + (this.at.c + 0.5) * MAP.cell; this.hy = MAP.y + (this.at.r + 0.5) * MAP.cell;
+      this.flying = null; this.done = false; this.looked = new Set();
+      if (this.found) this.finish();
+      else O.intro([['chief', G().grid.intro]]);
+    },
+    letters() { return L().gridLetters.split(''); },
+    finish() {
+      if (this.done) return;
+      this.done = true;
+      sfx('fanfare');
+      O.speak('teddy', G().grid.found, { now: true, done: () => O.game('complete') });
+    },
+    effect(msg) {
+      if (msg.kind !== 'cellSay') return;
+      const letter = this.letters()[this.data.c], number = this.data.r + 1;
+      sfx('radio'); O.showGps(letter + number);
+      O.speak('chief', G().grid.cell(letter, number), { now: true });
+    },
+    down(p) {
+      if (this.done || this.flying) return;
+      const c = Math.floor((p.sx - MAP.x) / MAP.cell), r = Math.floor((p.sy - MAP.y) / MAP.cell);
+      if (c < 0 || r < 0 || c >= C.GRID || r >= C.GRID) return;
+      sfx('whoosh');
+      this.flying = { c, r };
+    },
+    land() {
+      const { c, r } = this.flying;
+      this.flying = null;
+      this.at = { c, r };
+      this.looked.add(c + ',' + r);
+      O.game('cell', { c, r });
+      if (c === this.data.c && r === this.data.r) { sfx('found'); this.found = true; setTimeout(() => this.finish(), 500); }
+      else O.speak('teddy', G().grid.miss(this.letters()[c], r + 1), { now: true });
+    },
+    update(dt) {
+      if (!this.flying) return;
+      const tx = MAP.x + (this.flying.c + 0.5) * MAP.cell, ty = MAP.y + (this.flying.r + 0.5) * MAP.cell;
+      const d = O.dist(this.hx, this.hy, tx, ty), step = dt * 420;
+      if (d <= step) { this.hx = tx; this.hy = ty; this.land(); }
+      else { this.hx += (tx - this.hx) / d * step; this.hy += (ty - this.hy) / d * step; }
+    },
+    draw(c) {
+      O.inStage(c => {
+        A.room(c, 'park', O.clock);
+        c.save(); c.globalAlpha = 0.35; c.fillStyle = '#fff'; c.fillRect(-500, -300, 2000, 1200); c.restore();
+        c.save(); c.translate(MAP.x, MAP.y); A.gridMap(c, MAP.cell, this.data, O.clock, this.found); c.restore();
+        const L1 = this.letters();
+        for (let i = 0; i < C.GRID; i++) {
+          text(c, L1[i], MAP.x + (i + 0.5) * MAP.cell, MAP.y - 26, 38, i === this.at.c ? '#1971c2' : A.OUT);
+          text(c, String(i + 1), MAP.x - 30, MAP.y + (i + 0.5) * MAP.cell, 38, i === this.at.r ? '#1971c2' : A.OUT);
+        }
+        this.looked.forEach(k => {
+          const [cc, rr] = k.split(',').map(Number);
+          if (cc === this.data.c && rr === this.data.r) return;
+          A.ell(c, MAP.x + (cc + 0.85) * MAP.cell, MAP.y + (rr + 0.18) * MAP.cell, 9, 9, '#ced4da', A.OUT, 1.5);
+        });
+        A.rr(c, MAP.x + this.at.c * MAP.cell + 3, MAP.y + this.at.r * MAP.cell + 3, MAP.cell - 6, MAP.cell - 6, 10, null, '#1971c2', 4);
+        c.save(); c.translate(this.hx, this.hy - 6); A.helicopter(c, O.clock, 70); c.restore();
+        panel(c, 800, 200, 170, 120, '#fff8e8');
+        text(c, L1[this.at.c] + ' ' + (this.at.r + 1), 885, 262, 56, '#1971c2');
+        c.save(); c.translate(130, 300); c.scale(0.9, 0.9); A.wordIcon(c, this.data.item, O.clock); c.restore();
+      });
+    }
+  };
+
+  // ===== Sketch artist: build the face the witness describes to the station =====
+  const ROWS = [['color', 175], ['ears', 330], ['scarf', 480]];
+  const optionX = i => 560 + i * 105;
+  O.scenes.sketch = {
+    enter() {
+      const p = O.progress();
+      this.pick = { color: p.color, ears: p.ears, scarf: p.scarf };
+      this.target = O.stepData();
+      this.done = false; this.pop = 0;
+      if (this.matches()) this.finish();
+      else O.intro([['chief', G().sketch.intro]]);
+    },
+    matches() { return Object.keys(C.SKETCH_OPTIONS).every(k => this.pick[k] === this.target[k]); },
+    finish() {
+      if (this.done) return;
+      this.done = true;
+      sfx('fanfare');
+      O.speak('teddy', G().sketch.done, { now: true, done: () => O.game('complete') });
+    },
+    down(p) {
+      if (this.done) return;
+      ROWS.forEach(([cat, y]) => {
+        C.SKETCH_OPTIONS[cat].forEach((v, i) => {
+          if (O.dist(p.sx, p.sy, optionX(i), y) > 46) return;
+          this.pick[cat] = v; this.pop = 0.3;
+          sfx('pop');
+          O.game('pick', { cat, v });
+          if (this.matches()) setTimeout(() => this.finish(), 400);
+        });
+      });
+    },
+    update(dt) { this.pop = Math.max(0, this.pop - dt); },
+    draw(c) {
+      O.inStage(c => {
+        A.room(c, O.place(), O.clock);
+        panel(c, 60, 110, 420, 460, '#fffdf5');
+        c.save(); c.translate(270, 360); c.scale(1.55 + this.pop * 0.3, 1.55 + this.pop * 0.3); A.sketchFace(c, this.pick, O.clock); c.restore();
+        if (this.done) for (let i = 0; i < 5; i++) A.sparkle(c, 120 + i * 80, 140 + Math.sin(O.clock * 4 + i) * 8, 11, '#ffd34d');
+        panel(c, 500, 110, 460, 460, 'rgba(255,248,232,0.95)');
+        ROWS.forEach(([cat, y]) => {
+          C.SKETCH_OPTIONS[cat].forEach((v, i) => {
+            const x = optionX(i), on = this.pick[cat] === v;
+            A.ell(c, x, y, 44, 44, on ? '#fff3bf' : '#fff', on ? '#1971c2' : A.OUT, on ? 6 : 3);
+            if (cat === 'color') A.ell(c, x, y, 28, 28, A.FUR[v], A.OUT, 2.5);
+            else if (cat === 'scarf') { A.rr(c, x - 28, y - 10, 56, 20, 10, A.SCARF[v], A.OUT, 2.5); A.rr(c, x + 8, y, 12, 24, 4, A.SCARF[v], A.OUT, 2); }
+            else { c.save(); c.translate(x, y + 18); c.scale(0.42, 0.42); A.sketchFace(c, { ears: v, color: 'beige' }, 0); c.restore(); }
+          });
+        });
+      });
+    }
+  };
+})();
+
+</script>
+  <script>
+'use strict';
+
+// The adult's computer: owns the case state, picks cases, guides the officer and holds the keys of the mini-games.
 const Station = (function () {
   const $ = id => document.getElementById(id);
   const C = PatrolCase;
-  const SAVE_KEY = 'teddyPatrol.station';
-  const OFFICER_EVENTS = ['callDone', 'vehicle', 'arrive', 'print', 'found', 'letter', 'lettersDone', 'pick', 'endDone'];
+  const SAVE_KEY = 'teddyPatrol.station', SOLVED_KEY = 'teddyPatrol.solved';
+  const OFFICER_EVENTS = ['callDone', 'vehicle', 'arrive', 'g', 'endDone'];
+  const GAME_ICON = { brush: '🐾', lamp: '🔦', letters: '🔤', word: '✏️', symbols: '🗝️', sketch: '🧑‍🎨', spot: '🔍', safe: '🔢', grid: '🚁', lineup: '👮' };
 
   const S = { state: null, car: null, lamp: null, brush: 0, code: '', local: false, connected: false, crossed: [], radioUntil: 0 };
   let link = null;
@@ -5486,6 +7310,7 @@ const Station = (function () {
     try { sessionStorage.setItem(SAVE_KEY, JSON.stringify({ code: S.code, local: S.local, state: S.state })); } catch (error) { /* not kept */ }
   }
   S.restore = () => { try { return JSON.parse(sessionStorage.getItem(SAVE_KEY)); } catch (error) { return null; } };
+  const solved = () => { try { return JSON.parse(localStorage.getItem(SOLVED_KEY)) || []; } catch (error) { return []; } };
 
   function broadcast() {
     if (link) link.send({ t: 'state', s: S.state });
@@ -5493,22 +7318,39 @@ const Station = (function () {
     render();
   }
   function act(e) {
-    const before = S.state.phase;
+    const before = { phase: S.state.phase, step: S.state.step, tries: S.state.progress && S.state.progress.tries };
     if (!C.apply(S.state, e)) return false;
-    if (e.t === 'match' && S.state.phase === 'match') { sfx('wrong'); shakeMatch(e.print); }
-    if (e.t === 'match' && S.state.phase !== 'match') sfx('found');
-    if (before !== S.state.phase && ['brush', 'lamp', 'lineup', 'ending'].includes(S.state.phase)) sfx('connect');
+    const s = S.state;
+    if (e.t === 'g' && e.a === 'match') {
+      if (s.step === before.step) { sfx('wrong'); shakeMatch(e.print); } else sfx('found');
+    }
+    if (before.step !== s.step || before.phase !== s.phase) sfx('connect');
+    if (s.phase === 'done' && before.phase !== 'done') {
+      const list = solved();
+      if (!list.includes(s.caseId)) { list.push(s.caseId); try { localStorage.setItem(SOLVED_KEY, JSON.stringify(list)); } catch (error) { /* not kept */ } }
+    }
     broadcast();
     return true;
   }
   function fx(kind, extra) { if (link) link.send(Object.assign({ t: 'fx', kind }, extra || {})); }
-  S.act = act; S.fx = fx;
+  // Station-side game actions (fingerprint file, sending the item to find)
+  const gameAct = (a, extra) => act(Object.assign({ t: 'g', step: S.state.step, a }, extra || {}));
+  S.act = act; S.fx = fx; S.gameAct = gameAct;
 
-  function newCase() {
-    S.state = C.create(0, lang);
+  function startCase(id, seed) {
+    const ids = Object.keys(C.CASES);
+    if (!C.CASES[id]) {
+      // Surprise: prefer cases not solved yet
+      const fresh = ids.filter(k => !solved().includes(k) && k !== (S.state && S.state.caseId));
+      const pool = fresh.length ? fresh : ids.filter(k => k !== (S.state && S.state.caseId));
+      id = pool[Math.floor(Math.random() * pool.length)];
+    }
+    S.state = C.create(id, seed || 0, lang);
     S.crossed = []; S.car = null; S.lamp = null; S.brush = 0;
+    sfx('radio');
     broadcast();
   }
+  S.startCase = startCase;
 
   function onMessage(msg) {
     switch (msg.t) {
@@ -5540,15 +7382,16 @@ const Station = (function () {
   }
 
   // ===== What the adult should do now =====
-  function todoKey(s) {
-    if (s.phase === 'drive') {
-      const need = C.need(s);
-      if (need) return need;
-      if (!s.clues.garden || !s.clues.item) return 'witness';
-      return 'send';
-    }
-    if (s.phase === 'lamp' && !s.clues.itemSent) return 'lampSend';
-    return s.phase;
+  function todoText(s) {
+    const T = L();
+    if (s.phase === 'board' || s.phase === 'done') return T.todo.board;
+    if (s.phase === 'drive') return T.todo.goTo(C.need(s));
+    if (s.phase !== 'game') return T.todo[s.phase] || '';
+    const g = C.game(s), p = s.progress;
+    if (g === 'brush') return p.part === 'match' ? T.todo.match : T.todo.brush;
+    if (g === 'lamp') return p.sent ? T.todo.lamp : T.todo.lampSend;
+    if (g === 'letters') return C.isLineup(s) ? T.todo.letters : T.todo.lettersWord;
+    return T.todo[g] || '';
   }
 
   function canvasIcon(cv, draw) {
@@ -5562,35 +7405,80 @@ const Station = (function () {
     if (text !== undefined) e.textContent = text;
     return e;
   }
+  S.el = el; S.canvasIcon = canvasIcon;
 
+  // ===== Case board =====
+  function renderBoard() {
+    const s = S.state, box = $('caseBoard'), T = L();
+    box.hidden = !['board', 'done'].includes(s.phase);
+    if (box.hidden) return;
+    const key = lang + '|' + solved().join(',');
+    if (box.dataset.key === key) return;
+    box.dataset.key = key;
+    box.textContent = '';
+    box.append(el('h3', '', T.boardTitle));
+    const grid = el('div', 'case-grid');
+    const done = solved();
+    Object.keys(C.CASES).forEach(id => {
+      const card = el('button', 'case-card' + (done.includes(id) ? ' solved' : ''));
+      card.dataset.case = id;
+      const cv = el('canvas'); cv.width = cv.height = 96;
+      Art.portrait(cv.getContext('2d'), C.CASES[id].caller, 0, 96);
+      card.append(cv, el('b', '', T.cases[id].title));
+      if (done.includes(id)) card.append(el('small', '', '✔ ' + T.solved));
+      card.addEventListener('click', () => startCase(id));
+      grid.append(card);
+    });
+    box.append(grid);
+    const surprise = el('button', 'big-surprise', T.surprise);
+    surprise.addEventListener('click', () => startCase(null));
+    box.append(surprise);
+  }
+
+  // ===== Case summary: caller, steps =====
+  function renderCase() {
+    const s = S.state, T = L(), head = $('caseHeader'), list = $('stepsList');
+    head.textContent = ''; list.textContent = '';
+    $('caseSection').hidden = s.phase === 'board';
+    if (s.phase === 'board') return;
+    const d = C.def(s);
+    const cv = el('canvas'); cv.width = cv.height = 72;
+    Art.portrait(cv.getContext('2d'), d.caller, 0, 72);
+    head.append(cv, el('b', '', T.cases[s.caseId].title));
+    s.steps.forEach((st, i) => {
+      const state = i < s.step || s.phase === 'ending' || s.phase === 'done' ? 'done' : i === s.step ? 'now' : 'later';
+      const row = el('div', 'step-row ' + state);
+      row.append(el('span', 'step-icon', state === 'done' ? '✔' : GAME_ICON[st.game]), el('b', '', T.gameNames[st.game]), el('small', '', T.places[st.place]));
+      list.append(row);
+    });
+  }
+
+  // ===== Lineup cases: clues, witnesses, suspects =====
   function renderClues() {
     const s = S.state, T = L(), box = $('clues');
     box.textContent = '';
-    const row = (key, known, value, icon, extra) => {
+    const row = (key, known, value, icon) => {
       const r = el('div', 'clue' + (known ? ' known' : ''));
       const cv = el('canvas'); cv.width = cv.height = 64;
       if (known && icon) canvasIcon(cv, icon);
       r.append(cv);
       const body = el('div', 'clue-body');
       body.append(el('small', '', T.clue[key]), el('b', '', known ? value : T.unknown));
-      if (extra) body.append(extra);
       r.append(body);
       box.append(r);
     };
     const paw = C.paw(s), culprit = C.culprit(s);
-    row('print', s.clues.print, T.paws[paw], c => { c.scale(0.55, 0.55); Art.pawPrint(c, paw); });
-    row('scarf', s.clues.scarf, T.colors[culprit.scarf], c => { Art.rr(c, -24, -10, 48, 20, 10, Art.SCARF[culprit.scarf], Art.OUT, 2.5); });
-    row('garden', s.clues.garden, T.places.garden, c => { c.scale(0.8, 0.8); Art.placeBadge(c, 'garden', 0); });
-    let send = null;
-    if (s.clues.item) {
-      send = el('button', 'small-button' + (s.clues.itemSent ? ' done' : ' glow'), s.clues.itemSent ? T.sent : T.send);
-      send.disabled = s.clues.itemSent;
-      send.addEventListener('click', () => { sfx('radio'); act({ t: 'sendItem' }); });
-    }
-    row('item', s.clues.item, (T.itemsIs || T.items)[s.item], c => { c.scale(0.6, 0.6); Art.item(c, s.item); }, send);
-    const word = C.word(s);
-    const shownWord = s.clues.found ? word.split('').map((ch, i) => (i < s.clues.letters ? ch : '_')).join(' ') : '';
-    row('name', s.clues.found, shownWord, null);
+    row('print', !!s.results.print, T.paws[paw], c => { c.scale(0.55, 0.55); Art.pawPrint(c, paw); });
+    row('scarf', !!s.results.scarf, T.colors[culprit.scarf], c => { Art.rr(c, -24, -10, 48, 20, 10, Art.SCARF[culprit.scarf], Art.OUT, 2.5); });
+    row('name', !!s.results.name, T.names[culprit.species], c => { c.translate(-32, -36); Art.portrait(c, culprit.species, 0, 64); });
+  }
+
+  function answerText(k) {
+    const s = S.state, fn = L().answers[k];
+    if (k === 'owl.who') return fn(C.culprit(s).scarf);
+    if (k === 'owl.where') { const next = s.steps.slice(s.step + 1).find(st => st.place !== C.current(s).place); return fn((next || s.steps[s.steps.length - 1]).place); }
+    if (k === 'duck.what') return fn(C.paw(s));
+    return fn();
   }
 
   function renderWitnesses() {
@@ -5610,8 +7498,9 @@ const Station = (function () {
         const b = el('button', 'small-button' + (asked ? ' done' : open ? ' glow' : ''), T.questions[k]);
         b.disabled = asked || !open;
         b.addEventListener('click', () => {
+          const answer = answerText(k);
           if (!act({ t: 'ask', witness: who, q })) return;
-          say(answerText(k), who);
+          say(answer, who);
         });
         buttons.append(b);
       });
@@ -5621,17 +7510,13 @@ const Station = (function () {
     });
     if (!open) box.append(el('p', 'note', T.witnessLater));
   }
-  function answerText(k) {
-    const s = S.state, fn = L().answers[k];
-    return fn(k === 'owl.who' ? C.culprit(s).scarf : s.item);
-  }
 
   function renderSuspects() {
     const s = S.state, T = L(), box = $('suspects');
     box.textContent = '';
-    const solved = s.clues.print && s.clues.scarf && ['lineup', 'ending', 'done'].includes(s.phase);
+    const known = s.results.print && s.results.scarf && (C.game(s) === 'lineup' || ['ending', 'done'].includes(s.phase));
     s.suspects.forEach((sp, i) => {
-      const card = el('button', 'suspect' + (S.crossed.includes(i) || s.wrong.includes(i) ? ' crossed' : '') + (solved && i === s.culprit ? ' answer' : ''));
+      const card = el('button', 'suspect' + (S.crossed.includes(i) || s.wrong.includes(i) ? ' crossed' : '') + (known && i === s.culprit ? ' answer' : ''));
       const cv = el('canvas'); cv.width = 110; cv.height = 150;
       const c = cv.getContext('2d');
       c.save(); c.translate(55, 146); c.scale(0.78, 0.78); Art.animal(c, sp.species, sp.scarf, 0); c.restore();
@@ -5642,33 +7527,33 @@ const Station = (function () {
       });
       box.append(card);
     });
-    $('suspectNote').textContent = solved ? T.answerIs(s.culprit + 1) : T.suspectsHint;
+    $('suspectNote').textContent = known ? T.answerIs(s.culprit + 1) : T.suspectsHint;
   }
 
-  // ===== Fingerprint file (adult mini-game) =====
+  // ===== Fingerprint file (adult part of the brush game) =====
   function renderMatch() {
     const s = S.state, T = L(), box = $('matchGame');
-    box.hidden = s.phase !== 'match';
+    const st = C.current(s);
+    box.hidden = !(C.game(s) === 'brush' && s.progress.part === 'match');
     if (box.hidden) return;
-    if (box.dataset.seed === String(s.seed)) return;
-    box.dataset.seed = String(s.seed);
+    const key = s.seed + '|' + s.step + '|' + lang;
+    if (box.dataset.key === key) return;
+    box.dataset.key = key;
     box.textContent = '';
     box.append(el('h3', '', T.matchTitle));
     const wrap = el('div', 'match-row');
     const plate = el('div', 'print-card plate');
     const pc = el('canvas'); pc.width = pc.height = 160;
-    canvasIcon(pc, c => { Art.plate(c, 74); c.rotate(-0.25); c.scale(0.8, 0.8); Art.pawPrint(c, C.paw(s)); });
+    canvasIcon(pc, c => { Art.plate(c, 74); c.rotate(-0.25); c.scale(0.8, 0.8); Art.pawPrint(c, st.data.print); });
     plate.append(pc, el('b', '', T.plate));
     wrap.append(plate, el('div', 'equals', '='));
-    const rnd = Art.seeded(s.seed + 3), order = C.PRINTS.slice();
-    for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
-    order.forEach(kind => {
+    st.data.choices.forEach(kind => {
       const b = el('button', 'print-card');
       b.dataset.print = kind;
       const cv = el('canvas'); cv.width = cv.height = 130;
       canvasIcon(cv, c => { c.scale(1.2, 1.2); Art.pawPrint(c, kind); });
       b.append(cv, el('b', '', T.paws[kind]));
-      b.addEventListener('click', () => act({ t: 'match', print: kind }));
+      b.addEventListener('click', () => gameAct('match', { print: kind }));
       wrap.append(b);
     });
     box.append(wrap);
@@ -5680,33 +7565,41 @@ const Station = (function () {
   }
 
   function renderControls() {
-    const s = S.state, T = L();
-    $('todo').textContent = T.todo[todoKey(s)] || '';
+    const s = S.state, T = L(), g = C.game(s);
+    $('todo').textContent = todoText(s);
     $('gpsPad').hidden = s.phase !== 'drive';
-    $('lampPad').hidden = s.phase !== 'lamp';
-    $('hintBtn').hidden = s.phase !== 'letters';
-    $('askBtn').hidden = s.phase !== 'lineup';
+    $('lampPad').hidden = g !== 'lamp';
+    $('sendBtn').hidden = !(g === 'lamp' && !s.progress.sent);
+    $('hintBtn').hidden = !['letters', 'word', 'symbols', 'safe'].includes(g);
+    $('repeatBtn').hidden = g !== 'word';
+    $('sayCellBtn').hidden = g !== 'grid';
+    $('askBtn').hidden = g !== 'lineup';
     $('newCaseBtn').hidden = !['ending', 'done'].includes(s.phase);
     $('vehicleNote').textContent = s.vehicle ? T.vehicleIs(T.vehicles[s.vehicle]) : '';
+    $('lineupBox').hidden = !(s.suspects && C.isLineup(s));
   }
 
   function render() {
     if (!S.state) return;
     renderControls();
-    renderClues();
-    renderWitnesses();
-    renderSuspects();
-    if ($('matchGame').dataset.lang !== lang) { $('matchGame').dataset.lang = lang; delete $('matchGame').dataset.seed; }
+    renderBoard();
+    renderCase();
+    if (S.state.suspects && C.isLineup(S.state)) { renderClues(); renderWitnesses(); renderSuspects(); }
     renderMatch();
   }
 
-  // Next instruction shown under the map (also refreshed every frame by the view)
+  // Next instruction shown under the view (refreshed every frame by the view)
   S.nextHint = () => {
-    const s = S.state, T = L();
-    if (s.phase === 'letters') {
-      const word = C.word(s);
-      return s.clues.letters < word.length ? T.nextLetter(word[s.clues.letters]) : '';
+    const s = S.state, T = L(), g = C.game(s);
+    if (['letters', 'word', 'symbols'].includes(g)) {
+      const pieces = C.pieces(s, C.current(s)), next = pieces[s.progress.n];
+      return next ? (next.length > 1 ? T.nextPiece(next) : T.nextLetter(next)) : '';
     }
+    if (g === 'safe') {
+      const d = C.current(s).data.digits[s.progress.n];
+      return d ? `${d.a} + ${d.b} = ${d.a + d.b}` : '';
+    }
+    if (g === 'grid') { const d = C.current(s).data; return T.target + ' : ' + T.gridLetters[d.c] + ' ' + (d.r + 1); }
     if (s.phase !== 'drive' || !S.car) return '';
     const place = s.target || C.need(s);
     if (!place) return '';
@@ -5738,8 +7631,11 @@ const Station = (function () {
     document.querySelectorAll('#lampPad [data-dir]').forEach(b => b.addEventListener('click', () => { sfx('gps'); fx('lampDir', { dir: b.dataset.dir }); }));
     $('bravoBtn').addEventListener('click', () => { sfx('sparkle'); fx('bravo'); });
     $('hintBtn').addEventListener('click', () => fx('hint'));
+    $('repeatBtn').addEventListener('click', () => fx('repeat'));
+    $('sayCellBtn').addEventListener('click', () => { sfx('radio'); fx('cellSay'); });
+    $('sendBtn').addEventListener('click', () => { sfx('radio'); gameAct('send'); });
     $('askBtn').addEventListener('click', () => { sfx('radio'); fx('ask'); });
-    $('newCaseBtn').addEventListener('click', newCase);
+    $('newCaseBtn').addEventListener('click', () => { S.state = C.board(lang); broadcast(); });
     $('stationStatus').addEventListener('click', () => { $('lobby').hidden = false; });
     $('lobbyClose').addEventListener('click', () => { $('lobby').hidden = true; });
     languageListeners.push(code => {
@@ -5751,8 +7647,9 @@ const Station = (function () {
 
   function start(netFactory, code, local, saved) {
     S.code = code; S.local = local;
-    S.state = saved && saved.state && saved.state.suspects ? saved.state : C.create(0, lang);
+    S.state = saved && saved.state && saved.state.v === 2 ? saved.state : C.board(lang);
     if (S.state.lang !== lang) C.apply(S.state, { t: 'lang', lang });
+    if (S.state.phase === 'board') S.state.lang = lang;
     document.body.classList.add('station');
     $('station').hidden = false;
     wire();
@@ -5771,7 +7668,8 @@ const Station = (function () {
   <script>
 'use strict';
 
-// Live picture on the adult's screen: the whole town map while driving, or a mirror of the child's mini-game.
+// Live picture on the adult's screen: the whole town map while driving, or the adult's side of each mini-game
+// (the key the child does not see: codebook, answers, "before" photo, grid target, witness description).
 const StationView = (function () {
   const $ = id => document.getElementById(id);
   const A = Art, T = Town, C = PatrolCase;
@@ -5802,6 +7700,14 @@ const StationView = (function () {
     c.fillStyle = A.OUT; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(text, x, y + 1);
     c.restore();
   }
+  function text(c, str, x, y, size, color, align) {
+    c.save(); c.fillStyle = color || A.OUT; c.font = `bold ${size}px Georgia`; c.textAlign = align || 'center'; c.textBaseline = 'middle';
+    c.fillText(str, x, y); c.restore();
+  }
+  function panel(c, x, y, w, h, fill) { A.rr(c, x, y, w, h, 20, fill || '#fff8e8', A.OUT, 3); }
+  const step = () => C.current(S.state);
+  const data = () => step().data;
+  const prog = () => S.state.progress || {};
 
   // ===== Town map =====
   function drawMap() {
@@ -5856,12 +7762,13 @@ const StationView = (function () {
     return best;
   }
 
-  // ===== Mirrors of the child's scenes =====
+  // ===== Phases before and after the mini-games =====
   function drawCall() {
     inStage(c => {
       A.office(c, clock);
       c.save(); c.translate(360, 368); c.scale(1.2, 1.2); A.phone(c, clock, S.state.phase === 'call'); c.restore();
       c.save(); c.translate(640, 520); c.scale(1.7, 1.7); A.teddy(c, clock, { wave: true }); c.restore();
+      if (S.state.caseId) { c.save(); c.translate(860, 300); c.scale(1.2, 1.2); A.character(c, C.def(S.state).caller, clock, {}); c.restore(); }
     });
   }
   function drawGarage() {
@@ -5872,98 +7779,221 @@ const StationView = (function () {
       });
     });
   }
-  function drawBrush() {
-    const s = S.state;
+  function drawBoard() {
     inStage(c => {
-      A.kitchen(c, clock);
-      c.save(); c.translate(150, 560); c.scale(1.5, 1.5); A.granny(c, clock); c.restore();
-      c.save(); c.translate(500, 355); A.plate(c, 165);
-      c.save(); c.rotate(-0.25); c.scale(1.35, 1.35); A.pawPrint(c, C.paw(s)); c.restore();
-      const left = s.phase === 'match' ? 0 : 1 - S.brush;
-      c.globalAlpha = Math.min(0.96, left * 1.2); A.ell(c, 0, 0, 157, 157, 'rgb(160,150,140)'); c.globalAlpha = 1;
-      c.restore();
-      if (s.phase === 'brush') {
-        A.rr(c, 300, 540, 400, 30, 15, '#fff', A.OUT, 3);
-        A.rr(c, 300, 540, 400 * Math.min(1, S.brush / 0.72), 30, 15, '#4cc552', A.OUT, 3);
-        label(c, L().brushProgress, 500, 515, 20);
-      }
-    });
-  }
-  function drawLamp() {
-    const s = S.state, target = s.objects.find(o => o.kind === s.item);
-    inStage(c => {
-      A.gardenNight(c, clock);
-      c.save(); c.globalAlpha = 0.45; c.fillStyle = '#fff3c4'; c.fillRect(-500, -300, 2000, 1200); c.restore();
-      s.objects.forEach(o => {
-        c.save(); c.translate(o.x * 1000, o.y * 600); c.scale(1.25, 1.25);
-        A.item(c, o.kind, o === target && s.clues.itemSent);
-        c.restore();
-      });
-      if (target) A.ell(c, target.x * 1000, target.y * 600, 70, 70, null, '#ffd34d', 5);
-      if (S.lamp) {
-        const x = S.lamp.x * 1000, y = S.lamp.y * 600;
-        A.ell(c, x, y, 150, 150, 'rgba(255,243,160,0.25)', '#ffb703', 5);
-        A.ell(c, x, y, 8, 8, '#ffb703');
-      }
-    });
-  }
-  function drawLetters() {
-    const s = S.state, word = C.word(s), n = word.length;
-    inStage(c => {
-      A.gardenNight(c, clock);
-      c.save(); c.globalAlpha = 0.5; c.fillStyle = '#fff3c4'; c.fillRect(-500, -300, 2000, 1200); c.restore();
-      A.rr(c, 40, 90, 920, 480, 30, '#fff8e8', A.OUT, 4);
-      const w = Math.min(120, 860 / n);
-      word.split('').forEach((ch, i) => {
-        const x = 500 - (n * w) / 2 + w * (i + 0.5), done = i < s.clues.letters, nextOne = i === s.clues.letters;
-        A.rr(c, x - w * 0.42, 260 - w * 0.42, w * 0.84, w * 0.84, 12, done ? '#d3f9d8' : nextOne ? '#ffe680' : '#fff', A.OUT, 4);
-        c.fillStyle = done ? A.OUT : 'rgba(29,47,69,0.35)'; c.font = `bold ${Math.round(w * 0.55)}px Georgia`; c.textAlign = 'center'; c.textBaseline = 'middle';
-        c.fillText(ch, x, 264);
-      });
-      c.save(); c.translate(500, 470); c.scale(0.9, 0.9); A.item(c, s.item); c.restore();
-    });
-  }
-  function drawLineup() {
-    const s = S.state;
-    inStage(c => {
-      A.lineupRoom(c);
-      s.suspects.forEach((sp, i) => {
-        const x = [230, 500, 770][i];
-        c.save(); c.translate(x, 480); c.scale(1.75, 1.75);
-        A.animal(c, sp.species, sp.scarf, clock, { happy: s.phase !== 'lineup' && i === s.culprit });
-        c.restore();
-        A.rr(c, x - 30, 500, 60, 50, 10, s.wrong.includes(i) ? '#ffc9c9' : '#fff8e8', A.OUT, 3);
-        c.fillStyle = A.OUT; c.font = 'bold 34px Georgia'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(String(i + 1), x, 527);
-      });
-      label(c, L().question(C.paw(s), C.culprit(s).scarf), 500, 130, 24);
+      A.party(c, clock);
+      const ids = Object.keys(C.CASES);
+      ids.forEach((id, i) => { c.save(); c.translate(90 + i * 118, 560); c.scale(0.85, 0.85); A.character(c, C.CASES[id].caller, clock, { crown: true }); c.restore(); });
     });
   }
   function drawEnding() {
-    const s = S.state, sp = C.culprit(s).species;
+    const s = S.state;
     inStage(c => {
       A.party(c, clock);
-      c.save(); c.translate(500, 398); c.scale(1.2, 1.2); A.cake(c, clock, true); c.restore();
-      c.save(); c.translate(180, 560); c.scale(1.5, 1.5); A.granny(c, clock, { happy: true }); c.restore();
-      c.save(); c.translate(360, 560); c.scale(1.5, 1.5); A.animal(c, sp, C.culprit(s).scarf, clock, { happy: true }); c.restore();
+      const { cast, extra } = Officer.partyCast(s);
+      if (s.caseId === 'cake') { c.save(); c.translate(500, 398); c.scale(1.2, 1.2); A.cake(c, clock, true); c.restore(); }
+      else if (extra) { c.save(); c.translate(500, 330); c.scale(1.6, 1.6); A.item(c, extra, true); c.restore(); }
+      const xs = cast.length > 1 ? [180, 360] : [270];
+      cast.forEach((who, i) => { c.save(); c.translate(xs[i], 560); c.scale(1.5, 1.5); A.character(c, who, clock, { happy: true, chicks: true, crown: true, scarf: C.isLineup(s) && i === 1 ? C.culprit(s).scarf : undefined }); c.restore(); });
       c.save(); c.translate(660, 560); c.scale(1.5, 1.5); A.teddy(c, clock, { happy: true, wave: true }); c.restore();
       c.save(); c.translate(840, 560); c.scale(1.5, 1.5); A.chief(c, clock, { happy: true }); c.restore();
-      if (s.phase === 'done') { c.save(); c.translate(390, 120); A.sticker(c, sp, clock, 220, true); c.restore(); }
+      if (s.phase === 'done') { c.save(); c.translate(390, 120); A.sticker(c, C.stickerOf(s), clock, 220, true); c.restore(); }
     });
   }
+
+  // ===== Mini-games, adult side =====
+  const VIEWS = {
+    brush() {
+      const s = S.state;
+      inStage(c => {
+        A.room(c, step().place, clock);
+        c.save(); c.translate(150, 560); c.scale(1.5, 1.5); A.character(c, C.def(s).caller, clock, {}); c.restore();
+        c.save(); c.translate(500, 355); A.plate(c, 165);
+        c.save(); c.rotate(-0.25); c.scale(1.35, 1.35); A.pawPrint(c, data().print); c.restore();
+        const left = prog().part === 'match' ? 0 : 1 - S.brush;
+        c.globalAlpha = Math.min(0.96, left * 1.2); A.ell(c, 0, 0, 157, 157, 'rgb(160,150,140)'); c.globalAlpha = 1;
+        c.restore();
+        if (prog().part === 'brush') {
+          A.rr(c, 300, 540, 400, 30, 15, '#fff', A.OUT, 3);
+          A.rr(c, 300, 540, 400 * Math.min(1, S.brush / 0.72), 30, 15, '#4cc552', A.OUT, 3);
+          label(c, L().brushProgress, 500, 515, 20);
+        }
+      });
+    },
+    lamp() {
+      const d = data(), target = d.objects.find(o => o.kind === d.item);
+      inStage(c => {
+        A.room(c, step().place, clock);
+        c.save(); c.globalAlpha = 0.45; c.fillStyle = '#fff3c4'; c.fillRect(-500, -300, 2000, 1200); c.restore();
+        d.objects.forEach(o => {
+          c.save(); c.translate(o.x * 1000, o.y * 600); c.scale(1.25, 1.25);
+          A.item(c, o.kind, o === target && prog().sent, clock);
+          c.restore();
+        });
+        A.ell(c, target.x * 1000, target.y * 600, 70, 70, null, '#ffd34d', 5);
+        if (S.lamp) {
+          const x = S.lamp.x * 1000, y = S.lamp.y * 600;
+          A.ell(c, x, y, 150, 150, 'rgba(255,243,160,0.25)', '#ffb703', 5);
+          A.ell(c, x, y, 8, 8, '#ffb703');
+        }
+        panel(c, 20, 20, 230, 150);
+        text(c, L().target, 135, 45, 22);
+        c.save(); c.translate(135, 110); A.item(c, d.item, false, clock); c.restore();
+      });
+    },
+    pieces() {
+      const s = S.state, pieces = C.pieces(s, step()), n = pieces.length, done = prog().n || 0;
+      inStage(c => {
+        A.gardenNight(c, clock);
+        c.save(); c.globalAlpha = 0.5; c.fillStyle = '#fff3c4'; c.fillRect(-500, -300, 2000, 1200); c.restore();
+        A.rr(c, 40, 90, 920, 480, 30, '#fff8e8', A.OUT, 4);
+        const w = Math.min(pieces.some(p => p.length > 1) ? 200 : 120, 860 / n);
+        pieces.forEach((ch, i) => {
+          const x = 500 - (n * w) / 2 + w * (i + 0.5), isDone = i < done, nextOne = i === done;
+          A.rr(c, x - w * 0.42, 260 - 46, w * 0.84, 92, 12, isDone ? '#d3f9d8' : nextOne ? '#ffe680' : '#fff', A.OUT, 4);
+          text(c, ch, x, 264, Math.min(56, w * (ch.length > 2 ? 0.3 : 0.5)), isDone ? A.OUT : 'rgba(29,47,69,0.4)');
+        });
+        c.save(); c.translate(500, 450); c.scale(0.9, 0.9);
+        if (C.isLineup(s)) { c.translate(-50, -55); A.portrait(c, C.culprit(s).species, clock, 100); } else A.wordIcon(c, data().word, clock);
+        c.restore();
+      });
+    },
+    symbols() {
+      const s = S.state, word = C.plain(s, data().word).split(''), code = C.symbolCode(s, s.step), done = prog().n || 0;
+      inStage(c => {
+        A.room(c, step().place, clock);
+        panel(c, 30, 20, 940, 250);
+        text(c, L().codebook, 500, 48, 28, '#22427a');
+        const entries = Object.keys(code.map).sort();
+        const per = Math.ceil(entries.length / 2), cw = 900 / per;
+        entries.forEach((ch, i) => {
+          const x = 50 + (i % per) * cw + cw / 2, y = 110 + Math.floor(i / per) * 85;
+          const needed = ch === word[done];
+          A.rr(c, x - cw / 2 + 6, y - 32, cw - 12, 72, 12, needed ? '#ffe680' : '#fff', A.OUT, 2);
+          c.save(); c.translate(x - 22, y + 4); A.symbol(c, code.map[ch], 40); c.restore();
+          text(c, '= ' + ch, x + 22, y + 4, 30);
+        });
+        panel(c, 30, 300, 940, 260);
+        const n = word.length, w = Math.min(110, 880 / n);
+        word.forEach((ch, i) => {
+          const x = 500 - (n * w) / 2 + w * (i + 0.5);
+          A.rr(c, x - w * 0.42, 330, w * 0.84, 90, 12, i === done ? '#fff3bf' : '#fff', A.OUT, 3);
+          c.save(); c.translate(x, 375); A.symbol(c, code.map[ch], Math.min(56, w * 0.55)); c.restore();
+          A.rr(c, x - w * 0.36, 440, w * 0.72, 90, 12, i < done ? '#d3f9d8' : '#f1f3f5', A.OUT, 3);
+          text(c, ch, x, 487, Math.min(54, w * 0.5), i < done ? A.OUT : 'rgba(29,47,69,0.35)');
+        });
+      });
+    },
+    safe() {
+      const digits = data().digits, done = prog().n || 0;
+      inStage(c => {
+        A.room(c, step().place, clock);
+        panel(c, 60, 40, 880, 520);
+        text(c, L().code + ' : ' + digits.map(d => d.a + d.b).join(' '), 500, 95, 46, '#22427a');
+        digits.forEach((d, i) => {
+          const y = 190 + i * 125, now = i === done;
+          A.rr(c, 100, y - 50, 800, 104, 18, i < done ? '#d3f9d8' : now ? '#fff3bf' : '#fff', A.OUT, 3);
+          for (let k = 0; k < d.a; k++) { c.save(); c.translate(150 + (k % 5) * 38, y - 18 + Math.floor(k / 5) * 38); A.countIcon(c, d.icon, 32); c.restore(); }
+          text(c, '+', 360, y, 44);
+          for (let k = 0; k < d.b; k++) { c.save(); c.translate(410 + (k % 5) * 38, y - 18 + Math.floor(k / 5) * 38); A.countIcon(c, d.icon, 32); c.restore(); }
+          text(c, `${d.a} + ${d.b} = ${d.a + d.b}`, 780, y, 40, i < done ? '#2f9e44' : A.OUT);
+        });
+        if (prog().wrong) label(c, '✗ ' + prog().wrong, 880, 540, 20);
+      });
+    },
+    spot() {
+      const d = data(), found = prog().found || [];
+      inStage(c => {
+        A.room(c, step().place, clock);
+        // Left: before (with the differences circled), right: now as the child sees it
+        [[0, d.items, L().before, true], [500, Officer.afterItems(d), L().now, false]].forEach(([x0, items, title, before]) => {
+          c.save(); c.translate(x0 + 15, 60); c.scale(0.47, 0.47);
+          A.rr(c, 40, 120, 920, 470, 30, before ? '#fffbe6' : '#f8f9fa', A.OUT, 6);
+          Officer.drawShelves(c, items, null, 1.6);
+          d.changes.forEach(ch => {
+            const s = { x: 200 + (ch.i % 4) * 200, y: ch.i < 4 ? 250 : 430 };
+            const ok = found.includes(ch.i);
+            A.ell(c, s.x, s.y, 74, 70, null, ok ? '#2f9e44' : '#f59f00', 9);
+          });
+          c.restore();
+          label(c, title, x0 + 250, 95, 26);
+        });
+        label(c, found.length + ' / ' + d.changes.length, 500, 520, 30);
+      });
+    },
+    grid() {
+      const d = data(), p = prog(), size = 92, x0 = 300, y0 = 105;
+      inStage(c => {
+        A.room(c, 'park', clock);
+        c.save(); c.globalAlpha = 0.35; c.fillStyle = '#fff'; c.fillRect(-500, -300, 2000, 1200); c.restore();
+        c.save(); c.translate(x0, y0); A.gridMap(c, size, d, clock, true); c.restore();
+        const letters = L().gridLetters;
+        for (let i = 0; i < C.GRID; i++) {
+          text(c, letters[i], x0 + (i + 0.5) * size, y0 - 24, 34, i === d.c ? '#e8590c' : A.OUT);
+          text(c, String(i + 1), x0 - 28, y0 + (i + 0.5) * size, 34, i === d.r ? '#e8590c' : A.OUT);
+        }
+        A.rr(c, x0 + d.c * size + 3, y0 + d.r * size + 3, size - 6, size - 6, 10, null, '#e8590c', 6);
+        if (p.c >= 0) { c.save(); c.translate(x0 + (p.c + 0.5) * size, y0 + (p.r + 0.5) * size); A.helicopter(c, clock, 56); c.restore(); }
+        panel(c, 790, 180, 190, 150);
+        text(c, L().target, 885, 215, 22);
+        text(c, letters[d.c] + ' ' + (d.r + 1), 885, 275, 64, '#e8590c');
+      });
+    },
+    sketch() {
+      const d = data(), p = prog(), T1 = L();
+      inStage(c => {
+        A.room(c, step().place, clock);
+        panel(c, 30, 30, 940, 200);
+        c.save(); c.translate(60, 60); A.portrait(c, 'owl', clock, 130); c.restore();
+        text(c, T1.witnessSays, 210, 70, 24, '#22427a', 'left');
+        c.save(); c.font = 'bold 26px "Trebuchet MS"'; c.fillStyle = A.OUT;
+        const words = T1.sketchSays(d.color, d.ears, d.scarf).split(' ');
+        let line = '', y = 120;
+        words.forEach(w => { if (c.measureText(line + w).width > 720) { c.fillText(line, 210, y); line = ''; y += 34; } line += w + ' '; });
+        c.fillText(line, 210, y);
+        c.restore();
+        [['color', 0], ['ears', 1], ['scarf', 2]].forEach(([cat, i]) => {
+          const x = 180 + i * 320, ok = p[cat] === d[cat];
+          panel(c, x - 140, 260, 280, 290, ok ? '#e6fcf5' : '#fff');
+          c.save(); c.translate(x, 420); c.scale(0.9, 0.9);
+          A.sketchFace(c, cat === 'color' ? { color: p.color } : cat === 'ears' ? { ears: p.ears, color: 'beige' } : { scarf: p.scarf, color: 'beige' }, clock);
+          c.restore();
+          text(c, ok ? '✔' : p[cat] ? '✗' : '…', x + 110, 290, 34, ok ? '#2f9e44' : '#e03131');
+        });
+        // The real face, small, for the adult
+        c.save(); c.translate(900, 470); c.scale(0.45, 0.45); A.sketchFace(c, d, clock); c.restore();
+      });
+    },
+    lineup() {
+      const s = S.state;
+      inStage(c => {
+        A.lineupRoom(c);
+        s.suspects.forEach((sp, i) => {
+          const x = [230, 500, 770][i];
+          c.save(); c.translate(x, 480); c.scale(1.75, 1.75);
+          A.animal(c, sp.species, sp.scarf, clock, {});
+          c.restore();
+          A.rr(c, x - 30, 500, 60, 50, 10, s.wrong.includes(i) ? '#ffc9c9' : '#fff8e8', A.OUT, 3);
+          text(c, String(i + 1), x, 527, 34);
+        });
+        label(c, L().question(C.paw(s), C.culprit(s).scarf), 500, 130, 24);
+      });
+    }
+  };
+  VIEWS.letters = VIEWS.pieces;
+  VIEWS.word = VIEWS.pieces;
 
   function frame(time) {
     const dt = Math.min(0.05, (time - last) / 1000 || 0);
     last = time; clock += dt;
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     ctx.clearRect(0, 0, width, height);
-    const phase = S.state.phase;
+    const s = S.state, phase = s.phase;
     if (phase === 'drive') drawMap();
     else if (phase === 'call') drawCall();
     else if (phase === 'garage') drawGarage();
-    else if (phase === 'brush' || phase === 'match') drawBrush();
-    else if (phase === 'lamp') drawLamp();
-    else if (phase === 'letters') drawLetters();
-    else if (phase === 'lineup') drawLineup();
+    else if (phase === 'game') VIEWS[C.game(s)]();
+    else if (phase === 'board') drawBoard();
     else drawEnding();
     const h = S.nextHint();
     if (h !== hint) { hint = h; $('nextTurn').textContent = h; $('nextTurn').hidden = !h; }
